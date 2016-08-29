@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="../../../css/style1.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript"
+            src="../../../scripts/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../../../scripts/easyui-1.3.6/themes/myself/easyui.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript"
+            src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../../../css/condition-table.css"/>
+    <script src="../../../scripts/echarts.js"></script>
+    <title>Insert title here</title>
+</head>
+<script>
+    $(function () {
+        $("#main1").css("height", $(window).height() - 40);
+        $("#main2").css("height", $(window).height() - 40);
+        showDiv1();
+        showDiv2();
+    });
+
+    function confirmIt() {
+        showDiv1();
+        showDiv2();
+    }
+
+    function showDiv1() {
+        $.ajax({
+            url: "div1.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {},
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //var arrayData = eval("("+return_data+")");
+                //console.log(arrayData);
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar',
+                            'echarts/chart/pie'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            option = {
+                                title: {
+                                    text: '项目结构分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                },
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {
+                                            show: true,
+                                            type: ['pie', 'funnel'],
+                                            option: {
+                                                funnel: {
+                                                    x: '25%',
+                                                    width: '50%',
+                                                    funnelAlign: 'left',
+                                                    max: 1548
+                                                }
+                                            }
+                                        },
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                series: [
+                                    {
+                                        name: '业务板块',
+                                        type: 'pie',
+                                        radius: '55%',
+                                        center: ['50%', '50%'],
+                                        data: [
+                                            {value: 33, name: '污水'},
+                                            {value: 24, name: '供水'},
+                                            {value: 19, name: '再生水'},
+                                            {value: 13, name: '固废'},
+                                        ]
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+
+    function showDiv2() {
+        $.ajax({
+            url: "CompFactoryGetData.jsp",
+            dataType: "text",
+            type: "post",
+            data: {},
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval(return_data);
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                            var option = {
+                                title: {
+                                    text: '公司、水厂数量统计',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    },
+                                    grid: {
+                                        x2: 40,
+                                        y2: 30
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["公司数量", "水厂数量"]
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: '{b}<br/>{a}:{c}个<br/>{a1}:{c1}座'
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        splitNumber: 12,
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(arrayData[i].split(":")[0]);
+                                            }
+                                            return d;
+                                        })(),
+                                        axisLabel: {
+                                            show: true,
+                                            interval: 0,
+                                            textStyle: {
+                                                fontSize: 12
+                                            }
+                                        }
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '数量'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '公司数量',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(parseFloat(arrayData[i].split(":")[1]));
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%',
+                                        itemStyle: {
+                                            normal: {
+                                                label: {
+                                                    show: true, position: 'top'
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        name: '水厂数量',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(parseFloat(arrayData[i].split(":")[2]));
+                                            }
+                                            return d;
+                                        })(),
+                                        itemStyle: {
+                                            normal: {
+                                                label: {
+                                                    show: true, position: 'top'
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+                            myChart.on(ecConfig.EVENT.CLICK, function () {
+                                var year1 = $('#cc').combobox('getValue');
+                                window.location = "../DeptDispatch/ProjectNum.html?year=" + year1;
+                            });
+
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+
+
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="5%"><span style="font-size: 12px;">年度：</span></td>
+            <td width="5%">
+                <input id="cc" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="110">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main1" style="height: 500px; width:43%; float:left;"></div>
+<div id="main2" style="height: 500px; width:57%; float:right;"></div>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>公司级财务比较分析</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/finance_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div1 {
+            position: absolute;
+            z-index: 95;
+        }
+
+        .div2 {
+            position: absolute;
+            z-index: 96;
+        }
+
+        .div3 {
+            position: absolute;
+            z-index: 97;
+        }
+
+        .div4 {
+            position: absolute;
+            z-index: 90;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 91;
+        }
+
+        .div6 {
+            position: absolute;
+            z-index: 92;
+        }
+    </style>
+    <script>
+        function setSize() {
+            var h = $(window).height() - 2;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt1').datagrid('resize');
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt2').datagrid('resize');
+            $("#tab003").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt3').datagrid('resize');
+            $("#tab004").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt4').datagrid('resize');
+            $("#tab005").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt5').datagrid('resize');
+            $("#tab006").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt6').datagrid('resize');
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            $('#tt1').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#tt2').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#tt3').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#tt4').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#tt5').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#tt6').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="center" border="false">
+        <input type="hidden" id="CompanyId">
+        <input type="hidden" id="CompanyName">
+        <div class="div1 drag-item" id="main1">
+            <div id="tab001">
+                <table id="tt1" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					 url:'Sewage001GetData.jsp',
+					 title:'归属母公司净资产收益率Top10排名分析',
+					  method:'post',
+					  rownumbers:'true',
+					  fit:'true',
+					  sortName:'roe',
+					  sortOrder:'desc',
+					  queryParams:{ date : ''}
+					  ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:190,align:'left'">公司名称</th>
+                        <th data-options="field:'roe',width:140,align:'center',sortable:true">收益率(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div2 drag-item" id="main2">
+            <div id="tab002">
+                <table id="tt2" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					 url:'Sewage002GetData.jsp',
+					 title:'归属首创净利润Top10排名分析',
+					 method:'post',
+					 rownumbers:'true',
+					 fit:'true',
+					 sortName:'profit_cw',
+					 sortOrder:'desc',
+					 queryParams:{ date : ''}
+					 ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:190,align:'left'">公司名称</th>
+                        <th data-options="field:'profit_cw',width:140,align:'center',sortable:true">归属首创净利润(万元)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div3 drag-item" id="main3">
+            <div id="tab003">
+                <table id="tt3" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					 url:'Sewage003GetData.jsp',
+					 title:'三项费用占收入比Top10排名分析',
+					 method:'post',
+					 rownumbers:'true',
+					 fit:'true',
+					 sortName:'proportion_of_three_expense',
+					 sortOrder:'asc',
+					 queryParams:{ date : ''}
+					 ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:190,align:'left'">公司名称</th>
+                        <th data-options="field:'proportion_of_three_expense',width:140,align:'center',sortable:true">
+                            三项费用占收入比(%)
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div4 drag-item" id="main4">
+            <div id="tab004">
+                <table id="tt4" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					  url:'Sewage004GetData.jsp',
+					  title:'单位总成本同比Top10排名分析',
+					  method:'post',
+					  rownumbers:'true',
+					  fit:'true',
+					  sortName:'cost_per_unit_yoy',
+					  sortOrder:'asc',
+					  queryParams:{ date : ''}
+					  ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:110,align:'left'">公司名称</th>
+                        <th data-options="field:'cost_per_unit',width:110,align:'center',sortable:true">单位总成本(元)</th>
+                        <th data-options="field:'cost_per_unit_yoy',width:110,align:'center',sortable:true">单位成本同比(%)
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div5 drag-item" id="main5">
+            <div id="tab005">
+                <table id="tt5" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					  url:'Sewage005GetData.jsp',
+					  title:'成本费用利润率Top10排名分析',
+					  method:'post',
+					  rownumbers:'true',
+					  fit:'true',
+					  sortName:'cost_profit_ratio',
+					  sortOrder:'desc',
+					  queryParams:{ date : ''}
+					  ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:190,align:'left'">公司名称</th>
+                        <th data-options="field:'cost_profit_ratio',width:140,align:'center',sortable:true">成本费用利润率(%)
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div6 drag-item" id="main6">
+            <div id="tab006">
+                <table id="tt6" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					  url:'Sewage006GetData.jsp',
+					  title:'主营业务利润率Top10排名分析',
+					  method:'post',
+					  rownumbers:'true',
+					  fit:'true',
+					  sortName:'ope',
+					  sortOrder:'desc',
+					  queryParams:{ date : ''}
+					  ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:190,align:'left'">公司名称</th>
+                        <th data-options="field:'ope',width:140,align:'center',sortable:true">主营业务利润率(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                       style="width: 120px;"></input>
+                <script type="text/javascript">
+                    function myformatter(date) {
+                        var y = date.getFullYear();
+                        var m = date.getMonth() + 1;
+                        return y + '-' + (m < 10 ? ('0' + m) : m);
+                    }
+                    function myparser(s) {
+                        if (!s) return new Date();
+                        var ss = (s.split('-'));
+                        var y = parseInt(ss[0], 10);
+                        var m = parseInt(ss[1], 10);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            return new Date(y, m - 1);
+                        } else {
+                            return new Date();
+                        }
+                    }
+                </script>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

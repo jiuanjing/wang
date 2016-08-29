@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>大区供水生产运营月度分析报告-组织架构</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/OPMR/opmr.css"/>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_MR_dept.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        setTimeout("confirmIt()", 1000);
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    function confirmIt() {
+        var DeptName = $('#DeptName').val();
+        if (DeptName == "" || DeptName == null) {
+            alert("请填写大区名称！");
+            return;
+        }
+        $("#tab_deptName").html($('#DeptName').val());
+        $("#tab_date").html($('#date').datebox('getValue'));
+
+    }
+</script>
+<body>
+<div style="background-color: #E0E0E0; padding:5px 0;width: 100%;position:fixed;z-index: 9999;">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">日期：</span><input id="date" class="easyui-datebox"
+                                                    data-options="formatter:myformatter,parser:myparser"
+                                                    value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">大区名称：</span><input type="text" size="40" id="DeptName"><input type="hidden"
+                                                                                                 id="DeptID">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+</div>
+<div style="width: 1100px;margin-left: auto;margin-right: auto;">
+    <br>
+    <br>
+    <h3 style="width: 1100px;text-align: center;line-height: 30px; "><img src="../../../images/CW_logo.png" align="top"
+                                                                          width="25px" height="25px;">&nbsp;大区供水生产运营月度分析报告-组织架构
+    </h3>
+    <div style="width: 1100px;">
+        <p style="font-size: 12px;">大区名称：<span id="tab_deptName"></span></p>
+        <p style="font-size: 12px;">编制时间：<span id="tab_date"></span></p>
+    </div>
+    <p class="item_text">一、大区组织架构图</p>
+    <table class="gridtable">
+        <tbody>
+        <tr>
+            <td style="background-color:#c5d9f1;text-align: center;width: 100px;">大区基本情况</td>
+            <td style="width:1000px;">
+                <div style="height: 100%;width:100%;border: 1px solid green;">
+                    <div id="main001" style="height: 250px;z-index: 999;"></div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="item_text">二、人员编制</p>
+    <table class="gridtable">
+        <thead>
+        <tr>
+            <th style="width: 100px;"></th>
+            <th style="width: 100px;" colspan="2">职务</th>
+            <th style="width: 100px;">姓名</th>
+            <th style="width: 100px;">联系方式</th>
+            <th style="width: 110px;"></th>
+            <th style="width: 110px;">部门名称</th>
+            <th style="width: 110px;">计划编制（人）</th>
+            <th style="width: 110px;">目前编制（人）</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td rowspan="13">组织架构</td>
+            <td style="width: 100px;" rowspan="13">大区</td>
+            <td style="width: 100px;">总经理</td>
+            <td>王纯岩</td>
+            <td></td>
+            <td rowspan="13">在岗职工</td>
+            <td>综合部</td>
+            <td>123</td>
+            <td>241</td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">副总经理</td>
+            <td>谭绍仲</td>
+            <td></td>
+            <td>人力资源部</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">副总经理</td>
+            <td></td>
+            <td></td>
+            <td>财务部</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">副总经理</td>
+            <td></td>
+            <td></td>
+            <td>运营部</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">副总经理</td>
+            <td></td>
+            <td></td>
+            <td>投资部</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">财务总监</td>
+            <td></td>
+            <td></td>
+            <td>技术部</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+        <tr>
+            <td style="width: 100px;">总经理助理</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="7"></td>
+            <td>人员总数</td>
+            <td>586</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

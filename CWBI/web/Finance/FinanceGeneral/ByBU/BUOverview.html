@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>财务概率分析</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/finance_general.css"/>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 80;
+            var w = $(window).width() - 29;
+            $(".div1").css({"width": (w * 1.15) / 3, "height": (h) / 2});
+            $(".div2").css({"width": (w * 0.7) / 3, "height": (h) / 2, "left": (w * 1.15) / 3});
+            $(".div3").css({"width": (w * 1.15) / 3, "height": (h) / 2, "left": 1.85 * (w) / 3});
+            $(".div4").css({"width": (w) / 2, "height": (h) / 2, "top": (h) / 2});
+            $(".div5").css({"width": (w) / 2, "height": (h) / 2, "top": (h) / 2, "left": (w) / 2});
+
+        }
+        $(function () {
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            /* 一*********************************************************************** */
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/line',
+                        'echarts/chart/bar'
+                    ],
+                    function (ec, theme) {
+                        var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                        var option = {
+                            title: {
+                                text: '利润趋势分析',
+                                x: 'center',
+                                textStyle: {
+                                    color: '#1b1b1b',
+                                    fontWeight: 'bold',
+                                    fontSize: 14
+                                }
+                            },
+                            grid: {
+                                x: 55,
+                                x2: 55,
+                                y: 50,
+                                y2: 40
+                            },
+                            legend: {
+                                y: 30,
+                                data: ["利润", "同比增长率"]
+
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    splitNumber: 12,      //表示X轴上有24个标签
+                                    data: [
+                                        "15-01",
+                                        "15-02",
+                                        "15-03",
+                                        "15-04",
+                                        "15-05",
+                                        "15-06",
+                                        "15-07",
+                                        "15-08",
+                                        "15-09",
+                                        "15-10",
+                                        "15-11",
+                                        "15-12",
+                                    ],
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 0,    // {number}
+                                        rotate: 45,
+                                        textStyle: {
+                                            fontSize: 10
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '利润(万元)',
+                                    axisLabel: {
+                                        formatter: '{value}'
+                                    }
+                                },
+                                {
+                                    type: 'value',
+                                    name: '同比增长率(%)',
+                                    axisLabel: {
+                                        formatter: '{value} '
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '利润',
+                                    type: 'bar',
+                                    data: [
+                                        6021,
+                                        5923,
+                                        5133,
+                                        6123,
+                                        6502,
+                                        5345,
+                                        4321,
+                                        4345,
+                                        4231,
+                                        5321,
+                                        5453,
+                                        4543
+                                    ]
+
+                                },
+                                {
+                                    name: '同比增长率',
+                                    type: 'line',
+                                    yAxisIndex: 1,
+                                    showAllSymbol: true,
+                                    symbolSize: 2,     //点的大小
+                                    data: [
+                                        10.12,
+                                        15.23,
+                                        12.45,
+                                        13.45,
+                                        18.67,
+                                        12.78,
+                                        10.89,
+                                        11.23,
+                                        10.34,
+                                        13.12,
+                                        16.45,
+                                        13.33
+                                    ],
+                                    symbol: 'rectangle',
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#FF6600'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+            );
+            /* 二 ************************************************************************/
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/gauge'
+                    ],
+                    function (ec) {
+                        var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                        option = {
+                            title: {
+                                text: "利润完成情况分析",
+                                x: 'center',
+                                textStyle: {
+                                    color: '#1b1b1b',
+                                    fontWeight: 'bold',
+                                    fontSize: 14
+                                }
+                            },
+                            tooltip: {
+                                formatter: "{a} <br/>{b} : {c}%"
+                            },
+                            series: [
+                                {
+                                    name: '利润完成情况',
+                                    type: 'gauge',
+                                    center: ['50%', '55%'],
+                                    radius: [0, '85%'],
+                                    min: 0,
+                                    max: 150,
+                                    splitNumber: 10,
+                                    axisLine: {            // 坐标轴线
+                                        lineStyle: {       // 属性lineStyle控制线条样式
+                                            color: [[0.45, '#ff4500'], [0.75, '#ffd400'], [1, '#228b22']],
+                                            width: 10
+                                        }
+                                    },
+                                    axisTick: {            // 坐标轴小标记
+                                        splitNumber: 10,   // 每份split细分多少段
+                                        length: 15,        // 属性length控制线长
+                                        lineStyle: {       // 属性lineStyle控制线条样式
+                                            color: 'auto'
+                                        }
+                                    },
+                                    axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                            color: 'auto'
+                                        }
+                                    },
+                                    splitLine: {           // 分隔线
+                                        show: true,        // 默认显示，属性show控制显示与否
+                                        length: 20,         // 属性length控制线长
+                                        lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                            color: 'auto'
+                                        }
+                                    },
+                                    pointer: {
+                                        width: 8
+                                    },
+                                    title: {
+                                        show: true,
+                                        offsetCenter: [0, '-40%'],       // x, y，单位px
+                                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                            fontWeight: 'bolder'
+                                        }
+                                    },
+                                    detail: {
+                                        formatter: '{value}',
+                                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                            color: 'auto',
+                                            fontWeight: 'bolder'
+                                        }
+                                    },
+                                    data: [{value: 106, name: '完成率(%)'}]
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+            );
+            /* 三*********************************************************************** */
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/line',
+                        'echarts/chart/bar'
+                    ],
+                    function (ec, theme) {
+                        var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                        var option = {
+                            title: {
+                                text: '收入、成本费用对比分析',
+                                x: 'center',
+                                textStyle: {
+                                    color: '#1b1b1b',
+                                    fontWeight: 'bold',
+                                    fontSize: 14
+                                }
+                            },
+                            grid: {
+                                x: 55,
+                                x2: 55,
+                                y: 50,
+                                y2: 40
+                            },
+                            legend: {
+                                y: 30,
+                                data: ["收入", "成本费用"]
+
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}万元'
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    splitNumber: 12,      //表示X轴上有24个标签
+                                    data: [
+                                        "15-01",
+                                        "15-02",
+                                        "15-03",
+                                        "15-04",
+                                        "15-05",
+                                        "15-06",
+                                        "15-07",
+                                        "15-08",
+                                        "15-09",
+                                        "15-10",
+                                        "15-11",
+                                        "15-12",
+                                    ],
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 0,    // {number}
+                                        rotate: 45,
+                                        textStyle: {
+                                            fontSize: 10
+                                        }
+                                    },
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '收入(万元)',
+                                    axisLabel: {
+                                        formatter: '{value}'
+                                    }
+                                },
+                                {
+                                    type: 'value',
+                                    name: '成本费用(万元)',
+                                    axisLabel: {
+                                        formatter: '{value}'
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '收入',
+                                    type: 'bar',
+                                    data: [
+                                        90213,
+                                        89234,
+                                        81334,
+                                        91234,
+                                        85021,
+                                        93453,
+                                        63213,
+                                        83455,
+                                        92312,
+                                        73213,
+                                        84532,
+                                        95432
+                                    ]
+
+                                },
+                                {
+                                    name: '成本费用',
+                                    type: 'line',
+                                    yAxisIndex: 1,
+                                    showAllSymbol: true,
+                                    symbolSize: 2,     //点的大小
+                                    data: [
+                                        50213,
+                                        49234,
+                                        41334,
+                                        41234,
+                                        45021,
+                                        43453,
+                                        43213,
+                                        43455,
+                                        52312,
+                                        43213,
+                                        44532,
+                                        45432
+                                    ],
+                                    symbol: 'rectangle',
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#FF6600',
+
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+            );
+            /* 四*********************************************************************** */
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/line',
+                        'echarts/chart/bar'
+                    ],
+                    function (ec) {
+                        var myChart = ec.init(document.getElementById('main4'), 'macarons');
+                        var option = {
+                            title: {
+                                text: '资产负债率趋势分析',
+                                x: 'center',
+                                textStyle: {
+                                    color: '#1b1b1b',
+                                    fontWeight: 'bold',
+                                    fontSize: 14
+                                }
+                            },
+                            grid: {
+                                x: 55,
+                                x2: 55,
+                                y: 50,
+                                y2: 40
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                formatter: '{b}</br>{a}:{c}%'
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    splitNumber: 24,      //表示X轴上有24个标签
+                                    data: [
+                                        "15-01",
+                                        "15-02",
+                                        "15-03",
+                                        "15-04",
+                                        "15-05",
+                                        "15-06",
+                                        "15-07",
+                                        "15-08",
+                                        "15-09",
+                                        "15-10",
+                                        "15-11",
+                                        "15-12",
+                                    ],
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 0,    // {number}
+                                        rotate: 45,
+                                        textStyle: {
+                                            fontSize: 10
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '资产负债率(%)',
+                                    axisLabel: {
+                                        formatter: '{value}'
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '资产负债率',
+                                    type: 'line',
+                                    showAllSymbol: true,
+                                    symbolSize: 2,     //点的大小
+                                    data: [
+                                        50.23,
+                                        34.24,
+                                        54.56,
+                                        67.34,
+                                        23.12,
+                                        12.34,
+                                        34.43,
+                                        23.59,
+                                        29.56,
+                                        44.23,
+                                        56.45,
+                                        34.45
+
+                                    ],
+                                    markLine: {
+                                        data: [
+                                            {type: 'average', name: '平均值'}
+                                        ],
+                                        itemStyle: {
+                                            normal: {
+                                                label: {
+                                                    show: true,
+                                                    formatter: function (params) {
+                                                        return params.data.value + "%"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    symbol: 'rectangle'
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+            );
+            /* 五*********************************************************************** */
+            require(
+                    [
+                        'echarts',
+                        'echarts/chart/line',
+                        'echarts/chart/bar'
+                    ],
+                    function (ec) {
+                        var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                        var option = {
+                            title: {
+                                text: '投资回报率趋势分析',
+                                x: 'center',
+                                textStyle: {
+                                    color: '#1b1b1b',
+                                    fontWeight: 'bold',
+                                    fontSize: 14
+                                }
+                            },
+                            grid: {
+                                x: 55,
+                                x2: 55,
+                                y: 50,
+                                y2: 40
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                formatter: '{b}</br>{a}:{c}%'
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    splitNumber: 24,      //表示X轴上有24个标签
+                                    data: [
+                                        "15-01",
+                                        "15-02",
+                                        "15-03",
+                                        "15-04",
+                                        "15-05",
+                                        "15-06",
+                                        "15-07",
+                                        "15-08",
+                                        "15-09",
+                                        "15-10",
+                                        "15-11",
+                                        "15-12",
+                                    ],
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 0,    // {number}
+                                        rotate: 45,
+                                        textStyle: {
+                                            fontSize: 10
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '投资回报率(%)',
+                                    axisLabel: {
+                                        formatter: '{value}'
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '投资回报率',
+                                    type: 'line',
+                                    showAllSymbol: true,
+                                    symbolSize: 2,     //点的大小
+                                    data: [
+                                        30.23,
+                                        34.24,
+                                        34.56,
+                                        37.34,
+                                        33.12,
+                                        32.34,
+                                        34.43,
+                                        33.59,
+                                        39.56,
+                                        44.23,
+                                        36.45,
+                                        34.45
+
+                                    ],
+                                    markLine: {
+                                        data: [
+                                            {type: 'average', name: '平均值'}
+                                        ],
+                                        itemStyle: {
+                                            normal: {
+                                                label: {
+                                                    show: true,
+                                                    formatter: function (params) {
+                                                        return params.data.value + "%"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    symbol: 'rectangle'
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+            );
+        });
+        function confirmIt() {
+            $('#cc').layout('collapse', 'east');
+            alert($("#date").val());
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="north" style="height:80px;">
+        <div class="north_div">
+            <ul class="up_ul">
+                <li class="bgjb1">
+                    <span>利润</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 128px;" class="total_span">22312.23</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb2">
+                    <span>收入</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 128px;" class="total_span">83782.47</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb3">
+                    <span>成本费用</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 128px;" class="total_span">52312.33</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb4">
+                    <span>资产</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 128px;" class="total_span">132312.98</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb5">
+                    <span>负债</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 128px;" class="total_span">82412.78</span>
+                    <span>万元</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div region="center" id="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+
+        </div>
+        <div class="div5 drag-item" id="main5">
+
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" type="text" style="width: 120px;margin:5px;">
+                <select style="width: 125px;margin:5px;">
+                    <option>供水</option>
+                    <option>污水</option>
+                    <option>再生水</option>
+                    <option>固废</option>
+                    <option>其他板块</option>
+                </select>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

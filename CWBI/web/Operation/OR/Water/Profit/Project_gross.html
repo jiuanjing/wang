@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>工程毛利率分析</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+<script>
+    $(function () {
+        var Nowdate = new Date();
+        var beginYear = Nowdate.getYear() + 1900 - 5;
+        var endYear = Nowdate.getYear() + 1900 - 1;
+
+        $('#begin_date').val(beginYear);
+        $('#end_date').val(endYear);
+
+        $("#begin_date").datepicker({
+            changeYear: true,
+            dateFormat: 'yyyy',
+            showMonthAfterYear: true,
+            showButtonPanel: true,
+            onChangeMonthYear: function (year, month, inst) {
+                $('#begin_date').val(year);
+            }
+        });
+        $("#end_date").datepicker({
+            changeYear: true,
+            dateFormat: 'yyyy',
+            showMonthAfterYear: true,
+            showButtonPanel: true,
+            onChangeMonthYear: function (year, month, inst) {
+                $('#end_date').val(year);
+            }
+        });
+
+        $("#main").css("height", $(window).height());
+        //获取公司指标值以及评分
+        DoAjaxGetData();
+
+        $('#tg').datagrid({
+            url: 'Invest_rate.json',
+            height: $(window).height(),
+            title: "工程毛利率",
+            pagination: true,
+            pageSize: 50,
+            pageNumber: 1,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            fitColumns: true,
+            singleSelect: true,
+            method: 'post',
+            nowrap: false,
+            rownumbers: true,
+            striped: true,
+            toolbar: '#tb',
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: '',
+                target: 'roe_parent_months',  //表字段
+                tableName: 'dm_profitability'		//表明称
+            },
+            idField: 'company_id',
+            sortOrder: 'desc',
+            columns: [[
+                {field: 'company_id', title: 'companyId', hidden: true},
+                {field: 'brief_name', title: '公司简称', width: 30},
+                {field: 'invest_rate', title: '工程毛利率(%)', width: 20, align: 'center', sortable: true},
+                {field: 'c1', title: '评分', width: 10, align: 'center', sortable: true}
+            ]],
+            onClickRow: function (rowIndex, rowData) {
+                $('#CompanyID').val(rowData.company_id);
+                $('#CompanyName').val(rowData.brief_name);
+                DoAjaxGetData();
+            },
+            onRowContextMenu: function (e, rowIndex, rowData) {
+                e.preventDefault();
+                $('#mm').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            }
+        });
+        //公司自动提示
+        aotoCompanyName();
+    });
+
+    function DoAjaxGetData() {
+        /* $.ajax({
+         url : "ROEParentTrendGetData.jsp",
+         dataType : "text", //传参的数据类型
+         type : "post", //传参方式，get 或post
+         data : {
+         CompanyID : $('#CompanyID').val(),
+         begin_date : $("#begin_date").val(),
+         end_date : $("#end_date").val()
+         },
+         error : function(msg) { //若Ajax处理失败后返回的信息
+         alert("Ajax获取数据失败");
+         },
+         success : function(return_data) { //若Ajax处理成功后返回的信息
+         //$('#value1').val(return_data);      //调试用
+         var arrayData = eval(return_data);
+         */
+        var CompanyName = $("#CompanyName").val();
+        require.config({
+            paths: {
+                echarts: '../../../../scripts'
+            }
+        });
+        // 使用
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/line',
+                    'echarts/chart/bar'
+                ],
+                function (ec, theme) {
+                    var myChart = ec.init(document.getElementById('main'));
+                    var option = {
+                        title: {
+                            text: CompanyName + '工程毛利率趋势分析',
+                            textStyle: {
+                                fontSize: 18,
+                                fontWeight: 'bolder',
+                                color: '#666666'
+                            }
+                        },
+                        grid: {
+                            y2: 80
+                        },
+                        toolbox: {
+                            show: true,
+                            y: 15,
+                            feature: {
+                                mark: {show: true},
+                                dataView: {show: true, readOnly: true},
+                                magicType: {show: true, type: ['line', 'bar']},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: '{b}<br/>{a}:{c}%',
+                        },
+                        dataZoom: {
+                            show: true,
+                            start: 0,        //从最小的X值开始
+                            end: 100         //到最大的X值结束
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                splitNumber: 24,      //表示X轴上有24个标签
+                                data: ['2011', '2012', '2013', '2014', '2015'],
+                                axisLabel: {
+                                    show: true,
+                                    interval: 0,    // {number}
+                                    rotate: 45
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: '工程毛利率',
+                                axisLabel: {
+                                    formatter: '{value}%'
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '工程毛利率',
+                                type: 'line',
+                                showAllSymbol: true,
+                                symbolSize: 2,     //点的大小
+                                data: [88.34, 87.30, 86.26, 85.22, 84.18],
+                                markLine: {
+                                    data: [
+                                        {type: 'average', name: '平均值'}
+                                    ],
+                                    itemStyle: {
+                                        normal: {
+                                            label: {
+                                                show: true,
+                                                formatter: function (params) {
+                                                    return params.data.value + "%"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                symbol: 'rectangle',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#CC99CC',
+                                        label: {
+                                            show: true,
+                                            formatter: function (params) {
+                                                return params.data + "%"
+                                            }
+                                        }
+                                    },
+                                    emphasis: {
+                                        color: '#FF33CC'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                }
+        );
+        /*     }
+         }); */
+    }
+
+    function aotoCompanyName() {
+        jQuery.post("../../../../common/AutoCompanyList.jsp",
+                {
+                    tableName: "dim_company_fn"
+                },
+                function (data) {
+                    var list = eval(data);
+                    var htmList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        var temp = {
+                            name: list[i].fullPinyin + "," + list[i].shortPinyin + "," + list[i].companyId,
+                            to: list[i].companyName
+                        };
+                        htmList.push(temp);
+                    }
+                    $("#Company_Name").autocomplete(
+                            htmList, {
+                                max: 50,    //列表里的条目数
+                                minChars: 0,    //自动完成激活之前填入的最小字符
+                                width: 280,     //提示的宽度，溢出隐藏
+                                scrollHeight: 300,   //提示的高度，溢出显示滚动条
+                                matchContains: true,    //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示
+                                mustMatch: true,      //必须选择下拉列表的值
+                                autoFill: false,    //自动填充
+                                formatItem: function (row, i, max) {
+                                    //return i + '/' + max + ':"' + row.name + '"[' + row.to + ']';
+                                    return row.to;
+                                },
+                                formatMatch: function (row, i, max) {
+                                    return row.name + row.to;
+                                },
+                                formatResult: function (row) {
+                                    return row.to;
+                                }
+                            }).result(function (event, row, formatted) {
+                        var data001 = row.name;
+                        var data002 = data001.split(",");
+                        $("#CompanyID").val(data002[2]);
+                    });
+                });
+    }
+    ;
+    function gotoInvest() {
+        self.location = "Invest_rate.html";
+    }
+    function gotoAllGross() {
+        self.location = "All_gross.html";
+    }
+    function gotoWaterGross() {
+        self.location = "Water_gross.html";
+    }
+    function gotoProjectGross() {
+        self.location = "Project_gross.html";
+    }
+    function gotoEBIT() {
+        self.location = "EBIT.html";
+    }
+    function doSearch() {
+        $('#tg').datagrid('load', {
+            date: $('#end_date').val()
+        });
+    }
+    function gotoBack() {
+        self.location = "Profit_List.html";
+    }
+    function gotoIndex() {
+        self.location = "../Comprehensive_List.html";
+    }
+    function gotoReload() {
+        var CompanyName = $("#CompanyName").val();
+        if (CompanyName == "" || CompanyName == null) {
+            $("#CompanyID").val("");
+        }
+        $('#tg').datagrid('load', {
+            CompanyID: $("#CompanyID").val(),
+            begin_date: $("#date").val()
+        });
+    }
+</script>
+<body>
+<div id="mm" class="easyui-menu" style="width:165px;">
+    <div onclick="gotoInvest()" data-options="">投资回报率</div>
+    <div onclick="gotoAllGross()" data-options="">综合毛利率</div>
+    <div onclick="gotoWaterGross()" data-options="">水处理毛利率</div>
+    <div onclick="gotoProjectGross()" data-options="">工程毛利率</div>
+    <div onclick="gotoEBIT()" data-options="">税息折旧及摊销前利润</div>
+    <div class="menu-sep"></div>
+    <div onclick="gotoReload()" data-options="iconCls:'icon-reload'">刷新</div>
+    <div onclick="gotoBack()" data-options="iconCls:'icon-undo'">返回上一级</div>
+    <div onclick="gotoIndex()" data-options="iconCls:'icon-back'">返回首级</div>
+</div>
+<div id="tb" style="padding:5px">
+    <input id="CompanyID" type="hidden">
+    <input id="CompanyName" type="hidden">
+    <span>隶属区域:</span>
+    <select style="width: 85px;">
+        <option></option>
+        <option>东南大区</option>
+        <option>北方大区</option>
+        <option>中原大区</option>
+        <option>北京大区</option>
+        <option>中南大区</option>
+        <option>西南大区</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span>公&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;司:</span>
+    <input style="line-height:18px;width:236px;margin-bottom: 5px;" id="Company_Name"></input>
+    <br>
+    <span>开始时间:</span>
+    <input id="begin_date" style="line-height:18px;width:80px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span>结束时间:</span>
+    <input id="end_date" style="line-height:18px;width:80px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="#" style="display: inline-block;" onclick="doSearch()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'">确定</a>
+    <a href="#" style="display: inline-block;" onclick="gotoBack()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-undo'">返回</a>
+</div>
+<div id="tg_wap" style="height:100%;width: 40%;float: left;overflow: visible;">
+    <table id="tg">
+    </table>
+</div>
+<div id="main" style="width: 60%;float: right;"></div>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>归属于母公司净利润增长率异常及预警分析</title>
+</head>
+<script type="text/javascript" src="../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery-ui.min.js"></script>
+<script src="../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../scripts/jquery.easyui.min.js"></script>
+<script src="../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/condition-table.css"/>
+<!-- 设置时间 -->
+<script src="../../scripts/MyScripts_FN.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../scripts/myIndicator/myIndicator2.js"></script>
+<script>
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        DoAjaxGetDeptData();
+        DoAjaxGetPPIRWarningData();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+    function DoAjaxGetPPIRWarningData() {
+        $.ajax({
+            url: "PPIRWarningGetData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+                var arrayData = ""
+                if (return_data == "" || return_data == null) {
+                } else {
+                    arrayData = eval(return_data);
+                }
+                var CompanyName = $("#CompanyName").val();
+                var date = $('#date').datebox('getValue');
+                if (CompanyName == "--请选择公司--" || CompanyName == "") {
+                    CompanyName = "首创股份";
+                }
+                require.config({
+                    paths: {
+                        echarts: '../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/gauge'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'));
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            option = {
+                                title: {
+                                    text: CompanyName + '归属于母公司净利润增长率异常及预警分析',
+                                    x: 'center',
+                                    y: 15,
+                                    textStyle: {
+                                        fontSize: 18,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                tooltip: {
+                                    formatter: "{a} <br/>{b}：{c}% "
+                                },
+                                toolbox: {
+                                    show: true,
+                                    y: 15,
+                                    feature: {
+                                        mark: {show: true},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                series: [
+                                    {
+                                        name: date + CompanyName,
+                                        type: 'gauge',
+                                        min: -100,
+                                        max: 100,
+                                        splitNumber: 10,
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: [[0.2, 'red'], [0.35, 'orange'], [0.5, 'yellow'], [1, 'lime']],
+                                                width: 10,
+                                                shadowColor: '#fff',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        axisLabel: {            // 坐标轴小标记
+                                            textStyle: {       // 属性lineStyle控制线条样式
+                                                color: '#1b1b1b',
+                                                shadowColor: '#1b1b1b',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        axisTick: {            // 坐标轴小标记
+                                            length: 20,        // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: 'auto',
+                                                shadowColor: '#1b1b1b',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length: 25,         // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                width: 3,
+                                                color: '#1b1b1b',
+                                                shadowColor: '#1b1b1b',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        pointer: {           // 分隔线
+                                            shadowColor: '#1b1b1b', //默认透明
+                                            shadowBlur: 5
+                                        },
+                                        title: {
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                fontSize: 20,
+                                                fontStyle: 'italic',
+                                                color: '#1b1b1b',
+                                                shadowColor: '#1b1b1b',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        detail: {
+                                            backgroundColor: 'rgba(30,144,255,0.8)',
+                                            borderWidth: 1,
+                                            borderColor: '#1b1b1bf',
+                                            shadowColor: '#1b1b1b', //默认透明
+                                            shadowBlur: 5,
+                                            offsetCenter: [0, '50%'],       // x, y，单位px
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: '#fff'
+                                            },
+                                            formatter: '{value}%'
+                                        },
+                                        data: arrayData
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+    function DoAjaxGetDeptData() {
+        $.ajax({
+            url: "../../common/DoAjaxGetXxxData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                tableName: "dim_dept",
+                target: "dept_id,brief_name",
+                conditions: "status:1"
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+                var array = eval(return_data);
+                //下面用返回值来填充所属管理部门下拉框
+                var html = "";
+                html += "<option value='' selected>全部</option>"
+                for (var i = 0; i < array.length; i++) {
+                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>"
+                    html += option;
+                }
+                $('#DeptId').append(html);
+            }
+        });
+    }
+    function doSearch() {
+        $('#tg').datagrid('load', {
+            date: $('#date').datebox('getValue'),
+            DeptId: $('#DeptId').val(),
+            target: 'PPIR',
+            tableName: 'dm_operating_growth'
+        });
+    }
+    //数据表格
+    $(function () {
+        $('#tg').datagrid({
+            url: '../../common/DoAjaxGetWarningData.jsp',
+            height: $(window).height(),
+            toolbar: '#tb',
+            fitColumns: true,
+            singleSelect: true,
+            method: 'post',
+            nowrap: false,
+            rownumbers: true,
+            striped: true,
+            toolbar: '#tb',
+            sortName: 'ppir', //默认排序字段
+            sortOrder: 'asc', //排序方式
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: '',
+                target: 'ppir',  //表字段
+                tableName: 'dm_operating_growth'	//表明称
+            },
+            idField: 'companyId',
+            columns: [[
+                {field: 'companyId', title: 'companyId', hidden: true},
+                {field: 'briefName', title: '公司简称', width: 30},
+                {
+                    field: 'value', title: '归属于母公司净利润增长率', width: 50, align: 'center', sortable: true,
+                    formatter: function (value) {
+                        if (value <= -60) {
+                            return '<font color="#d71345">' + value + '% </font>';
+                        } else if (-60 < value && value <= -25) {
+                            return '<font color="#f47920">' + value + '% </font>';
+                        } else if (-25 < value && value <= 0) {
+                            return '<font color="#fdb933">' + value + '% </font>';
+                        } else if (value > 0) {
+                            return '<font color="#1d953f">' + value + '% </font>';
+                        }
+                    }
+                }
+            ]],
+            onClickRow: function (rowIndex, rowData) {
+                $('#CompanyID').val(rowData.companyId);
+                $('#CompanyName').val(rowData.briefName);
+                DoAjaxGetPPIRWarningData();
+            }
+        });
+    });
+</script>
+
+<body style="overflow: hidden;">
+<div id="tb" style="padding:3px">
+    <input type="hidden" id="CompanyID">
+    <input type="hidden" id="CompanyName">
+    <span>部门:</span>
+    <select id="DeptId"></select>
+    <span>年-月:</span>
+    <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+           style="width: 100px;"></input>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="doSearch();">确定</a>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<div style="height:100%;width: 35%;float: left;overflow: visible;">
+    <table id="tg" title="归属于母公司净利润增长率">
+    </table>
+</div>
+<div id="main" style="height:540px;width: 65%;float: right;"></div>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>设计水量分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_Operation_Kpi.js"></script>
+<script>
+    $(function () {
+        $("#main1").css("height", $(window).height() - 190);
+        $("#main2").css("height", $(window).height() - 190);
+        var indicator = myIndicator("正在加载中...");
+        aotoCompanyName();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    //公司名称模糊查询，自动提示_供水项目公司
+    function aotoCompanyName() {
+        jQuery.post("AutoWaterCompanyList.jsp",
+                {
+                    tableName: "dim_op_company"
+                },
+                function (data) {
+                    var list = eval(data);
+                    var htmList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        var temp = {
+                            name: list[i].fullPinyin + "," + list[i].shortPinyin + "," + list[i].companyId,
+                            to: list[i].companyName
+                        };
+                        htmList.push(temp);
+                    }
+
+                    var Request = new Object();
+                    Request = GetRequest();
+                    var CompanyID = Request['CompanyID'];//获取传来的参数
+                    //如果有公司ID传过来，则显示传来的公司，否则显示默认公司
+                    if (CompanyID == null || CompanyID == "") {
+                        //设置模糊查询的值
+                        $("#CompanyID").val(list[0].companyId);
+                        $("#CompanyName").val(list[0].companyName);
+                        //设置下拉树的值
+                        $('#cc').combotree('setValue', list[0].companyId);
+                    } else {
+                        //设置模糊查询的值
+                        for (var i = 0; i < list.length; i++) {
+                            if (list[i].companyId == CompanyID) {
+                                $("#CompanyID").val(list[i].companyId);
+                                $("#CompanyName").val(list[i].companyName);
+                            }
+                        }
+                        //设置下拉树的值
+                        $('#cc').combotree('setValue', CompanyID);
+                        //有参数传来，显示后退
+                        $('#url_back').css("display", "block");
+                    }
+                    //图表
+                    showDiv001($('#date').datebox('getValue'), $('#CompanyID').val());
+                    //数据表格
+                    $('#tg').datagrid({
+                        url: 'WaterDesigned002GD.jsp',
+                        title: '设计水量趋势分析表',
+                        method: 'post',
+                        fitColumns: true,
+                        singleSelect: true,
+                        nowrap: true,
+                        rownumbers: false,
+                        striped: true,
+                        loadMsg: '正在加载数据，请稍等......',
+                        queryParams: {
+                            date: $('#date').datebox('getValue'),
+                            CompanyID: $('#CompanyID').val()
+                        },
+                        columns: [[
+                            {field: 'kpi', title: '指标', width: 120, align: 'left'},
+                            {
+                                field: 'm1',
+                                title: '1月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm2',
+                                title: '2月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm3',
+                                title: '3月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm4',
+                                title: '4月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm5',
+                                title: '5月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm6',
+                                title: '6月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm7',
+                                title: '7月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm8',
+                                title: '8月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm9',
+                                title: '9月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm10',
+                                title: '10月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm11',
+                                title: '11月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm12',
+                                title: '12月',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            },
+                            {
+                                field: 'm13',
+                                title: '累计值',
+                                width: 50,
+                                align: 'center',
+                                formatter: function (value, rowData, rowIndex) {
+                                    return parseFloat(value).toFixed(2)
+                                }
+                            }
+                        ]]
+                    });
+
+                    $("#CompanyName").autocomplete(
+                            htmList, {
+                                max: 50,    //列表里的条目数
+                                minChars: 0,    //自动完成激活之前填入的最小字符
+                                width: 280,     //提示的宽度，溢出隐藏
+                                scrollHeight: 300,   //提示的高度，溢出显示滚动条
+                                matchContains: true,    //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示
+                                mustMatch: true,      //必须选择下拉列表的值
+                                autoFill: false,    //自动填充
+                                formatItem: function (row, i, max) {
+                                    //return i + '/' + max + ':"' + row.name + '"[' + row.to + ']';
+                                    return row.to;
+                                },
+                                formatMatch: function (row, i, max) {
+                                    return row.name + row.to;
+                                },
+                                formatResult: function (row) {
+                                    return row.to;
+                                }
+                            }).result(function (event, row, formatted) {
+                        var data001 = row.name;
+                        var data002 = data001.split(",");
+                        $("#CompanyID").val(data002[2]);
+                    });
+                });
+    }
+    ;
+    function confirmIt() {
+        var indicator = myIndicator("正在加载中...");
+        var CompanyID;
+        //根据click判断使用的是哪个查询方式
+        if (click == 1) {
+            CompanyID = $('#CompanyID').val();
+        } else {
+            CompanyID = $('#cc').combogrid('getValue');
+        }
+        showDiv001($('#date').datebox('getValue'), CompanyID);
+        $('#tg').datagrid({queryParams: {date: $('#date').datebox('getValue'), CompanyID: CompanyID}});
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    }
+    function showDiv001(date, CompanyID) {
+        $.ajax({
+            url: "WaterDesigned001GD.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: date,
+                CompanyID: CompanyID
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                var arrayData = eval("(" + return_data + ")");
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            var option = {
+                                title: {
+                                    text: '设计水量趋势分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 18,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                grid: {
+                                    x: 50,
+                                    y: 80,
+                                    y2: 60
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    y: 'center',
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: true},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                legend: {
+                                    y: 40,
+                                    data: ["设计水量同期值", "设计水量实际值", "同比"]
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: function (params, ticket, callback) {
+                                        var res = params[0].name;
+                                        for (var i = 0, l = params.length; i < l; i++) {
+                                            if (params[i].seriesIndex == "0" || params[i].seriesIndex == "1") {
+                                                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + "万吨/日";
+                                            } else {
+                                                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + "%";
+                                            }
+                                        }
+                                        return res;
+                                    }
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        splitNumber: 24,      //表示X轴上有24个标签
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.date.length; i++) {
+                                                d.push(arrayData.date[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        axisLabel: {
+                                            show: true,
+                                            interval: 0,    // {number}
+                                            rotate: 45
+                                        }
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '设计水量(万吨/日)'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '设计水量同期值',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.ly.length; i++) {
+                                                d.push(arrayData.ly[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    },
+                                    {
+                                        name: '设计水量实际值',
+                                        type: 'bar',
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#26C0C0'
+                                            }
+                                        },
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#FE8463'
+                                            }
+                                        },
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.cy.length; i++) {
+                                                d.push(arrayData.cy[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    },
+                                    {
+                                        name: '同比',
+                                        type: 'line',
+                                        yAxisIndex: 1,
+                                        showAllSymbol: true,
+                                        symbolSize: 2,     //点的大小
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.yoy.length; i++) {
+                                                d.push(arrayData.yoy[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        symbol: 'rectangle',
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#4e72b8'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    var click = 1;
+    function lookup() {
+        if (click == 1) {
+            $('#blur_look').css("display", "none");
+            $('#blur_comb').css("display", "block");
+            click = 2;
+        } else if (click == 2) {
+            $('#blur_look').css("display", "block");
+            $('#blur_comb').css("display", "none");
+            click = 1;
+        }
+
+    }
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年-月：</td>
+            <td width="8%"><input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"
+                                  value="01" style="width: 100px;"></input></td>
+
+            <td width="7%">公司名称：</td>
+            <td width="8%">
+					<span id="blur_look" style="background-color: red;width: 280px;">
+						<input type="text" Style="width: 280px;" id="CompanyName"><input type="hidden" id="CompanyID">
+					</span>
+                <span id="blur_comb" style="display: none;background-color: red;width: 280px;">
+						<input id="cc" class="easyui-combotree" data-options="url:'AutoWaterDeptList.jsp'"
+                               style="width:280px;">
+					</span>
+            </td>
+            <td width="6%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="6%"><a class="easyui-linkbutton" href="javascript:void(0)" onclick="lookup();">切换查询</a></td>
+            <td width="6%"><a id="url_back" style="display: none;" class="easyui-linkbutton"
+                              data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main1" style="height:360px;width: 99%;float: right;"></div>
+<div id="main3" style="height:130px;width: 99%;float: left;margin-left: 5px;">
+    <table id="tg" style="height:130px;"></table>
+</div>
+</body>
+</html>

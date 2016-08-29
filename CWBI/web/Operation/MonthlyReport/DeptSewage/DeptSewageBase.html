@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>大区污水生产运营月度分析报告-基本情况</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/OPMR/opmr.css"/>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_MR_dept.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        var Nowdate = new Date();
+        var nowYear = Nowdate.getYear() + 1900;
+        var preYear = Nowdate.getYear() + 1900 - 1;
+
+        var month = Nowdate.getMonth();
+        var nowMonth = (month + 1) < 10 ? "0" + (month + 1) : (month + 1); //当月
+        var preMonth = month < 10 ? "0" + month : month; //上个月
+        //设置单个日期
+        if (preMonth == "00") {
+            $("#date").datebox("setValue", preYear + '-' + "12");
+        } else {
+            $("#date").datebox("setValue", nowYear + '-' + preMonth);
+        }
+
+        $("#DeptID").val("2");
+        $("#DeptName").val("北方大区");
+        aotoDeptName();
+
+        setTimeout("confirmIt()", 1000);
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    function confirmIt() {
+        var DeptName = $('#DeptName').val();
+        if (DeptName == "" || DeptName == null) {
+            alert("请填写大区名称！");
+            return;
+        }
+        $("#tab_deptName").html($('#DeptName').val());
+        $("#tab_date").html($('#date').datebox('getValue'));
+
+        hebingRow("index002", 0)
+
+    }
+    function hebingRow(id, col) {
+        var trs = $("#" + id + " > tr");
+        var rows = 1;
+        for (var i = trs.length; i >= 0; i--) {
+            var cur = $($(trs[i]).find("td")[col]).text();
+            var next = $($(trs[i - 1]).find("td")[col]).text();
+            if (cur == next) {
+                rows++;
+                $($(trs[i]).find("td")[col]).remove();
+            } else {
+                $($(trs[i]).find("td")[col]).attr("rowspan", rows);
+                rows = 1;
+            }
+        }
+    }
+    //大区名称模糊查询，自动提示
+    function aotoDeptName() {
+        jQuery.post("AutoDeptList.jsp",
+                {
+                    tableName: "dim_dept_op"
+                },
+                function (data) {
+                    var list = eval(data);
+                    var htmList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        var temp = {
+                            name: list[i].fullPinyin + "," + list[i].shortPinyin + "," + list[i].deptId,
+                            to: list[i].deptName
+                        };
+                        htmList.push(temp);
+                    }
+                    $("#DeptName").autocomplete(
+                            htmList, {
+                                max: 50,    //列表里的条目数
+                                minChars: 0,    //自动完成激活之前填入的最小字符
+                                width: 280,     //提示的宽度，溢出隐藏
+                                scrollHeight: 300,   //提示的高度，溢出显示滚动条
+                                matchContains: true,    //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示
+                                mustMatch: true,      //必须选择下拉列表的值
+                                autoFill: false,    //自动填充
+                                formatItem: function (row, i, max) {
+                                    //return i + '/' + max + ':"' + row.name + '"[' + row.to + ']';
+                                    return row.to;
+                                },
+                                formatMatch: function (row, i, max) {
+                                    return row.name + row.to;
+                                },
+                                formatResult: function (row) {
+                                    return row.to;
+                                }
+                            }).result(function (event, row, formatted) {
+                        var data001 = row.name;
+                        var data002 = data001.split(",");
+                        $("#DeptID").val(data002[2]);
+                    });
+                });
+    }
+    ;
+</script>
+<body>
+<div style="background-color: #E0E0E0; padding:5px 0;width: 100%;position:fixed;z-index: 9999;">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">日期：</span><input id="date" class="easyui-datebox"
+                                                    data-options="formatter:myformatter,parser:myparser"
+                                                    value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">大区名称：</span><input type="text" size="40" id="DeptName"><input type="hidden"
+                                                                                                 id="DeptID">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+</div>
+<div style="width: 1100px;margin-left: auto;margin-right: auto;">
+    <br>
+    <br>
+    <h3 style="width: 1100px;text-align: center;line-height: 30px; "><img src="../../../images/CW_logo.png" align="top"
+                                                                          width="25px" height="25px;">&nbsp;大区污水生产运营月度分析报告-基本情况
+    </h3>
+    <div style="width: 1100px;">
+        <p style="font-size: 12px;">大区名称：<span id="tab_deptName"></span></p>
+        <p style="font-size: 12px;">编制时间：<span id="tab_date"></span></p>
+    </div>
+    <p class="item_text">一、基本情况</p>
+    <table class="gridtable" style="text-align: center;">
+        <thead>
+        <tr>
+            <th style="width: 100px;"></th>
+            <th style="width: 100px;">公司数量[个]</th>
+            <th style="width: 150px;">形式</th>
+            <th style="width: 100px;">数量[座]</th>
+            <th style="width: 150px;">水厂数量[座]</th>
+            <th style="width: 150px;">形式</th>
+            <th style="width: 100px;">数量[座]</th>
+            <th style="width: 150px;">水处理能力[万吨/日]</th>
+            <th style="width: 100px;">固废[吨/天]</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td rowspan="8">基本情况</td>
+            <td rowspan="8">10</td>
+            <td>全产业链</td>
+            <td>0</td>
+            <td rowspan="8">22</td>
+            <td rowspan="2">供水</td>
+            <td rowspan="2">8</td>
+            <td rowspan="2">130.85</td>
+            <td rowspan="2">-</td>
+        </tr>
+        <tr>
+            <td>供排一体</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>污水再生</td>
+            <td>1</td>
+            <td rowspan="2">污水</td>
+            <td rowspan="2">11</td>
+            <td rowspan="2">95.5</td>
+            <td rowspan="2">-</td>
+        </tr>
+        <tr>
+            <td>污水固废</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>供生</td>
+            <td>4</td>
+            <td rowspan="2">再生</td>
+            <td rowspan="2">3</td>
+            <td rowspan="2">9.5</td>
+            <td rowspan="2">-</td>
+        </tr>
+        <tr>
+            <td>污水</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>再生</td>
+            <td>0</td>
+            <td rowspan="2">固废</td>
+            <td rowspan="2">0</td>
+            <td rowspan="2">0</td>
+            <td rowspan="2">-</td>
+        </tr>
+        <tr>
+            <td>固废</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td colspan="7">合计</td>
+            <td>234.85</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>注：1）全产业链公司指业务链条上涵盖供水、污水、再生水的公司；
+    <p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2）供排一体公司指业务链条上涵盖供水、污水的公司;
+    <p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3）污水再生公司指业务链条上涵盖污水和再生水的公司;
+    <p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4）污水固废公司指业务链条上涵盖污水和固废的公司;
+    <p>
+    <p class="item_text">二、大区运营情况</p>
+    <table class="gridtable" style="text-align: center;">
+        <thead>
+        <tr>
+            <th style="width: 100px;">省份</th>
+            <th style="width: 150px;">公司名称</th>
+            <th style="width: 100px;">成立时间[年/月]</th>
+            <th style="width: 100px;">股权比例[%]</th>
+            <th style="width: 100px;">注册资金[万元]</th>
+            <th style="width: 150px;">厂名称</th>
+            <th style="width: 100px;">处理能力[万吨/日]</th>
+            <th style="width: 100px;">厂工艺</th>
+            <th style="width: 100px;">出水质量</th>
+            <th style="width: 100px;">在岗人数[人]</th>
+        </tr>
+        </thead>
+        <tbody id="index002">
+        <tr>
+            <td>内蒙古</td>
+            <td>呼和浩特首创</td>
+            <td>2008</td>
+            <td>80</td>
+            <td>16800</td>
+            <td colspan="4" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <tbody>
+                    <tr>
+                        <td width="150px">公主府污水厂</td>
+                        <td width="100px">5</td>
+                        <td width="100px">CAST</td>
+                        <td width="100px">二级</td>
+                    </tr>
+                    <tr>
+                        <td width="150px">辛辛板污水厂</td>
+                        <td width="100px">15</td>
+                        <td width="100px">10万吨普曝，5万吨A2/O</td>
+                        <td width="100px">二级</td>
+                    </tr>
+                    <tr>
+                        <td width="150px">章盖营污水厂</td>
+                        <td width="100px">6</td>
+                        <td width="100px">A2/O</td>
+                        <td width="100px">二级</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>120</td>
+        </tr>
+        <tr>
+            <td>山西</td>
+            <td>太原首创</td>
+            <td>2008</td>
+            <td>93.73</td>
+            <td>16000</td>
+            <td colspan="4" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <tbody>
+                    <tr>
+                        <td width="150px">城南污水厂</td>
+                        <td width="100px">20</td>
+                        <td width="100px">改良A2/O+深度处理单元</td>
+                        <td width="100px"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>96</td>
+        </tr>
+        <tr>
+            <td>山西</td>
+            <td>运城首创</td>
+            <td>2008</td>
+            <td>80</td>
+            <td>16800</td>
+            <td colspan="4" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <tbody>
+                    <tr>
+                        <td width="150px">城东污水厂</td>
+                        <td width="100px">4</td>
+                        <td width="100px">BAF生物滤池工艺</td>
+                        <td width="100px"></td>
+                    </tr>
+                    <tr>
+                        <td width="150px">城西污水厂</td>
+                        <td width="100px">15</td>
+                        <td width="100px">复合A2O工艺+微絮凝过滤工艺</td>
+                        <td width="100px"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>山西</td>
+            <td>临猗首创</td>
+            <td>2008</td>
+            <td>80</td>
+            <td>16800</td>
+            <td colspan="4" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <tbody>
+                    <tr>
+                        <td width="150px">临猗县第二污水处理厂</td>
+                        <td width="100px">4</td>
+                        <td width="100px">水解酸化+A2O+深度处理</td>
+                        <td width="100px"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td>198</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="item_text">三、投资回报</p>
+    <table class="gridtable" style="text-align: center;">
+        <tbody>
+        <tr>
+            <td style="width: 100px;">投资回报率[%]</td>
+            <td style="padding: 0;margin: 0;width: 1000px;">
+                <table class="gridtable_">
+                    <thead>
+                    <tr>
+                        <th style="width: 260px;">公司</th>
+                        <th style="width: 80px;">2013</th>
+                        <th style="width: 80px;">1014</th>
+                        <th style="width: 80px;">2015</th>
+                        <th style="width: 500px;">分析图</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>呼和浩特</td>
+                        <td>6</td>
+                        <td>8</td>
+                        <td>7</td>
+                        <td rowspan="8">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>太原</td>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>运城</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            差异说明：
+                        </td>
+                        <td colspan="4">
+					         			<textarea id="reason005" style="resize:none; width:99%; height:100px;">
+					         				
+					         			</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="item_text">四、应收账款</p>
+    <table class="gridtable" style="text-align: center;">
+        <tbody>
+        <tr>
+            <td style="width: 100px;">应收账款增减率[%]</td>
+            <td colspan="2" style="padding: 0;margin: 0;width: 1000px;">
+                <table class="gridtable_">
+                    <thead>
+                    <tr>
+                        <th style="width: 260px;">公司</th>
+                        <th style="width: 80px;">2013</th>
+                        <th style="width: 80px;">1014</th>
+                        <th style="width: 80px;">2015</th>
+                        <th style="width: 500px;">分析图</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>呼和浩特</td>
+                        <td>6</td>
+                        <td>8</td>
+                        <td>7</td>
+                        <td rowspan="8">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>太原</td>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>运城</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            差异说明：
+                        </td>
+                        <td colspan="4">
+					         			<textarea id="reason005" style="resize:none; width:99%; height:100px;">
+					         				
+					         			</textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="2" style="width: 100px;">应收账款</td>
+            <td style="width: 232px;">本年度期初应收[万元]</td>
+            <td>1234</td>
+        </tr>
+        <tr>
+            <td style="width: 232px;">本年度期末应收[万元]</td>
+            <td>1234</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

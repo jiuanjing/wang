@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>水务企业（供水）经营结果评价_债务风险</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<!-- 设置时间 -->
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+<script>
+    //数据表格
+    $(function () {
+        aotoCompanyName();
+        var Nowdate = new Date();
+        var preYear = Nowdate.getYear() + 1900 - 1;
+
+        $('#date').val(preYear);
+
+        $("#date").datepicker({
+            changeYear: true,
+            dateFormat: 'yyyy',
+            showMonthAfterYear: true,
+            showButtonPanel: true,
+            onChangeMonthYear: function (year, month, inst) {
+                $('#date').val(year);
+            }
+        });
+
+        $('#tg').datagrid({
+            url: 'Debt_List.json',
+            title: '水务企业（供水）经营结果评价-债务风险',
+            height: $(window).height(),
+            pagination: true,
+            pageSize: 50,
+            pageNumber: 1,
+            pageList: [10, 20, 30, 50, 100, 150, 200],
+            fitColumns: true,
+            singleSelect: true,
+            method: 'post',
+            nowrap: false,
+            rownumbers: true,
+            striped: true,
+            toolbar: '#query_condition',
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                CompanyID: $("#CompanyID").val(),
+                begin_date: $("#begin_date").val(),
+                end_date: $("#end_date").val()
+            },
+            idField: 'company_id',
+            /* sortName:'credit_amount', //默认排序字段
+             sortOrder:'desc', //排序方式 */
+            columns: [[
+                {field: 'company_id', title: 'companyId', hidden: true},
+                {field: 'brief_name', title: '公司简称', width: 30, rowspan: 2},
+                {title: '债务风险', align: 'center', colspan: 4},
+                {field: 'total', title: '评分合计', width: 10, align: 'center', rowspan: 2}
+            ], [
+                {field: 'ALR', title: '资产负债率(%)', width: 20, align: 'center', sortable: true},
+                {field: 'c1', title: '评分', width: 10, align: 'center', sortable: true},
+                {field: 'EBITRATIO', title: '已获利息倍数', width: 20, align: 'center', sortable: true},
+                {field: 'c2', title: '评分', width: 10, align: 'center', sortable: true}
+            ]],
+            /*  onClickCell:function(rowIndex, field, value){
+             alert(field+":"+value);
+             }, */
+            onRowContextMenu: function (e, rowIndex, rowData) {
+                e.preventDefault();
+                $('#mm').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            }
+        });
+    });
+    function aotoCompanyName() {
+        jQuery.post("../../../../common/AutoCompanyList.jsp",
+                {
+                    tableName: "dim_company_fn"
+                },
+                function (data) {
+                    var list = eval(data);
+                    var htmList = [];
+                    for (var i = 0; i < list.length; i++) {
+                        var temp = {
+                            name: list[i].fullPinyin + "," + list[i].shortPinyin + "," + list[i].companyId,
+                            to: list[i].companyName
+                        };
+                        htmList.push(temp);
+                    }
+                    $("#CompanyName").autocomplete(
+                            htmList, {
+                                max: 50,    //列表里的条目数
+                                minChars: 0,    //自动完成激活之前填入的最小字符
+                                width: 280,     //提示的宽度，溢出隐藏
+                                scrollHeight: 300,   //提示的高度，溢出显示滚动条
+                                matchContains: true,    //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示
+                                mustMatch: true,      //必须选择下拉列表的值
+                                autoFill: false,    //自动填充
+                                formatItem: function (row, i, max) {
+                                    //return i + '/' + max + ':"' + row.name + '"[' + row.to + ']';
+                                    return row.to;
+                                },
+                                formatMatch: function (row, i, max) {
+                                    return row.name + row.to;
+                                },
+                                formatResult: function (row) {
+                                    return row.to;
+                                }
+                            }).result(function (event, row, formatted) {
+                        var data001 = row.name;
+                        var data002 = data001.split(",");
+                        $("#CompanyID").val(data002[2]);
+                    });
+                });
+    }
+    ;
+
+    function gotoALR() {
+        self.location = "ALR.html";
+    }
+    function gotoEBITRATIO() {
+        self.location = "EBITRATIO.html";
+    }
+
+    function doSearch() {
+        var CompanyName = $("#CompanyName").val();
+        if (CompanyName == "" || CompanyName == null) {
+            $("#CompanyID").val("");
+        }
+        $('#tg').datagrid('load', {
+            CompanyID: $("#CompanyID").val(),
+            begin_date: $("#date").val()
+        });
+    }
+    function gotoBack() {
+        self.location = "../Comprehensive_List.html";
+    }
+    function gotoReload() {
+        var CompanyName = $("#CompanyName").val();
+        if (CompanyName == "" || CompanyName == null) {
+            $("#CompanyID").val("");
+        }
+        $('#tg').datagrid('load', {
+            CompanyID: $("#CompanyID").val(),
+            begin_date: $("#begin_date").val(),
+            end_date: $("#end_date").val()
+        });
+    }
+</script>
+<body>
+<div id="mm" class="easyui-menu" style="width:165px;">
+    <div onclick="gotoALR()" data-options="">资产负债率</div>
+    <div onclick="gotoEBITRATIO()" data-options="">已获利息倍数</div>
+    <div class="menu-sep"></div>
+    <div onclick="gotoReload()" data-options="iconCls:'icon-reload'">刷新</div>
+    <div onclick="gotoBack()" data-options="iconCls:'icon-undo'">返回</div>
+</div>
+<div id="query_condition">
+    <table class="condition_table">
+        <tr>
+            <td width="6%">隶属区域：</td>
+            <td width="8%">
+                <select>
+                    <option></option>
+                    <option>东南大区</option>
+                    <option>北方大区</option>
+                    <option>中原大区</option>
+                    <option>北京大区</option>
+                    <option>中南大区</option>
+                    <option>西南大区</option>
+                </select>
+            </td>
+            <td width='4%'>公司：</td>
+            <td width='8%'>
+                <input style='width:280px;' id='CompanyName'></input>
+                <input type='hidden' id='CompanyID'></input>
+            </td>
+
+            <td width="4%">日期：</td>
+            <td width="8%"><input id="date"></input></td>
+
+            <td width="5%">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-search'" href="javascript:void(0)"
+                   onclick="doSearch();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+            </td>
+            <td width="5%">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" href="javascript:void(0)"
+                   onclick="gotoBack();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a>
+            </td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value="">
+            </td>
+        </tr>
+    </table>
+</div>
+<table id="tg">
+</table>
+</body>
+</html>

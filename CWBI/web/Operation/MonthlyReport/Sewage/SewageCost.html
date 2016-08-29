@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>污水公司生产运营月度分析报告-成本费用</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/OPMR/opmr.css"/>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_MR_sewage.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        setTimeout("confirmIt()", 1000);
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    function saveIt() {
+        var CompanyID = $('#CompanyID').val();
+        var date = $('#date').datebox('getValue');
+        if (CompanyID == "" || CompanyID == null) {
+            alert("请填写公司名称！");
+            return;
+        }
+        if (date == "" || date == null) {
+            alert("请选择编制日期！");
+            return;
+        }
+        $.ajax({
+            url: "SewageCostSD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue'),
+                power: $("#reason001").html(),
+                chemical: $("#reason002").html(),
+                sludge: $("#reason003").html(),
+                man: $("#reason004").html(),
+                fix: $("#reason005").html(),
+                manage: $("#reason006").html()
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                alert(return_data);
+                confirmIt();
+            }
+        });
+    }
+    function confirmIt() {
+        var CompanyName = $('#CompanyName').val();
+        if (CompanyName == "" || CompanyName == null) {
+            alert("请填写公司名称！");
+            return;
+        }
+        $("#tab_companyName").html($('#CompanyName').val());
+        $("#tab_date").html($('#date').datebox('getValue'));
+
+        table001();
+        table002();
+        table003();
+        table004();
+        table005();
+        table006();
+    }
+    function table001() {
+        $.ajax({
+            url: "SewageCost001GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                //console.log(arrayData);
+                $("#table001").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table001").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"6\" style=\"width: 130px;\">电耗</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table001").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table001").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main001\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason001\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason001").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main001'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['单位制水电耗', '预算单位制水电耗', '去年同期单位制水电耗']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}kwh/千吨<br>{a1}:{c1}kwh/千吨<br>{a2}:{c2}kwh/千吨'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '电耗(kwh/千吨)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '单位制水电耗',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算单位制水电耗',
+                                            type: 'line',
+                                            data: [arrayData.operation[3].m1,
+                                                arrayData.operation[3].m2,
+                                                arrayData.operation[3].m3,
+                                                arrayData.operation[3].m4,
+                                                arrayData.operation[3].m5,
+                                                arrayData.operation[3].m6,
+                                                arrayData.operation[3].m7,
+                                                arrayData.operation[3].m8,
+                                                arrayData.operation[3].m9,
+                                                arrayData.operation[3].m10,
+                                                arrayData.operation[3].m11,
+                                                arrayData.operation[3].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期单位制水电耗',
+                                            type: 'line',
+                                            data: [arrayData.operation[4].m1,
+                                                arrayData.operation[4].m2,
+                                                arrayData.operation[4].m3,
+                                                arrayData.operation[4].m4,
+                                                arrayData.operation[4].m5,
+                                                arrayData.operation[4].m6,
+                                                arrayData.operation[4].m7,
+                                                arrayData.operation[4].m8,
+                                                arrayData.operation[4].m9,
+                                                arrayData.operation[4].m10,
+                                                arrayData.operation[4].m11,
+                                                arrayData.operation[4].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table002() {
+        $.ajax({
+            url: "SewageCost002GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table002").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table002").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"5\" style=\"width: 130px;\">药剂费</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table002").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table002").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main002\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason002\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason002").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main002'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 45,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['药剂费', '预算药剂费', '去年同期药剂费']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br>{a1}:{c1}万元<br>{a2}:{c2}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '药剂费(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '药剂费',
+                                            type: 'line',
+                                            data: [arrayData.operation[0].m1,
+                                                arrayData.operation[0].m2,
+                                                arrayData.operation[0].m3,
+                                                arrayData.operation[0].m4,
+                                                arrayData.operation[0].m5,
+                                                arrayData.operation[0].m6,
+                                                arrayData.operation[0].m7,
+                                                arrayData.operation[0].m8,
+                                                arrayData.operation[0].m9,
+                                                arrayData.operation[0].m10,
+                                                arrayData.operation[0].m11,
+                                                arrayData.operation[0].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算药剂费',
+                                            type: 'line',
+                                            data: [arrayData.operation[1].m1,
+                                                arrayData.operation[1].m2,
+                                                arrayData.operation[1].m3,
+                                                arrayData.operation[1].m4,
+                                                arrayData.operation[1].m5,
+                                                arrayData.operation[1].m6,
+                                                arrayData.operation[1].m7,
+                                                arrayData.operation[1].m8,
+                                                arrayData.operation[1].m9,
+                                                arrayData.operation[1].m10,
+                                                arrayData.operation[1].m11,
+                                                arrayData.operation[1].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期药剂费',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table003() {
+        $.ajax({
+            url: "SewageCost003GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table003").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table003").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"6\" style=\"width: 130px;\">污泥处置成本</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table003").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table003").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main003\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason003\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason003").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main003'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['污泥处置成本', '预算污泥处置成本', '去年同期污泥处置成本']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br>{a1}:{c1}万元<br>{a2}:{c2}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '污泥处置成本(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '污泥处置成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[0].m1,
+                                                arrayData.operation[0].m2,
+                                                arrayData.operation[0].m3,
+                                                arrayData.operation[0].m4,
+                                                arrayData.operation[0].m5,
+                                                arrayData.operation[0].m6,
+                                                arrayData.operation[0].m7,
+                                                arrayData.operation[0].m8,
+                                                arrayData.operation[0].m9,
+                                                arrayData.operation[0].m10,
+                                                arrayData.operation[0].m11,
+                                                arrayData.operation[0].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算污泥处置成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[1].m1,
+                                                arrayData.operation[1].m2,
+                                                arrayData.operation[1].m3,
+                                                arrayData.operation[1].m4,
+                                                arrayData.operation[1].m5,
+                                                arrayData.operation[1].m6,
+                                                arrayData.operation[1].m7,
+                                                arrayData.operation[1].m8,
+                                                arrayData.operation[1].m9,
+                                                arrayData.operation[1].m10,
+                                                arrayData.operation[1].m11,
+                                                arrayData.operation[1].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期污泥处置成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table004() {
+        $.ajax({
+            url: "SewageCost004GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table004").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table004").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"4\" style=\"width: 130px;\">人工成本</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table004").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table004").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main004\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason004\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason004").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main004'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['人工成本', '预算人工成本', '去年同期人工成本']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br>{a1}:{c1}万元<br>{a2}:{c2}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '人工成本(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '人工成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[0].m1,
+                                                arrayData.operation[0].m2,
+                                                arrayData.operation[0].m3,
+                                                arrayData.operation[0].m4,
+                                                arrayData.operation[0].m5,
+                                                arrayData.operation[0].m6,
+                                                arrayData.operation[0].m7,
+                                                arrayData.operation[0].m8,
+                                                arrayData.operation[0].m9,
+                                                arrayData.operation[0].m10,
+                                                arrayData.operation[0].m11,
+                                                arrayData.operation[0].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算人工成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[1].m1,
+                                                arrayData.operation[1].m2,
+                                                arrayData.operation[1].m3,
+                                                arrayData.operation[1].m4,
+                                                arrayData.operation[1].m5,
+                                                arrayData.operation[1].m6,
+                                                arrayData.operation[1].m7,
+                                                arrayData.operation[1].m8,
+                                                arrayData.operation[1].m9,
+                                                arrayData.operation[1].m10,
+                                                arrayData.operation[1].m11,
+                                                arrayData.operation[1].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期人工成本',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table005() {
+        $.ajax({
+            url: "SewageCost005GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table005").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table005").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"4\" style=\"width: 130px;\">维修费</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table005").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table005").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main005\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason005\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason005").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main005'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['维修费', '预算维修费', '去年同期维修费']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br>{a1}:{c1}万元<br>{a2}:{c2}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '维修费(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '维修费',
+                                            type: 'line',
+                                            data: [arrayData.operation[0].m1,
+                                                arrayData.operation[0].m2,
+                                                arrayData.operation[0].m3,
+                                                arrayData.operation[0].m4,
+                                                arrayData.operation[0].m5,
+                                                arrayData.operation[0].m6,
+                                                arrayData.operation[0].m7,
+                                                arrayData.operation[0].m8,
+                                                arrayData.operation[0].m9,
+                                                arrayData.operation[0].m10,
+                                                arrayData.operation[0].m11,
+                                                arrayData.operation[0].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算维修费',
+                                            type: 'line',
+                                            data: [arrayData.operation[1].m1,
+                                                arrayData.operation[1].m2,
+                                                arrayData.operation[1].m3,
+                                                arrayData.operation[1].m4,
+                                                arrayData.operation[1].m5,
+                                                arrayData.operation[1].m6,
+                                                arrayData.operation[1].m7,
+                                                arrayData.operation[1].m8,
+                                                arrayData.operation[1].m9,
+                                                arrayData.operation[1].m10,
+                                                arrayData.operation[1].m11,
+                                                arrayData.operation[1].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期维修费',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table006() {
+        $.ajax({
+            url: "SewageCost006GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table006").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        if (i == 0) {
+                            $("#table006").append("<tr>"
+                                    + "<td class=\"item_text\" rowspan=\"4\" style=\"width: 130px;\">管理费</td>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr>");
+                        } else {
+                            $("#table006").append("<tr>"
+                                    + "<td style=\"width: 300px;\">" + arrayData.operation[i].kpi_name + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                    + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                    + "</tr> ");
+                        }
+
+                    }
+                    $("#table006").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"7\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main006\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"6\" style=\"align:center\">"
+                            + "<textarea id=\"reason006\" style=\"resize:none; width:98%; height:230px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason006").html(arrayData.reason[0].reason);
+
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main006'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: ['管理费', '预算管理费', '去年同期管理费']
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br>{a1}:{c1}万元<br>{a2}:{c2}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '管理费(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '管理费',
+                                            type: 'line',
+                                            data: [arrayData.operation[0].m1,
+                                                arrayData.operation[0].m2,
+                                                arrayData.operation[0].m3,
+                                                arrayData.operation[0].m4,
+                                                arrayData.operation[0].m5,
+                                                arrayData.operation[0].m6,
+                                                arrayData.operation[0].m7,
+                                                arrayData.operation[0].m8,
+                                                arrayData.operation[0].m9,
+                                                arrayData.operation[0].m10,
+                                                arrayData.operation[0].m11,
+                                                arrayData.operation[0].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '预算管理费',
+                                            type: 'line',
+                                            data: [arrayData.operation[1].m1,
+                                                arrayData.operation[1].m2,
+                                                arrayData.operation[1].m3,
+                                                arrayData.operation[1].m4,
+                                                arrayData.operation[1].m5,
+                                                arrayData.operation[1].m6,
+                                                arrayData.operation[1].m7,
+                                                arrayData.operation[1].m8,
+                                                arrayData.operation[1].m9,
+                                                arrayData.operation[1].m10,
+                                                arrayData.operation[1].m11,
+                                                arrayData.operation[1].m12
+                                            ]
+                                        },
+                                        {
+                                            name: '去年同期管理费',
+                                            type: 'line',
+                                            data: [arrayData.operation[2].m1,
+                                                arrayData.operation[2].m2,
+                                                arrayData.operation[2].m3,
+                                                arrayData.operation[2].m4,
+                                                arrayData.operation[2].m5,
+                                                arrayData.operation[2].m6,
+                                                arrayData.operation[2].m7,
+                                                arrayData.operation[2].m8,
+                                                arrayData.operation[2].m9,
+                                                arrayData.operation[2].m10,
+                                                arrayData.operation[2].m11,
+                                                arrayData.operation[2].m12
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+</script>
+<body>
+<div style="position: absolute;top:40px;">
+
+</div>
+<div style="background-color: #E0E0E0; padding:5px 0;width: 100%;position:fixed;z-index: 9999">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">日期：</span><input id="date" class="easyui-datebox"
+                                                    data-options="formatter:myformatter,parser:myparser"
+                                                    value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">公司名称：</span><input type="text" size="40" id="CompanyName"><input type="hidden"
+                                                                                                    id="CompanyID">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+    <a style="float: right;" class="easyui-linkbutton" data-options="iconCls:'icon-save'" href="javascript:void(0)"
+       onclick="saveIt();">保&nbsp;&nbsp;&nbsp;&nbsp;存</a>
+</div>
+<div style="width: 1100px;margin-left: auto;margin-right: auto;">
+    <br>
+    <br>
+    <h3 style="width: 1100px;text-align: center;line-height: 30px; "><img src="../../../images/CW_logo.png" align="top"
+                                                                          width="25px" height="25px;">&nbsp;污水公司生产运营月度分析报告-成本费用
+    </h3>
+    <div style="width: 1100px;">
+        <p style="font-size: 12px;">公司名称：<span id="tab_companyName"></span></p>
+        <p style="font-size: 12px;">编制时间：<span id="tab_date"></span></p>
+    </div>
+    <table class="gridtable">
+        <thead>
+        <tr>
+            <th colspan="2">项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目</th>
+            <th style="width: 60px;">单位</th>
+            <th style="width: 40px;">1月</th>
+            <th style="width: 40px;">2月</th>
+            <th style="width: 40px;">3月</th>
+            <th style="width: 40px;">4月</th>
+            <th style="width: 40px;">5月</th>
+            <th style="width: 40px;">6月</th>
+            <th style="width: 80px;">7月</th>
+            <th style="width: 40px;">8月</th>
+            <th style="width: 40px;">9月</th>
+            <th style="width: 40px;">10月</th>
+            <th style="width: 40px;">11月</th>
+            <th style="width: 40px;">12月</th>
+            <th style="width: 40px;">累计</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 一、成本费用-电耗 -->
+        <tr>
+            <td class="item_text" colspan="16">一、成本费用-电耗</td>
+        </tr>
+        </tbody>
+        <tbody id="table001">
+        </tbody>
+        <tbody>
+        <!-- 二、生产成本-药剂费 -->
+        <tr>
+            <td class="item_text" colspan="16">二、生产成本-药剂费</td>
+        </tr>
+        </tbody>
+        <tbody id="table002">
+        </tbody>
+        <tbody>
+        <!-- 三、生产成本-污泥处理费 -->
+        <tr>
+            <td class="item_text" colspan="16">三、生产成本-污泥处理费</td>
+        </tr>
+        </tbody>
+        <tbody id="table003">
+        </tbody>
+        <tbody>
+        <!-- 四、人工成本 -->
+        <tr>
+            <td class="item_text" colspan="16">四、人工成本</td>
+        </tr>
+        </tbody>
+        <tbody id="table004">
+        </tbody>
+        <tbody>
+        <!-- 五、维修费 -->
+        <tr>
+            <td class="item_text" colspan="16">五、维修费</td>
+        </tr>
+        </tbody>
+        <tbody id="table005">
+        </tbody>
+        <tbody>
+        <!-- 六、管理费 -->
+        <tr>
+            <td class="item_text" colspan="16">六、管理费</td>
+        </tr>
+        </tbody>
+        <tbody id="table006">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

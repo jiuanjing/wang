@@ -1,0 +1,128 @@
+[
+  {
+    "company_id": 1,
+    "brief_name": "淮南首创",
+    "invest_rate": "88.34",
+    "c1": "99"
+  },
+  {
+    "company_id": 2,
+    "brief_name": "马鞍山首创",
+    "invest_rate": "87.30",
+    "c1": "98"
+  },
+  {
+    "company_id": 3,
+    "brief_name": "马鞍山港润",
+    "invest_rate": "86.26",
+    "c1": "97"
+  },
+  {
+    "company_id": 4,
+    "brief_name": "铜陵首创",
+    "invest_rate": "85.22",
+    "c1": "96"
+  },
+  {
+    "company_id": 5,
+    "brief_name": "铜陵钟顺",
+    "invest_rate": "84.18",
+    "c1": "95"
+  },
+  {
+    "company_id": 6,
+    "brief_name": "徐州首创",
+    "invest_rate": "83.14",
+    "c1": "94"
+  },
+  {
+    "company_id": 7,
+    "brief_name": "余姚首创",
+    "invest_rate": "82.10",
+    "c1": "93"
+  },
+  {
+    "company_id": 8,
+    "brief_name": "包头首创黄河水源",
+    "invest_rate": "81.06",
+    "c1": "92"
+  },
+  {
+    "company_id": 9,
+    "brief_name": "包头首创黄河城市 ",
+    "invest_rate": "80.02",
+    "c1": "91"
+  },
+  {
+    "company_id": 10,
+    "brief_name": "包头申银水务",
+    "invest_rate": "78.98",
+    "c1": "90"
+  },
+  {
+    "company_id": 11,
+    "brief_name": "临猗首创",
+    "invest_rate": "77.94",
+    "c1": "89"
+  },
+  {
+    "company_id": 12,
+    "brief_name": "宝鸡首创",
+    "invest_rate": "76.90",
+    "c1": "88"
+  },
+  {
+    "company_id": 13,
+    "brief_name": "渭南首创",
+    "invest_rate": "75.86",
+    "c1": "87"
+  },
+  {
+    "company_id": 14,
+    "brief_name": "铁岭泓源城市污水",
+    "invest_rate": "74.82",
+    "c1": "86"
+  },
+  {
+    "company_id": 15,
+    "brief_name": "盘锦首创",
+    "invest_rate": "73.78",
+    "c1": "85"
+  },
+  {
+    "company_id": 16,
+    "brief_name": "新乡首创",
+    "invest_rate": "72.74",
+    "c1": "84"
+  },
+  {
+    "company_id": 17,
+    "brief_name": "秦皇岛首创",
+    "invest_rate": "71.70",
+    "c1": "83"
+  },
+  {
+    "company_id": 18,
+    "brief_name": "首创东坝",
+    "invest_rate": "70.66",
+    "c1": "82"
+  },
+  {
+    "company_id": 19,
+    "brief_name": "深圳水务集团",
+    "invest_rate": "69.62",
+    "c1": "81"
+  },
+  {
+    "company_id": 20,
+    "brief_name": "屏山首创",
+    "invest_rate": "68.58",
+    "c1": "80"
+  },
+  {
+    "company_id": 21,
+    "brief_name": "广元首创",
+    "invest_rate": "67.54",
+    "c1": "79"
+  }
+]                                                                                                                                                

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>利润分析</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/finance_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div4 {
+            position: absolute;
+            z-index: 96;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 97;
+        }
+    </style>
+    <script>
+        function setSize() {
+            var h = $(window).height() - 2;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt').datagrid('resize');
+            $('#dd').datagrid('resize');
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            /* 一*********************************************************************** */
+            showDiv001();
+            /* 二************************************************************************/
+            showDiv002();
+            /* 三*********************************************************************** */
+            /* 四*********************************************************************** */
+            /* 五*********************************************************************** */
+            showDiv005();
+            /* 六*********************************************************************** */
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+
+        function showDiv001() {
+            $.ajax({
+                url: "Profit001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '归首创净利润趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 60,
+                                        x2: 50,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["归首创净利润", "同比"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '净利润(万元)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '同比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '归首创净利润',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '同比',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        //取数组最大值,并取整
+        function max_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 100;
+            } else if (max == 0 && min < 0) {
+                max = 0 - min;
+            }
+            for (var i = 1; i < tmp.length; i++) {
+                if (max < tmp[i])max = tmp[i];
+            }
+            max = max.toFixed(0);//取整
+            var len = max.length;
+            if (len > 5) {
+                len = len - 2;
+                max = parseFloat(max.substr(0, 2)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            } else {
+                len = len - 1;
+                max = parseFloat(max.substr(0, 1)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            }
+            return max;
+        }
+        //取数组最小值,并取整
+        function min_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 0;
+            } else if (max == 0 && min < 0) {
+                return (Math.floor(min / 1000)) * 1000;
+            } else if (min == 0 && max < 0) {
+                return (Math.floor(max / 1000)) * 1000;
+            } else if (max < 0 && min < 0) {
+                max = -max;
+                min = -min;
+                for (var i = 1; i < tmp.length; i++) {
+                    if (max < tmp[i])max = tmp[i];
+                }
+                return -(Math.ceil(min / 1000)) * 1000;
+            }
+            return 0;
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "Profit002GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "归属首创净利润与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}万元"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期归属首创净利润',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.6, '#ff4500'], [0.8, '#ffd400'], [1, '#228b22']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + '万元';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy
+                                        },
+                                        {
+                                            name: '同期归属首创净利润',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.6, '#ff4500'], [0.8, '#ffd400'], [1, '#228b22']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + '万元';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+        function showDiv005() {
+            $.ajax({
+                url: "Profit005GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/pie',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                                if (arrayData.positive.length <= 0) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '归属首创净利润结构分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{a} <br/>{b} : {c}万元 ({d}%)"
+                                    },
+                                    legend: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'left',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.positive.length; i++) {
+                                                d.push(arrayData.positive[i].name);
+                                            }
+                                            for (var i = 0; i < arrayData.negative.length; i++) {
+                                                d.push(arrayData.negative[i].name);
+                                            }
+                                            return d;
+                                        })()
+                                    },
+                                    calculable: true,
+                                    series: [
+                                        {
+                                            name: '归属首创净利润结构',
+                                            type: 'pie',
+                                            radius: [60, 100],
+                                            center: ['50%', '55%'],
+                                            data: arrayData.positive
+                                        },
+                                        {
+                                            name: '归属首创净利润结构',
+                                            type: 'pie',
+                                            radius: [0, 50],
+                                            center: ['50%', '55%'],
+                                            data: arrayData.negative,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {
+                                                        show: false
+                                                    },
+                                                    labelLine: {
+                                                        show: false
+                                                    }
+                                                }
+                                            },
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv006() {
+            $.ajax({
+                url: "Profit006GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    //console.log(arrayData);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/treemap'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main6'), 'macarons');
+                                if (arrayData.positive.length <= 0) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '归属首创净利润构成分析',
+                                        x: 100,
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{b}: {c}万元"
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        x: 258,
+                                        y: 7,
+                                        feature: {
+                                            myTool: {
+                                                show: true,
+                                                title: '切换正-负归属首创净利润构成',
+                                                icon: 'image://../../../scripts/easyui-1.3.6/themes/icons/reload.png', //图标
+                                                onclick: function (option) {
+                                                    //console.log(option);
+                                                    if (index1 % 2 == 0) {
+                                                        option.series[0].data = arrayData.positive;
+                                                    } else {
+                                                        if (arrayData.negative.length > 0) {
+                                                            option.series[0].data = arrayData.negative;
+                                                        }
+                                                    }
+                                                    index1++;
+                                                    myChart.setOption(option, true);
+                                                }
+                                            }
+                                        }
+                                    },
+                                    calculable: false,
+                                    series: [
+                                        {
+                                            name: ' ',
+                                            type: 'treemap',
+                                            center: ['50%', '58%'],
+                                            size: ['95%', '80%'],
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {
+                                                        show: true,
+                                                        formatter: "{b}"
+                                                    },
+                                                    borderWidth: 1
+                                                },
+                                                emphasis: {
+                                                    label: {
+                                                        show: true
+                                                    }
+                                                }
+                                            },
+                                            data: arrayData.positive
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+
+        function random() {
+            var r = Math.round(Math.random() * 100000);
+            return (r * (r % 2 == 0 ? 1 : 0.5));
+        }
+        function random1() {
+            var r = Math.round(Math.random() * 100);
+            return (r * (r % 2 == 0 ? 1 : -0.5));
+        }
+        function random2() {
+            var r = Math.round(Math.random() * 100000);
+            return (r * (r % 2 == 0 ? 0.5 : 0.25));
+        }
+
+        function randomDataArray() {
+            var d = [];
+            var len = 280;
+            while (len--) {
+                var a = random();
+                var b = random1();
+                var c = Math.abs(a * b / 100000).toFixed(2);
+                d.push([a, b, c,]);
+            }
+            return d;
+        }
+        var index1 = 1;
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            $('#tt').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#dd').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            showDiv001();
+            showDiv002();
+            showDiv005();
+            showDiv006();
+            index1 = 1;
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body class="easyui-layout" id="cc">
+<div data-options="region:'center',border:false">
+    <div class="div1 drag-item" id="main1">
+
+    </div>
+    <div class="div2 drag-item" id="main2">
+
+    </div>
+    <div class="div3 drag-item" id="main3">
+        <div id="tab002">
+            <table id="dd" class="easyui-datagrid" border="false"
+                   data-options="singleSelect:true,
+				 url:'Profit003GetData.jsp',
+				 title:'归属首创净利润同比Top10排名分析',
+				 method:'post',
+				 rownumbers:'true',
+				 fit:'true',
+				 sortName:'profit_cw_yoy', //默认排序字段
+	        	 sortOrder:'desc', //排序方式
+				 queryParams:{ date : ''},
+				 columns:[[
+						    {field:'CompanyName',title:'公司名称',rowspan:2,width:100},
+						    {title:'归属首创净利润(万元)',colspan:2},
+						    {field:'profit_cw_yoy',title:'同比(%)',width:60,align:'center',rowspan:2,sortable:true,
+						    	formatter:function(value,rowData,rowIndex){
+						    		if(value == '+'){
+						    			return '+∞';
+						    		}
+						    			return value;
+						    	}
+						    }
+						],[
+						    {field:'profit_cw',title:'本期值',width:85,align:'center',sortable:true},
+						    {field:'profit_cw_ly',title:'同期值',width:85,align:'center',sortable:true}
+						]]
+				 ">
+            </table>
+        </div>
+    </div>
+    <div class="div4 drag-item" id="main4">
+        <div id="tab001">
+            <table id="tt" class="easyui-datagrid" border="false"
+                   data-options="singleSelect:true,
+				 url:'Profit004GetData.jsp',
+				 title:'归属首创净利润完成率Top10排名分析',
+				 method:'post',
+				 rownumbers:'true',
+				 fit:'true',
+				 sortName:'rate', //默认排序字段
+	        	 sortOrder:'desc', //排序方式
+				 queryParams:{ date : ''},
+				 columns:[[
+						    {field:'CompanyName',title:'公司名称',rowspan:2,width:90},
+						    {title:'归属首创净利润(万元)',colspan:2},
+						    {field:'rate',title:'完成率(%)',width:70,align:'center',rowspan:2,sortable:true}
+						],[
+						    {field:'profit_cw',title:'本期值',width:85,align:'center',sortable:true},
+						    {field:'profit_cw_budget',title:'预算值',width:85,align:'center',sortable:true}
+						]]
+				 ">
+            </table>
+        </div>
+    </div>
+    <div class="div5 drag-item" id="main5">
+
+    </div>
+    <div class="div6 drag-item" id="main6">
+
+    </div>
+</div>
+<div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+     style="width:175px;padding:10px;">
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'center',border:false" style="padding:10px;background:#fff;border:1px solid #ccc;">
+            <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                   style="width: 120px;"></input>
+            <script type="text/javascript">
+                function myformatter(date) {
+                    var y = date.getFullYear();
+                    var m = date.getMonth() + 1;
+                    return y + '-' + (m < 10 ? ('0' + m) : m);
+                }
+                function myparser(s) {
+                    if (!s) return new Date();
+                    var ss = (s.split('-'));
+                    var y = parseInt(ss[0], 10);
+                    var m = parseInt(ss[1], 10);
+                    if (!isNaN(y) && !isNaN(m)) {
+                        return new Date(y, m - 1);
+                    } else {
+                        return new Date();
+                    }
+                }
+            </script>
+            <div style="text-align:right;padding:10px 0;">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                   onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

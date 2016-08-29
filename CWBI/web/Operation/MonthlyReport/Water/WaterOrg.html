@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>供水公司生产运营月度分析报告-组织架构</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/OPMR/opmr.css"/>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_MR_water.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        setTimeout("confirmIt()", 1000);
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    function confirmIt() {
+        var CompanyName = $('#CompanyName').val();
+        if (CompanyName == "" || CompanyName == null) {
+            alert("请填写公司名称！");
+            return;
+        }
+        $("#tab_companyName").html($('#CompanyName').val());
+        $("#tab_date").html($('#date').datebox('getValue'));
+        table001();
+        table002();
+    }
+    function table001() {
+        $.ajax({
+            url: "WaterOrg001GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table001").empty();
+                var len = arrayData.org.length;
+                for (var i = 0; i < arrayData.org.length; i++) {
+                    if (i == 0) {
+                        $("#table001").append("<tr>"
+                                + "<td rowspan=" + len + ">定岗定编</td>"
+                                + "<td>" + arrayData.org[i].unit_name + "</td>"
+                                + "<td>" + arrayData.org[i].summary_responsibility + "</td>"
+                                + "<td>" + arrayData.org[i].plan_heads + "</td>"
+                                + "<td>" + arrayData.org[i].actual_heads + "</td>"
+                                + "</tr>");
+                    } else {
+                        $("#table001").append("<tr>"
+                                + "<td>" + arrayData.org[i].unit_name + "</td>"
+                                + "<td>" + arrayData.org[i].summary_responsibility + "</td>"
+                                + "<td>" + arrayData.org[i].plan_heads + "</td>"
+                                + "<td>" + arrayData.org[i].actual_heads + "</td>"
+                                + "</tr>");
+                    }
+                }
+            }
+        });
+    }
+    function table002() {
+        $.ajax({
+            url: "WaterOrg002GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                $("#table002").empty();
+                $("#table002").append("<tr>"
+                        + "<td style=\"background-color:#c5d9f1;text-align: center;width: 100px;\" rowspan=\"2\">公司基本情况</td>"
+                        + "<td style=\"width:1000px;\" colspan=\"2\">"
+                        + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                        + "<div id=\"main001\" style=\"height: 300px;z-index: 999;text-align: center\">"
+                        + "<img src=\"" + arrayData[1] + "\">"
+                        + "</div>"
+                        + "</div>"
+                        + "</td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td style=\"text-align: right;width:800px;\">公司在岗职工（人）</td>"
+                        + "<td>" + arrayData[0] + "</td>"
+                        + "</tr>");
+            }
+        });
+    }
+</script>
+<body>
+<div style="background-color: #E0E0E0; padding:5px 0;width: 100%;position:fixed;">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">编制日期：</span><input id="date" class="easyui-datebox"
+                                                      data-options="formatter:myformatter,parser:myparser"
+                                                      value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">公司名称：</span><input type="text" size="40" id="CompanyName">
+    <input type="hidden" id="CompanyID">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+</div>
+<div style="width: 1100px;margin-left: auto;margin-right: auto;text-align: ">
+    <br>
+    <br>
+    <h3 style="width: 1100px;text-align: center;line-height: 30px; "><img src="../../../images/CW_logo.png" align="top"
+                                                                          width="25px" height="25px;">&nbsp;供水公司生产运营月度分析报告-组织架构
+    </h3>
+    <div style="width: 1100px;">
+        <p style="font-size: 12px;">公司名称：<span id="tab_companyName"></span></p>
+        <p style="font-size: 12px;">编制时间：<span id="tab_date"></span></p>
+    </div>
+    <p class="item_text">一、公司组织架构图</p>
+    <table class="gridtable">
+        <tbody id="table002">
+        </tbody>
+    </table>
+    <p class="item_text">二、定岗定编情况</p>
+    <table class="gridtable">
+        <thead>
+        <tr>
+            <th style="width: 100px;"></th>
+            <th style="width: 150px;">部门名称</th>
+            <th style="width: 350px;">职责概述</th>
+            <th style="width: 250px;">计划编制（人）</th>
+            <th style="width: 250px;">目前编制（人）</th>
+        </tr>
+        </thead>
+        <tbody id="table001">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

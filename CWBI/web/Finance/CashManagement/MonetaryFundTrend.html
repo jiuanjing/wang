@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>平均货币资金占用额趋势分析</title>
+</head>
+<script type="text/javascript" src="../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery-ui.min.js"></script>
+<script src="../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../scripts/jquery.easyui.min.js"></script>
+<script src="../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/condition-table.css"/>
+<!-- 设置时间 -->
+<script src="../../scripts/MyScripts_FN.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../scripts/myIndicator/myIndicator2.js"></script>
+<style type="text/css">
+    /* 数据表格样式 */
+    table.hovertable {
+        margin-left: auto;
+        margin-right: auto;
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #999999;
+        border-collapse: collapse;
+    }
+
+    table.hovertable th {
+        background-color: #c3dde0;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+
+    table.hovertable tr {
+        background-color: #d4e3e5;
+    }
+
+    table.hovertable td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+</style>
+<script>
+    $(function () {
+        DoAjaxGetDeptData();
+        DoAjaxGetRegionData();
+        DoAjaxGetCompanyData();
+        confirmIt();
+    });
+    function confirmIt() {
+        var indicator = myIndicator("正在加载中...");
+        DoAjaxGetMonetaryFundTrendData();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    }
+
+    function DoAjaxGetDeptData() {
+        $.ajax({
+            url: "../../common/DoAjaxGetDeptData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                AnalysisTypeID: "1"   //1表示财务分析，2表示运营分析，3表示人力资源分析，分析类型ID
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+
+                //下面用返回值来填充所属管理部门下拉框
+                $('#select_dept').html(return_data);
+            }
+        });
+    }
+
+    function DoAjaxGetRegionData() {
+        $.ajax({
+            url: "../../common/DoAjaxGetRegionData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                DeptID: $('#DeptID').val()   //0表示无管辖部门，1表示投运一部，2表示投运二部，部门ID
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+
+                //下面用返回值来填充所属管理部门下拉框
+                $('#select_region').html(return_data);
+            }
+        });
+    }
+
+    function DoAjaxGetCompanyData() {
+        $.ajax({
+            url: "../../common/DoAjaxGetCompanyData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                DeptID: $('#DeptID').val(),   //0表示无管辖部门，1表示投运一部，2表示投运二部，部门ID
+                RegionID: $('#RegionID').val()
+
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+
+                //下面用返回值来填充所属管理部门下拉框
+                $('#select_company').html(return_data);
+            }
+        });
+    }
+
+    function DoAjaxGetMonetaryFundTrendData() {
+        $.ajax({
+            url: "MonetaryFundTrendGetData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                CompanyID: $('#CompanyID').val(),
+                begin_date: $('#begin_date').datebox('getValue'),
+                end_date: $('#end_date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+                var arrayData = eval(return_data);
+                var CompanyName = $("#CompanyID").find("option:selected").text();
+                if (CompanyName == "--请选择公司--") {
+                    CompanyName = "首创股份";
+                }
+                if (CompanyName == "") {
+                    CompanyName = $("#CompanyName").val();
+                }
+                require.config({
+                    paths: {
+                        echarts: '../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'));
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            $("#Main_title").html(CompanyName + '平均货币资金占用额趋势分析');
+                            var option = {
+                                grid: {
+                                    y2: 80
+                                },
+                                legend: {
+                                    y: 35,
+                                    data: ["平均货币资金占用额", "平均货币资金占用额计划值"]
+                                },
+                                toolbox: {
+                                    show: true,
+                                    x: 890,
+                                    y: 15,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {
+                                            show: true,
+                                            readOnly: true,
+                                            optionToContent: function (params) {
+                                                //console.log(params);
+                                                var name = params.series[0].name;
+                                                var list = params.series[0].data;
+                                                var name1 = params.series[1].name;
+                                                var list1 = params.series[1].data;
+                                                var xAxis = params.xAxis[0].data;
+                                                var data = "<table class=\"hovertable\">";
+                                                data += "<tr><th>年-月</th><th>" + name + "</th><th>" + name1 + "</th></tr>";
+                                                for (var i = 0; i < list.length; i++) {
+                                                    var td = "<tr align=\"center\" onmouseover=\"this.style.backgroundColor='#ffff66';\"onmouseout=\"this.style.backgroundColor='#d4e3e5';\">"
+                                                            + "<td>" + xAxis[i] + "</td><td>" + list[i] + "万元</td><td>" + list1[i] + "万元</td></tr>";
+                                                    data += td;
+                                                }
+                                                data += "</table>"
+                                                return data;
+                                            }
+                                        },
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: '{b}</br>{a}:{c}万元</br>{a1}:{c1}万元'
+                                },
+                                dataZoom: {
+                                    show: true,
+                                    start: 0,        //从最小的X值开始
+                                    end: 100         //到最大的X值结束
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        splitNumber: 24,      //表示X轴上有24个标签
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                //解析字符串数组成需要的数据格式,前六位是年月,后面是每年的占比数据
+                                                d.push((arrayData[i].substring(2, 4)).toString() + '年' + (arrayData[i].substring(4, 6)).toString() + '月');
+                                            }
+                                            return d;
+                                        })(),
+                                        axisLabel: {
+                                            show: true,
+                                            interval: 0,    // {number}
+                                            rotate: 45,
+                                            textStyle: {
+                                                fontSize: 12
+                                            }
+                                        }
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '平均货币资金占用额(万元)'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '平均货币资金占用额',
+                                        type: 'line',
+                                        showAllSymbol: true,
+                                        symbolSize: 2,     //点的大小
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(parseFloat(arrayData[i].split(":")[1]));
+                                            }
+                                            return d;
+                                        })(),
+                                        symbol: 'rectangle',
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#666699',
+                                                label: {
+                                                    show: true,
+                                                    formatter: function (params) {
+                                                        return params.data;
+                                                    }
+                                                }
+                                            },
+                                            emphasis: {
+                                                color: '#FF33CC'
+                                            }
+                                        }
+                                    }, {
+                                        name: '平均货币资金占用额计划值',
+                                        type: 'line',
+                                        showAllSymbol: true,
+                                        symbolSize: 2,     //点的大小
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(parseFloat(arrayData[i].split(":")[2]));
+                                            }
+                                            return d;
+                                        })(),
+                                        symbol: 'rectangle',
+                                        itemStyle: {
+                                            normal: {
+                                                color: 'lime',
+                                                label: {
+                                                    show: true,
+                                                    formatter: function (params) {
+                                                        return params.data;
+                                                    }
+                                                }
+                                            },
+                                            emphasis: {
+                                                color: '#FF33CC'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+</script>
+<body style="overflow: hidden;">
+<div id="query_condition">
+    <table class="condition_table">
+        <tr>
+            <td class="hiddenSytle" style="" width="10%">所属管理部门：</td>
+            <td class="hiddenSytle" width="10%">
+                <div id="select_dept"></div>
+            </td>
+
+            <td class="hiddenSytle" width="4%">地区：</td>
+            <td class="hiddenSytle" width="8%">
+                <div id="select_region"></div>
+            </td>
+
+            <td class="hiddenSytle" width="4%">公司：</td>
+            <td class="hiddenSytle" width="8%">
+                <div id="select_company"></div>
+            </td>
+
+            <td id="append" width="7%">开始时间：</td>
+            <td width="8%"><input id="begin_date" class="easyui-datebox"
+                                  data-options="formatter:myformatter,parser:myparser" value="01"
+                                  style="width: 100px;"></input></td>
+
+            <td width="7%">结束时间：</td>
+            <td width="8%"><input id="end_date" class="easyui-datebox"
+                                  data-options="formatter:myformatter,parser:myparser" value="01"
+                                  style="width: 100px;"></input></td>
+
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="3%"><a href="javascript:lookup();"><img id="lookup" style="margin-top: 5px;" alt="模糊查询"
+                                                               height="22px" width="25px" src="../../images/lookup.png"></a>
+            </td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div class="Main_title_div">
+    <div class="Main_title" id="Main_title"></div>
+</div>
+<div id="main" style="height:495px"></div>
+</body>
+</html>

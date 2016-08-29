@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>现金流量分析</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/finance_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div4 {
+            position: absolute;
+            z-index: 96;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 98;
+        }
+    </style>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 80;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt').datagrid('resize');
+
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#dd').datagrid('resize');
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            showTotal();
+            /* 一*********************************************************************** */
+            showDiv001();
+            /* 二*********************************************************************** */
+            showDiv002();
+            /* 三*********************************************************************** */
+            showDiv003();
+            /* 四*********************************************************************** */
+            /* 五*********************************************************************** */
+            showDiv005();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+        function showTotal() {
+            $.ajax({
+                url: "CashFlowGetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    for (var i = 0; i < arrayData.length; i++) {
+                        $(".total_span").eq(i).text(arrayData[i]);
+                    }
+                }
+            });
+        }
+        function showDiv001() {
+            $.ajax({
+                url: "CashFlow001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '经营现金流入量趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 45,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["经营现金流入量", "同比"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '流入量(万元)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '同比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '经营现金流入量',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '同比',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "CashFlow002GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '经营现金净流量趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 45,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["经营现金净流量", "同比"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '净流量(万元)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '同比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '经营现金净流量',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '同比',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv003() {
+            $.ajax({
+                url: "CashFlow003GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '经营现金流动负债比率趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 55,
+                                        x2: 55,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}</br>{a}:{c}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 24,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '比率(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '经营现金流动负债比率',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle'
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv005() {
+            $.ajax({
+                url: "CashFlow005GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/treemap'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                                if (arrayData.positive.length <= 0) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '经营现金净流量构成分析',
+                                        x: 100,
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{b}: {c}万元"
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        x: 255,
+                                        y: 7,
+                                        feature: {
+                                            myTool: {
+                                                show: true,
+                                                title: '切换正-负现金净流量构成',
+                                                icon: 'image://../../../scripts/easyui-1.3.6/themes/icons/reload.png', //图标
+                                                onclick: function (option) {
+                                                    //console.log(option);
+                                                    if (index1 % 2 == 0) {
+                                                        option.series[0].data = arrayData.positive;
+                                                    } else {
+                                                        if (arrayData.negative.length > 0) {
+                                                            option.series[0].data = arrayData.negative;
+                                                        }
+                                                    }
+                                                    index1++;
+                                                    myChart.setOption(option, true);
+                                                }
+                                            }
+                                        }
+                                    },
+                                    calculable: false,
+                                    series: [
+                                        {
+                                            name: ' ',
+                                            type: 'treemap',
+                                            center: ['50%', '58%'],
+                                            size: ['95%', '75%'],
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {
+                                                        show: true,
+                                                        formatter: "{b}"
+                                                    },
+                                                    borderWidth: 1
+                                                },
+                                                emphasis: {
+                                                    label: {
+                                                        show: true
+                                                    }
+                                                }
+                                            },
+                                            data: arrayData.positive
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        var index1 = 1;
+
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            $('#tt').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#dd').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            showTotal();
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv005();
+            index1 = 1;
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="north" style="height:80px;">
+        <div class="north_div">
+            <ul class="up_ul">
+                <li class="bgjb0">
+                    <span>经营现金净流量</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb1">
+                    <span>投资现金净流量</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb2">
+                    <span>筹资现金净流量</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb3">
+                    <span>整体现金净流量</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb4">
+                    <span>营业收入</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb5">
+                    <span>流动负债</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div region="center" id="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+            <div id="tab001">
+                <table id="tt" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					url:'CashFlow004GetData.jsp',
+					title:'经营现金净流量趋势异常分析',
+					method:'post',
+					rownumbers:'true',
+					fit:'true',
+					sortName:'operating_cash_flow_months', //默认排序字段
+	        	    sortOrder:'desc', //排序方式
+					queryParams:{ date : ''}
+					">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:200,align:'left'">公司名称</th>
+                        <th data-options="field:'operating_cash_flow_months',width:130,align:'center',sortable:true">
+                            连续下降次数
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div5 drag-item" id="main5">
+
+        </div>
+        <div class="div6 drag-item" id="main6">
+            <div id="tab002">
+                <table id="dd" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+					 url:'CashFlow006GetData.jsp',
+					 title:'经营现金流动负债比Top10排名分析',
+					 method:'post',
+					 rownumbers:'true',
+					 fit:'true',
+					 sortName:'ccdr', //默认排序字段
+	        	    sortOrder:'desc', //排序方式
+					 queryParams:{ date : ''}
+					 ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:180,align:'left'">公司名称</th>
+                        <th data-options="field:'ccdr',width:150,align:'center',sortable:true">经营现金流动负债比(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                       style="width: 120px;"></input>
+                <script type="text/javascript">
+                    function myformatter(date) {
+                        var y = date.getFullYear();
+                        var m = date.getMonth() + 1;
+                        return y + '-' + (m < 10 ? ('0' + m) : m);
+                    }
+                    function myparser(s) {
+                        if (!s) return new Date();
+                        var ss = (s.split('-'));
+                        var y = parseInt(ss[0], 10);
+                        var m = parseInt(ss[1], 10);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            return new Date(y, m - 1);
+                        } else {
+                            return new Date();
+                        }
+                    }
+                </script>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>上存资金平均余额排名分析</title>
+</head>
+<script type="text/javascript" src="../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery-ui.min.js"></script>
+<script src="../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../scripts/jquery.easyui.min.js"></script>
+<script src="../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/condition-table.css"/>
+<!-- 设置时间 -->
+<script src="../../scripts/MyScripts_FN.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../scripts/myIndicator/myIndicator2.js"></script>
+<style type="text/css">
+    /* 数据表格样式 */
+    table.hovertable {
+        margin-left: auto;
+        margin-right: auto;
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #999999;
+        border-collapse: collapse;
+    }
+
+    table.hovertable th {
+        background-color: #c3dde0;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+
+    table.hovertable tr {
+        background-color: #d4e3e5;
+    }
+
+    table.hovertable td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+</style>
+<script>
+    $(function () {
+        confirmIt();
+    })
+    function confirmIt() {
+        var indicator = myIndicator("正在加载中...");
+        DoAjaxGetAMSINPRankData();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    }
+
+    function DoAjaxGetAMSINPRankData() {
+        $.ajax({
+            url: "AMSINPRankGetData.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //$('#value1').val(return_data);      //调试用
+                var arrayData = ""
+                if (return_data == "" || return_data == null) {
+                } else {
+                    arrayData = eval(return_data);
+                }
+                var date = $("#date").val();
+                var target = "上存资金平均余额";
+                require.config({
+                    paths: {
+                        echarts: '../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'), 'macarons');
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            $("#Main_title").html(date + target + '排名分析');
+                            var option = {
+                                grid: {
+                                    y2: 80
+                                },
+                                toolbox: {
+                                    show: true,
+                                    x: 890,
+                                    y: 15,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {
+                                            show: true, readOnly: true,
+                                            optionToContent: function (params) {
+                                                //console.log(params);
+                                                var name = params.series[0].name;
+                                                var list = params.series[0].data;
+                                                var xAxis = params.xAxis[0].data;
+                                                var data = "<table class=\"hovertable\">";
+                                                data += "<tr><th>No.</th><th>公司</th><th>" + name + "</th></tr>";
+                                                for (var i = 0; i < list.length; i++) {
+                                                    var td = "<tr align=\"center\" onmouseover=\"this.style.backgroundColor='#ffff66';\"onmouseout=\"this.style.backgroundColor='#d4e3e5';\">"
+                                                            + "<td>" + (i + 1) + "</td><td>" + xAxis[i] + "</td><td>" + list[i] + "万元</td></tr>";
+                                                    data += td;
+                                                }
+                                                data += "</table>"
+                                                return data;
+                                            }
+                                        },
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: function (params) {
+                                        //console.log(params);
+                                        var tip = date + "</br>" + params[0][1] + ":No." + (params[0].dataIndex + 1) + "</br>" + target + ":" + params[0].data + "万元";
+                                        return tip;
+                                    },
+                                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                    }
+                                },
+                                dataZoom: {
+                                    show: true,
+                                    start: 0,        //从最小的X值开始
+                                    end: 100         //到最大的X值结束
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        splitNumber: 100,      //表示X轴上有24个标签
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(arrayData[i].split(":")[2]);
+                                            }
+                                            return d;
+                                        })(),
+                                        splitLine: {
+                                            show: false
+                                        },
+                                        axisLabel: {
+                                            show: true,
+                                            interval: 0,    // {number}
+                                            rotate: 45,
+                                            textStyle: {
+                                                fontSize: 9,
+                                                fontStyle: 'italic'
+                                            }
+                                        }
+
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: target + '(万元)'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: target,
+                                        type: 'bar',
+                                        barGap: '10%',
+                                        barMaxWidth: 40,
+                                        itemStyle: {        // 系列级个性化样式，纵向渐变填充
+                                            normal: {
+                                                barBorderWidth: 1
+                                            }
+                                        },
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(parseFloat(arrayData[i].split(":")[1]));
+                                            }
+                                            return d;
+                                        })(),
+                                        markLine: {
+                                            data: [
+                                                {type: 'average', name: '平均值'}
+                                            ],
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#00000',
+                                                    label: {
+                                                        show: true,
+                                                        position: 'top',
+                                                        formatter: function (params) {
+                                                            return params.data.value + "万元";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#0099CC'
+                                            },
+                                            emphasis: {
+                                                color: '#FF33CC'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+</script>
+<body style="overflow: hidden;">
+<div id="query_condition">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年-月：</td>
+            <td width="8%"><input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"
+                                  value="01" style="width: 100px;"></input></td>
+
+            <td width="6%">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                   onclick="confirmIt();">确定</a>
+            </td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value="">
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div class="Main_title_div">
+    <div class="Main_title" id="Main_title"></div>
+</div>
+<div id="main" style="height:495px"></div>
+</body>
+</html>

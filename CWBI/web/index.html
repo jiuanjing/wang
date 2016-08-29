@@ -1,0 +1,122 @@
+<html>
+<head>
+    <title>首创股份经营决策系统</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<style type="text/css">
+
+    #layout {
+        background-color: #CCCCCC;
+        height: 600px;
+        text-align: center;
+    }
+
+    #div2 {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    #div2 p {
+        font: 12px/36px "微软雅黑";
+        font-size-adjust: none;
+        font-stretch: normal;
+    }
+
+    body {
+        margin: 0px;
+        font: 16px "微软雅黑";
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: #000000;
+        text-decoration: none;
+    }
+
+</style>
+<body>
+<form name="form1" method="post" action="login_out/login.jsp" onSubmit="return check();">
+    <table>
+        <tr style="height: 78px;">
+            <td>
+                <table>
+                    <tr>
+                        <td style="width: 100px">&nbsp;</td>
+                        <td><img src="images/login-logo.png" alt="背景图片"/></td>
+                        <td style="width: 500px">&nbsp;</td>
+                        <td><img src="images/login-bg.png" alt="背景图片"/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+    <div id="layout" style="position:absolute; width:100%; height:80%; z-index:-1">
+        <img src="images/bg_img.jpg" height="100%" width="100%"/>
+    </div>
+
+    <table style="width: 100%; height: 80%; ">
+        <tr>
+            <td align="center">
+                <table style="width: 74%; height: 80%;">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td height="59" align="right" valign="middle">
+                            <table>
+                                <tr>
+                                    <td width="41">&nbsp;</td>
+                                    <td width="65" height="35">用户名：</td>
+                                    <td width="200" height="35"><input type="text" name="user_account" size="20"
+                                                                       style="width:150px; height:22px"></td>
+                                    <td width="50">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td width="65" height="35">密&nbsp;&nbsp;码：</td>
+                                    <td width="200" height="35"><input type="password" name="user_password" size="20"
+                                                                       style="width:150px; height:22px"></td>
+                                    <td width="50">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td height="37" colspan="4" align="center">
+                                        <input name="submit" type="submit" value="登 录"> &nbsp;
+                                        <input name="reset" type="reset" value="取 消">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div id="div2" align="center">
+        <p>Copyright ©版权所有<a href="http://www.capitalwater.cn" target="_blank"> 北京首创股份有限公司</a></p>
+    </div>
+    <DIV class="login-footer">
+    </DIV>
+</form>
+</body>
+</html>
+<script>
+    function check() {
+        if (form1.user_account.value == "") {
+            alert("请输入用户名");
+            form1.user_account.focus();
+            return false;
+        }
+        if (form1.user_password.value == "") {
+            alert("请输入密码");
+            form1.user_password.focus();
+            return false;
+        }
+    }
+</script>

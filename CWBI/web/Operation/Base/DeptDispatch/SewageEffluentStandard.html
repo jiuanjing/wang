@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>总部污水公司出水标准规模数量分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_Operation_Kpi.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+
+        getDataGrid();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 500);
+    });
+
+    function getDataGrid() {
+        $.ajax({
+            url: "a.json",
+            dataType: "text",
+            type: "post",
+            /*
+             data : {
+             date1 : d1,
+             date2 : d2,
+             kpiCodeNum : '1022'//指标code
+             },
+             */
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                //var arrayData = eval("("+return_data+")");
+                //console.log(arrayData);
+                //table
+
+                //echarts
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/scatter'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'), "macarons");
+
+                            option = {
+                                title: {
+                                    text: '出水标准规模及项目数量分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    }
+                                },
+                                color: [
+                                    '#ff7f50', '#da70d6', '#32cd32', '#6495ed',
+                                    '#ff69b4', '#cd5c5c', '#ffa500', '#40e0d0',
+                                    '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
+                                    '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
+                                ],
+                                tooltip: {
+                                    trigger: 'axis',//触发器
+                                    showDelay: 0,//显示延迟
+                                    axisPointer: {
+                                        show: true,
+                                        type: 'cross',
+                                        lineStyle: {
+                                            type: 'solid',
+                                            width: 1
+                                        }
+                                    }
+                                },
+                                legend: {
+                                    y: 40,
+                                    data: ["东南大区", "北方大区", "中原大区", "北京大区", "中南大区", "西南大区"]
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        mark: {show: true},
+
+                                        dataView: {show: true, readOnly: false},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '数量',
+                                        splitNumber: 10,
+                                        scale: false
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '规模',
+                                        splitNumber: 10,
+                                        scale: false
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '东南大区',
+                                        /*  itemStyle:{
+                                         normal:{color:'#a36209'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [4, 80, '一级', '东南大区'],
+                                            [6, 200, '二级', '东南大区'],
+                                            [10, 150, '三级', '东南大区']
+                                        ]
+                                    }, {
+                                        name: '北方大区',
+                                        /* itemStyle:{
+                                         normal:{color:'green'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [5, 120, '一级', '北方大区'],
+                                            [10, 300, '二级', '北方大区'],
+                                            [8, 80, '三级', '北方大区']
+                                        ]
+                                    }, {
+                                        name: '中原大区',
+                                        /* itemStyle:{
+                                         normal:{color:'#fbaf5a'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [3, 200, '一级', '中原大区'],
+                                            [14, 250, '二级', '中原大区'],
+                                            [16, 150, '三级', '中原大区']
+                                        ]
+                                    }, {
+                                        name: '北京大区',
+                                        /* itemStyle:{
+                                         normal:{color:'#ed008c'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [5, 160, '一级', '北京大区'],
+                                            [8, 240, '二级', '北京大区'],
+                                            [12, 330, '三级', '北京大区']
+                                        ]
+                                    }, {
+                                        name: '中南大区',
+                                        /* itemStyle:{
+                                         normal:{color:'purple'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [9, 190, '一级', '中南大区'],
+                                            [15, 280, '二级', '中南大区'],
+                                            [5, 250, '三级', '中南大区']
+                                        ]
+                                    }, {
+                                        name: '西南大区',
+                                        /* itemStyle:{
+                                         normal:{color:'#fff467'}
+                                         }, */
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '项目数量：' + params.value[0] + '个<br/>'
+                                                        + '规模：' + params.value[1] + '万吨<br/>'
+                                                        + '出水标准：' + params.value[2] + '<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1] / 5
+                                        },
+                                        data: [
+                                            [7, 120, '一级', '西南大区'],
+                                            [4, 200, '二级', '西南大区'],
+                                            [18, 250, '三级', '西南大区']
+                                        ]
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+    function confirmIt() {
+        getDataGrid();
+    }
+
+</script>
+<body scroll=no>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="cc" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+
+<div id="main" style="height:520px;"></div>
+</body>
+</body>
+</html>

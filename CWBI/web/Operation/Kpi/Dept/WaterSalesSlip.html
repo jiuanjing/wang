@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>产销差率分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_Operation_Kpi.js"></script>
+<script>
+    $(function () {
+        $("#main1").css("height", $(window).height() - 240);
+        $("#main2").css("height", $(window).height() - 240);
+        aotoDeptName();
+    });
+    function aotoDeptName() {
+        jQuery.post("AutoDeptList.jsp",
+                {
+                    tableName: "dim_dept_op"
+                },
+                function (data) {
+                    var list = eval(data);
+                    var htmList = "";
+                    for (var i = 0; i < list.length; i++) {
+                        htmList += "<option value=\"" + list[i].deptId + "\">" + list[i].deptName + "</option>";
+                    }
+                    $("#DeptID").append(htmList);
+
+                    var indicator = myIndicator("正在加载中...");
+                    showDiv001();
+                    showDiv002();
+                    getDataGrid();
+                    window.setTimeout(function () {
+                        indicator.hide();
+                    }, 1000);
+                });
+    }
+    ;
+    function getDataGrid() {
+        $('#tg').datagrid({
+            url: 'WaterSalesSlip003GD.jsp',
+            title: '产销差率趋势分析表',
+            method: 'post',
+            fitColumns: true,
+            singleSelect: true,
+            nowrap: true,
+            rownumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue'),
+                DeptID: $('#DeptID').val()
+            },
+            columns: [[
+                {field: 'kpi', title: '指标', width: 120, align: 'left'},
+                {
+                    field: 'm1',
+                    title: '1月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm2',
+                    title: '2月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: '3月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '4月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm5',
+                    title: '5月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm6',
+                    title: '6月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm7',
+                    title: '7月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm8',
+                    title: '8月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm9',
+                    title: '9月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm10',
+                    title: '10月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm11',
+                    title: '11月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm12',
+                    title: '12月',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                },
+                {
+                    field: 'm13',
+                    title: '累计值',
+                    width: 50,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return parseFloat(value).toFixed(2)
+                    }
+                }
+            ]]
+        });
+    }
+    function confirmIt() {
+        var indicator = myIndicator("正在加载中...");
+        showDiv001();
+        showDiv002();
+        $('#tg').datagrid({queryParams: {date: $('#date').datebox('getValue'), DeptID: $('#DeptID').val()}});
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "WaterSalesSlip001GD.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue'),
+                DeptID: $('#DeptID').val()
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                var arrayData = eval("(" + return_data + ")");
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            var option = {
+                                title: {
+                                    text: '产销差率趋势分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 18,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                grid: {
+                                    x: 50,
+                                    y: 80,
+                                    y2: 60
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    y: 'center',
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: true},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                legend: {
+                                    y: 40,
+                                    data: ["产销差率预算值", "产销差率同期值", "产销差率实际值", "同比差异", "预算差异"],
+                                    selected: {
+                                        "产销差率预算值": false,
+                                        "预算差异": false
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: function (params, ticket, callback) {
+                                        var res = params[0].name;
+                                        for (var i = 0, l = params.length; i < l; i++) {
+                                            res += '<br/>' + params[i].seriesName + ' : ' + params[i].value + "%";
+                                        }
+                                        return res;
+                                    }
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        splitNumber: 24,
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.date.length; i++) {
+                                                d.push(arrayData.date[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        axisLabel: {
+                                            show: true,
+                                            interval: 0,    // {number}
+                                            rotate: 45
+                                        }
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '产销差率(%)'
+                                    },
+                                    {
+                                        type: 'value',
+                                        name: '差异率(%)'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '产销差率预算值',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.bt.length; i++) {
+                                                d.push(arrayData.bt[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    }, {
+                                        name: '产销差率同期值',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.ly.length; i++) {
+                                                d.push(arrayData.ly[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    }, {
+                                        name: '产销差率实际值',
+                                        type: 'bar',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.cy.length; i++) {
+                                                d.push(arrayData.cy[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    }, {
+                                        name: '同比差异',
+                                        type: 'bar',
+                                        itemStyle: {
+                                            normal: {
+                                                color: '#FE8463'
+                                            }
+                                        },
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.difly.length; i++) {
+                                                d.push(arrayData.difly[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        barGap: '0%',
+                                        barCategoryGap: '50%'
+                                    }, {
+                                        name: '预算差异',
+                                        type: 'line',
+                                        yAxisIndex: 1,
+                                        showAllSymbol: true,
+                                        symbolSize: 2,     //点的大小
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.difbt.length; i++) {
+                                                d.push(arrayData.difbt[i]);
+                                            }
+                                            return d;
+                                        })(),
+                                        symbol: 'rectangle'
+                                    }
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+                            myChart.on(ecConfig.EVENT.CLICK, function () {
+                                var param = $('#DeptID').val();
+                                var date = $('#date').datebox('getValue');
+                                window.location = "../CompanyDispatch/WaterSalesSlip.html?DeptID=" + param + "&date=" + date;
+                            });
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    function showDiv002() {
+        $.ajax({
+            url: "WaterSalesSlip002GD.jsp",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue'),
+                DeptID: $('#DeptID').val()
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                var arrayData = eval("(" + return_data + ")");
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/gauge'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main2'));
+                            if (arrayData == "" || arrayData == null) {
+                                myChart.showLoading({
+                                    text: '暂无数据',
+                                    effect: 'whirling',
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                });
+                                return;
+                            }
+                            option = {
+                                title: {
+                                    text: '产销差率分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 18,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                tooltip: {
+                                    formatter: "{a}：{c}% "
+                                },
+                                series: [
+                                    {
+                                        name: '产销差率预算值',
+                                        type: 'gauge',
+                                        min: 0,
+                                        max: 100,
+                                        splitNumber: 10,
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                //color: [[0.3, 'red'],[0.70, 'orange'],[0.85, 'yellow'],[1, 'lime']],
+                                                color: [[0.3, 'lime'], [0.60, 'yellow'], [0.85, 'orange'], [1, 'red']],
+                                                width: 10
+                                            }
+                                        },
+                                        axisLabel: {            // 坐标轴小标记
+                                            textStyle: {       // 属性lineStyle控制线条样式
+                                                color: '#1b1b1b'
+                                            }
+                                        },
+                                        axisTick: {            // 坐标轴小标记
+                                            length: 20,        // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: 'auto'
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length: 25,         // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                width: 3,
+                                                color: '#1b1b1b'
+                                            }
+                                        },
+                                        title: {
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                fontSize: 20,
+                                                fontStyle: 'italic'
+                                            }
+                                        },
+                                        detail: {
+                                            backgroundColor: 'rgba(30,144,255,0.8)',
+                                            borderWidth: 1,
+                                            borderColor: '#1b1b1bf',
+                                            offsetCenter: [0, '70%'],       // x, y，单位px
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: '#fff',
+                                                fontSize: 14
+                                            },
+                                            formatter: '预算：{value}%'
+                                        },
+                                        data: arrayData.budget
+                                    },
+                                    {
+                                        name: '产销差率实际值',
+                                        type: 'gauge',
+                                        min: 0,
+                                        max: 100,
+                                        splitNumber: 10,
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                //color: [[0.3, 'red'],[0.70, 'orange'],[0.85, 'yellow'],[1, 'lime']],
+                                                color: [[0.3, 'lime'], [0.60, 'yellow'], [0.85, 'orange'], [1, 'red']],
+                                                width: 10
+                                            }
+                                        },
+                                        axisLabel: {            // 坐标轴小标记
+                                            textStyle: {       // 属性lineStyle控制线条样式
+                                                color: '#1b1b1b'
+                                            }
+                                        },
+                                        axisTick: {            // 坐标轴小标记
+                                            length: 20,        // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: 'auto'
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length: 25,         // 属性length控制线长
+                                            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                width: 3,
+                                                color: '#1b1b1b'
+                                            }
+                                        },
+                                        title: {
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                fontSize: 20,
+                                                fontStyle: 'italic'
+                                            }
+                                        },
+                                        detail: {
+                                            backgroundColor: 'rgba(30,144,255,0.8)',
+                                            borderWidth: 1,
+                                            borderColor: '#1b1b1bf',
+                                            offsetCenter: [0, '100%'],       // x, y，单位px
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: '#fff',
+                                                fontSize: 14
+                                            },
+                                            formatter: '实际：{value}%'
+                                        },
+                                        data: arrayData.actual
+                                    }
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+                            myChart.on(ecConfig.EVENT.CLICK, function () {
+                                var param = $('#DeptID').val();
+                                var date = $('#date').datebox('getValue');
+                                window.location = "../CompanyDispatch/WaterSalesSlip.html?DeptID=" + param + "&date=" + date;
+                            });
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年月：</td>
+            <td width="8%"><input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"
+                                  value="01" style="width: 100px;"></input></td>
+
+            <td width="7%">大区名称：</td>
+            <td width="8%">
+                <select id="DeptID"></select>
+            </td>
+
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main2" style="height:310px;width: 35%;float: left;"></div>
+<div id="main1" style="height:310px;width: 65%;float: right;"></div>
+<div id="main3" style="height:180px;width: 99%;float: left;margin-left: 5px;">
+    <table id="tg" style="height:180px;"></table>
+</div>
+</body>
+</html>

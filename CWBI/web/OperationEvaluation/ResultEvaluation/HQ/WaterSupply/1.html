@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../../scripts/myIndicator/myIndicator3.js"></script>
+<script>
+
+    $(function () {
+        showDiv();
+    });
+
+    function getCity() {
+        var url = window.location.href;
+        var params = url.split("?")[1];
+        var city = params.split("=")[1];
+        return city+"分项整体趋势图";
+    }
+    function confirmIt() {
+        showDiv();
+    }
+
+    function showDiv() {
+        $.ajax({
+            url: "div1.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+//                var arrayData = eval("(" + return_data + ")");
+                //console.log(arrayData);
+                require.config({
+                    paths: {
+                        echarts: '../../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main'), 'macarons');
+                            var option = {
+                                title: {
+                                    text: getCity(),
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                tooltip: {
+
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    y:30,
+                                    data: ['分项整体分值', '水费回收率', '产销差率']
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        boundaryGap: false,
+                                        data: ['2011', '2012', '2013', '2014', '2015', '2016']
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '分项整体分值',
+                                        type: 'line',
+                                        stack: '总量',
+                                        data: [120, 132, 101, 134, 90, 230, 210]
+                                    },
+                                    {
+                                        name: '产销差率',
+                                        type: 'line',
+                                        stack: '总量',
+                                        data: [150, 232, 201, 154, 190, 330, 410]
+                                    },
+                                    {
+                                        name: '水费回收率',
+                                        type: 'line',
+                                        stack: '总量',
+                                        data: [820, 932, 901, 934, 1290, 1330, 1320]
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+
+<div id="main" style="height:520px;"></div>
+</body>
+</html>

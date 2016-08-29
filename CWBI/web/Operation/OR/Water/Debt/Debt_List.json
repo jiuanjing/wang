@@ -1,0 +1,191 @@
+[
+  {
+    "company_id": 1,
+    "brief_name": "淮南首创",
+    "ALR": "88.34",
+    "c1": "99",
+    "EBITRATIO": "21",
+    "c2": "99",
+    "total": "198"
+  },
+  {
+    "company_id": 2,
+    "brief_name": "马鞍山首创",
+    "ALR": "87.30",
+    "c1": "98",
+    "EBITRATIO": "23",
+    "c2": "98",
+    "total": "196"
+  },
+  {
+    "company_id": 3,
+    "brief_name": "马鞍山港润",
+    "ALR": "86.26",
+    "c1": "97",
+    "EBITRATIO": "45",
+    "c2": "97",
+    "total": "194"
+  },
+  {
+    "company_id": 4,
+    "brief_name": "铜陵首创",
+    "ALR": "85.22",
+    "c1": "96",
+    "EBITRATIO": "56",
+    "c2": "96",
+    "total": "192"
+  },
+  {
+    "company_id": 5,
+    "brief_name": "铜陵钟顺",
+    "ALR": "84.18",
+    "c1": "95",
+    "EBITRATIO": "45",
+    "c2": "95",
+    "total": "190"
+  },
+  {
+    "company_id": 6,
+    "brief_name": "徐州首创",
+    "ALR": "83.14",
+    "c1": "94",
+    "EBITRATIO": "32",
+    "c2": "94",
+    "total": "188"
+  },
+  {
+    "company_id": 7,
+    "brief_name": "余姚首创",
+    "ALR": "82.10",
+    "c1": "93",
+    "EBITRATIO": "34",
+    "c2": "93",
+    "total": "186"
+  },
+  {
+    "company_id": 8,
+    "brief_name": "包头首创黄河水源",
+    "ALR": "81.06",
+    "c1": "92",
+    "EBITRATIO": "2",
+    "c2": "92",
+    "total": "184"
+  },
+  {
+    "company_id": 9,
+    "brief_name": "包头首创黄河城市 ",
+    "ALR": "80.02",
+    "c1": "91",
+    "EBITRATIO": "3",
+    "c2": "91",
+    "total": "182"
+  },
+  {
+    "company_id": 10,
+    "brief_name": "包头申银水务",
+    "ALR": "78.98",
+    "c1": "90",
+    "EBITRATIO": "6",
+    "c2": "90",
+    "total": "180"
+  },
+  {
+    "company_id": 11,
+    "brief_name": "临猗首创",
+    "ALR": "77.94",
+    "c1": "89",
+    "EBITRATIO": "7",
+    "c2": "89",
+    "total": "178"
+  },
+  {
+    "company_id": 12,
+    "brief_name": "宝鸡首创",
+    "ALR": "76.90",
+    "c1": "88",
+    "EBITRATIO": "7",
+    "c2": "88",
+    "total": "176"
+  },
+  {
+    "company_id": 13,
+    "brief_name": "渭南首创",
+    "ALR": "75.86",
+    "c1": "87",
+    "EBITRATIO": "3",
+    "c2": "87",
+    "total": "174"
+  },
+  {
+    "company_id": 14,
+    "brief_name": "铁岭泓源城市污水",
+    "ALR": "74.82",
+    "c1": "86",
+    "EBITRATIO": "56",
+    "c2": "86",
+    "total": "172"
+  },
+  {
+    "company_id": 15,
+    "brief_name": "盘锦首创",
+    "ALR": "73.78",
+    "c1": "85",
+    "EBITRATIO": "7",
+    "c2": "85",
+    "total": "170"
+  },
+  {
+    "company_id": 16,
+    "brief_name": "新乡首创",
+    "ALR": "72.74",
+    "c1": "84",
+    "EBITRATIO": "67",
+    "c2": "84",
+    "total": "168"
+  },
+  {
+    "company_id": 17,
+    "brief_name": "秦皇岛首创",
+    "ALR": "71.70",
+    "c1": "83",
+    "EBITRATIO": "8",
+    "c2": "83",
+    "total": "166"
+  },
+  {
+    "company_id": 18,
+    "brief_name": "首创东坝",
+    "ALR": "70.66",
+    "c1": "82",
+    "EBITRATIO": "7",
+    "c2": "82",
+    "total": "164"
+  },
+  {
+    "company_id": 19,
+    "brief_name": "深圳水务集团",
+    "ALR": "69.62",
+    "c1": "81",
+    "EBITRATIO": "38",
+    "c2": "81",
+    "total": "162"
+  },
+  {
+    "company_id": 20,
+    "brief_name": "屏山首创",
+    "ALR": "68.58",
+    "c1": "80",
+    "EBITRATIO": "19",
+    "c2": "80",
+    "total": "160"
+  },
+  {
+    "company_id": 21,
+    "brief_name": "广元首创",
+    "ALR": "67.54",
+    "c1": "79",
+    "EBITRATIO": "28",
+    "c2": "79",
+    "total": "158"
+  }
+]                                                                                                                                           

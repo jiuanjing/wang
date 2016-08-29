@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>成本费用总额分析</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/finance_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div4 {
+            position: absolute;
+            z-index: 96;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 97;
+        }
+    </style>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 2;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt').datagrid('resize');
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#dd').datagrid('resize');
+            $("#tab003").css({"width": (w) / 3, "height": (h) / 2});
+            $('#ee').datagrid('resize');
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+
+            /* 一*********************************************************************** */
+            showDiv001();
+            /* 二************************************************************************/
+            showDiv002();
+            /* 三*********************************************************************** */
+            showDiv003();
+            /* 四*********************************************************************** */
+            /* 五*********************************************************************** */
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+
+        function showDiv001() {
+            $.ajax({
+                url: "Cost001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '成本费用总额趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["成本费用总额", "同比"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '成本(万元)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '同比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '成本费用总额',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '同比',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+        function max_value(max) {
+
+            if (max == "0" || max == 0) {
+                return 30000;
+            }
+            var max = Math.round(max);
+            max = max.toString();
+            var len = max.length;
+            if (len > 5) {
+                len = len - 2;
+                max = parseFloat(max.substr(0, 2)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            } else {
+                len = len - 1;
+                max = parseFloat(max.substr(0, 1)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            }
+            return max;
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "Cost002GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    // alert(arrayData.date[]);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '三项费用占收入比趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 55,
+                                        x2: 40,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["三项费用占收入比", "同期值"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}%<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.date.length; i++) {
+                                                    d.push((arrayData.date[i].substring(2, 4)).toString() + '-' + (arrayData.date[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '占比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '三项费用占收入比',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: arrayData.data1,
+                                            symbol: 'rectangle'
+                                        },
+                                        {
+                                            name: '同期值',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: arrayData.data0,
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600',
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+        function showDiv003() {
+            $.ajax({
+                url: "Cost003GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/bar',
+                                'echarts/chart/line'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '营业成本占收入比趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 55,
+                                        x2: 40,
+                                        y: 50,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["营业成本占收入比", "同期值"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}%<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.date.length; i++) {
+                                                    d.push((arrayData.date[i].substring(2, 4)).toString() + '-' + (arrayData.date[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '占比(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '营业成本占收入比',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: arrayData.data1,
+                                            symbol: 'rectangle'
+                                        },
+                                        {
+                                            name: '同期值',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: arrayData.data0,
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600',
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            $('#tt').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#dd').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            $('#ee').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+            <div id="tab001">
+                <table id="tt" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+				   url:'Cost004GetData.jsp',
+				   title:'管理费用占 营业收入比TOP10',
+				   method:'post',
+				   fit:'true',
+				   rownumbers:'true',
+				   sortName:'rate', //默认排序字段
+	        	   sortOrder:'asc', //排序方式
+				   queryParams:{ date : ''}
+				   ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:95,align:'left'">公司名称</th>
+                        <th data-options="field:'management_expense',width:100,align:'center',sortable:'true'">
+                            管理费用(万元)
+                        </th>
+                        <th data-options="field:'operating_revenue',width:75,align:'center',sortable:'true'">收入(万元)</th>
+                        <th data-options="field:'rate',width:60,align:'center',sortable:'true'">占比(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div5 drag-item" id="main5">
+            <div id="tab002">
+                <table id="dd" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+				   url:'Cost005GetData.jsp',
+				   title:'财务费用占 营业收入比TOP10',
+				   method:'post',
+				   fit:'true',
+				   rownumbers:'true',
+				   sortName:'rate', //默认排序字段
+	        	   sortOrder:'asc', //排序方式
+				   queryParams:{ date : ''}
+				   ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:95,align:'left'">公司名称</th>
+                        <th data-options="field:'financial_expense',width:100,align:'center',sortable:'true'">财务费用(万元)
+                        </th>
+                        <th data-options="field:'operating_revenue',width:75,align:'center',sortable:'true'">收入(万元)</th>
+                        <th data-options="field:'rate',width:60,align:'center',sortable:'true'">占比(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="div6 drag-item" id="main6">
+            <div id="tab003">
+                <table id="ee" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+				   url:'Cost006GetData.jsp',
+				   title:'营业成本占 营业收入比TOP10',
+				   method:'post',
+				   fit:'true',
+				   rownumbers:'true',
+				   sortName:'rate', //默认排序字段
+	        	   sortOrder:'asc', //排序方式
+				   queryParams:{ date : ''}
+				   ">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'CompanyName',width:95,align:'left'">公司名称</th>
+                        <th data-options="field:'operating_cost',width:100,align:'center',sortable:'true'">营业成本(万元)</th>
+                        <th data-options="field:'operating_revenue',width:75,align:'center',sortable:'true'">收入(万元)</th>
+                        <th data-options="field:'rate',width:60,align:'center',sortable:'true'">占比(%)</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                       style="width: 120px;"></input>
+                <script type="text/javascript">
+                    function myformatter(date) {
+                        var y = date.getFullYear();
+                        var m = date.getMonth() + 1;
+                        return y + '-' + (m < 10 ? ('0' + m) : m);
+                    }
+                    function myparser(s) {
+                        if (!s) return new Date();
+                        var ss = (s.split('-'));
+                        var y = parseInt(ss[0], 10);
+                        var m = parseInt(ss[1], 10);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            return new Date(y, m - 1);
+                        } else {
+                            return new Date();
+                        }
+                    }
+                </script>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

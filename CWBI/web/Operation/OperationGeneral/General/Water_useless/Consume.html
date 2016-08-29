@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>电耗、药耗分析</title>
+    <script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../../scripts/echarts.js"></script>
+    <!-- 设置时间 -->
+    <script src="../../../../scripts/OP_OperationGeneral.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../css/operation_general.css"/>
+    <script src="../../../../scripts/myIndicator/myIndicator4.js"></script>
+    <style type="text/css">
+        .div3 {
+            position: absolute;
+            z-index: 110;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 98;
+        }
+
+        .div6 {
+            position: absolute;
+            z-index: 99;
+        }
+    </style>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 2;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt').datagrid('resize');
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#dd').datagrid('resize');
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../../scripts'
+                }
+            });
+            /* 一*********************************************************************** */
+            showDiv001();
+            /* 二 ************************************************************************/
+            /* 三*********************************************************************** */
+            showDiv003();
+            /* 四*********************************************************************** */
+            showDiv004();
+            /* 五*********************************************************************** */
+            /* 六*********************************************************************** */
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+        function showDiv001() {
+            $.ajax({
+                url: "Consume001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "供水单位电耗与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}kwh/千吨"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期单位电耗',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + 'kwh/千吨';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy,
+                                        },
+                                        {
+                                            name: '同期单位电耗',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + 'kwh/千吨';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly,
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        //取数组最大值,并取整
+        function max_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 100;
+            } else if (max == 0 && min < 0) {
+                max = 0 - min;
+            }
+            for (var i = 1; i < tmp.length; i++) {
+                if (max < tmp[i])max = tmp[i];
+            }
+            max = max.toFixed(0);//取整
+            var len = max.length;
+            if (len > 5) {
+                len = len - 2;
+                max = parseFloat(max.substr(0, 2)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            } else {
+                len = len - 1;
+                max = parseFloat(max.substr(0, 1)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            }
+            return max;
+        }
+        //取数组最小值,并取整
+        function min_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 0;
+            } else if (max == 0 && min < 0) {
+                return (Math.floor(min / 1000)) * 1000;
+            } else if (min == 0 && max < 0) {
+                return (Math.floor(max / 1000)) * 1000;
+            } else if (max < 0 && min < 0) {
+                max = -max;
+                min = -min;
+                for (var i = 1; i < tmp.length; i++) {
+                    if (max < tmp[i])max = tmp[i];
+                }
+                return -(Math.ceil(min / 1000)) * 1000;
+            }
+            return 0;
+        }
+        function showDiv003() {
+            $.ajax({
+                url: "Consume003GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "供水单位药剂费与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}元/千吨"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期单位药剂费',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + '元/千吨';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy,
+                                        },
+                                        {
+                                            name: '同期单位药剂费',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + '元/千吨';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly,
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv004() {
+            $.ajax({
+                url: "Consume004GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main4'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "污水单位电耗与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}kwh/千吨"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期单位电耗',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + 'kwh/千吨';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy,
+                                        },
+                                        {
+                                            name: '同期单位电耗',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + 'kwh/千吨';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly,
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+
+        function showDiv006() {
+            $.ajax({
+                url: "Consume006GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main6'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "污水单位药剂费与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}元/千吨"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期单位药剂费',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + '元/千吨';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy,
+                                        },
+                                        {
+                                            name: '同期单位药剂费',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.8, '#228b22'], [0.9, '#ffd400'], [1, '#ff4500']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + '元/千吨';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly,
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            showTotal();
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv004();
+            showDiv005();
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="center" id="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+            <div id="tab001">
+                <table id="tt" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+				 url:'Consume002GetData.jsp',
+				 title:'供水公司单位电耗Top10排名分析',
+				 method:'post',
+				 rownumbers:'true',
+				 fit:'true',
+				 sortName:'rate', //默认排序字段
+	        	 sortOrder:'asc', //排序方式
+				 queryParams:{ date : ''},
+				 columns:[[
+						    {field:'CompanyName',title:'公司名称',width:90},
+						    {field:'rate2',title:'总电耗<br>(kwh)',width:80,align:'center',sortable:true},
+						    {field:'rate3',title:'平均电价<br>(元/kwh)',width:80,align:'center',sortable:true},
+						    {field:'rate',title:'单位电耗<br>(kwh/千吨)',width:80,align:'center',sortable:true}
+						]]
+				 ">
+                </table>
+            </div>
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+
+        </div>
+        <div class="div5 drag-item" id="main5">
+            <div id="tab002">
+                <table id="dd" class="easyui-datagrid" border="false"
+                       data-options="singleSelect:true,
+				 url:'Consume005GetData.jsp',
+				 title:'污水公司单位电耗Top10排名分析',
+				 method:'post',
+				 rownumbers:'true',
+				 fit:'true',
+				 sortName:'rate', //默认排序字段
+	        	 sortOrder:'asc', //排序方式
+				 queryParams:{ date : ''},
+				 columns:[[
+						    {field:'CompanyName',title:'公司名称',width:90},
+						    {field:'rate2',title:'总电耗<br>(kwh)',width:80,align:'center',sortable:true},
+						    {field:'rate3',title:'平均电价<br>(元/kwh)',width:80,align:'center',sortable:true},
+						    {field:'rate',title:'单位电耗<br>(kwh/千吨)',width:80,align:'center',sortable:true}
+						]]
+				 ">
+                </table>
+            </div>
+        </div>
+        <div class="div6 drag-item" id="main6">
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                       style="width: 120px;"></input>
+                <script type="text/javascript">
+                    function myformatter(date) {
+                        var y = date.getFullYear();
+                        var m = date.getMonth() + 1;
+                        return y + '-' + (m < 10 ? ('0' + m) : m);
+                    }
+                    function myparser(s) {
+                        if (!s) return new Date();
+                        var ss = (s.split('-'));
+                        var y = parseInt(ss[0], 10);
+                        var m = parseInt(ss[1], 10);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            return new Date(y, m - 1);
+                        } else {
+                            return new Date();
+                        }
+                    }
+                </script>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

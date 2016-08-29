@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="../../../css/style1.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript"
+            src="../../../scripts/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../../../scripts/easyui-1.3.6/themes/myself/easyui.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript"
+            src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../../../css/condition-table.css"/>
+    <script src="../../../scripts/echarts.js"></script>
+    <title>Insert title here</title>
+</head>
+<script>
+    $(function () {
+        $("#main1").css("height", $(window).height() - 40);
+        $("#main2").css("height", $(window).height() - 40);
+        //var indicator = myIndicator("正在加载中...");
+        showDiv1();
+        showDiv2();
+        //getDataGrid();
+    });
+
+    function confirmIt() {
+        //var indicator = myIndicator("正在加载中...");
+        showDiv1();
+        showDiv2();
+    }
+
+    function showDiv1() {
+        $.ajax({
+            url: "a.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {},
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //var arrayData = eval("("+return_data+")");
+                //console.log(arrayData);
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line',
+                            'echarts/chart/bar',
+                            'echarts/chart/pie'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            option = {
+                                title: {
+                                    text: '出水指标分析图',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                },
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {
+                                            show: true,
+                                            type: ['pie', 'funnel'],
+                                            option: {
+                                                funnel: {
+                                                    x: '25%',
+                                                    width: '50%',
+                                                    funnelAlign: 'left',
+                                                    max: 1548
+                                                }
+                                            }
+                                        },
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                series: [
+                                    {
+                                        name: '业务板块',
+                                        type: 'pie',
+                                        radius: '55%',
+                                        center: ['50%', '50%'],
+                                        data: [
+                                            {value: 33, name: '一级A'},
+                                            {value: 24, name: '一级B'},
+                                            {value: 19, name: '二级'}
+                                        ]
+                                    }
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+
+    function showDiv2() {
+        $.ajax({
+            url: "a.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {},
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                //var arrayData = eval("("+return_data+")");
+                //console.log(arrayData);
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/gauge'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                            /*
+                             if(arrayData == "" || arrayData == null){
+                             myChart.showLoading({
+                             text : '暂无数据',
+                             effect : 'whirling',
+                             textStyle : {
+                             fontSize : 20
+                             }
+                             });
+                             return;
+                             }
+                             */
+                            option = {
+                                title: {
+                                    text: '出水指标分析图',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis'
+                                },
+
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: false,
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        data: ['一级A', '一级B', '二级'],
+                                        name: '工艺类型'
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '处理规模(万吨)'
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '处理规模',
+                                        type: 'bar',
+                                        data: [20, 4, 7]
+
+                                    }
+
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+                            myChart.on(ecConfig.EVENT.CLICK, function () {
+                                window.location = "../CompanyDispatch/SewageEffluentStandard.html";
+                            });
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+
+
+</script>
+<body style="overflow: hidden;">
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="5%"><span style="font-size: 12px;">年度：</span></td>
+            <td width="5%">
+                <input id="cc" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="110">
+            </td>
+
+            <td width="5%"><span style="font-size: 12px;">大区：</span></td>
+            <td width="5%">
+                <select name="dept" id="dept">
+                    <option>东南大区</option>
+                    <option>北方大区</option>
+                    <option>中原大区</option>
+                    <option>北京大区</option>
+                    <option>东南大区</option>
+                    <option>西南大区</option>
+                </select>
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main1" style="height: 500px; width:43%; float:left;"></div>
+<div id="main2" style="height: 500px; width:57%; float:right;"></div>
+</body>
+</html>

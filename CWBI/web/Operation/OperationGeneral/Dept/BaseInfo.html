@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>大区基本信息概览</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyDate.js"></script>
+    <script src="../../../scripts/OP_OperationGeneral.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/operation_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div4 {
+            position: absolute;
+            z-index: 96;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 97;
+        }
+    </style>
+    <script>
+        function setSize() {
+            var h = $(window).height() - 2;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+            $("#tab001").css({"width": (w) / 3, "height": (h) / 2});
+            $('#tt').datagrid('resize');
+            $("#tab002").css({"width": (w) / 3, "height": (h) / 2});
+            $('#dd').datagrid('resize');
+        }
+        $(function () {
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            aotoDeptName();
+        });
+        function aotoDeptName() {
+            jQuery.post("AutoDeptList.jsp",
+                    {
+                        tableName: "dim_dept_op"
+                    },
+                    function (data) {
+                        var list = eval(data);
+                        var htmList = "";
+                        for (var i = 0; i < list.length; i++) {
+                            htmList += "<option value=\"" + list[i].deptId + "\">" + list[i].deptName + "</option>";
+                        }
+                        $("#DeptID").append(htmList);
+                        confirmIt();
+                    });
+        }
+        ;
+        function showDiv001() {
+            $.ajax({
+                url: "BaseInfo001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '总规模趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 60,
+                                        x2: 50,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["总规模", "年增长率"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万吨<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(0, 4)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '总规模(万吨)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '年增长率(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '总规模',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '年增长率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "BaseInfo002GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '项目数量趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 60,
+                                        x2: 50,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        show: false,
+                                        y: 30,
+                                        data: ["项目数量"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: function (params) {
+                                            console.log(params);
+                                            var xName = params[0].name;
+                                            var a0 = params[0].seriesName;
+                                            var b0 = params[0].data;
+                                            var a1 = params[1].seriesName;
+                                            var b1 = params[1].data;
+                                            var z = parseFloat(b0) + parseFloat(b1);
+                                            return xName + "<br>" + "项目数量：" + z + "<br>" + a1 + ":" + b1;
+                                        }
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(0, 4)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '数量(个)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '与最小值差值',
+                                            type: 'bar',
+                                            stack: 'sum',
+                                            data: (function () {
+                                                var d = [];
+                                                var min = 0;
+                                                if (arrayData.length > 0) {
+                                                    min = arrayData[0].split(":")[1];
+                                                    for (var i = 0; i < arrayData.length; i++) {
+                                                        if (min > parseFloat(arrayData[i].split(":")[1])) {
+                                                            min = parseFloat(arrayData[i].split(":")[1]);
+                                                        }
+                                                    }
+                                                    for (var i = 0; i < arrayData.length; i++) {
+                                                        d.push(parseFloat(arrayData[i].split(":")[1]) - min);
+                                                    }
+                                                }
+                                                return d;
+                                            })(),
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#26C0C0',
+                                                    barBorderColor: '#26C0C0',
+                                                    barBorderWidth: 2,
+                                                    barBorderRadius: 0
+                                                }
+                                            }
+                                        },
+                                        {
+                                            name: '最低值',
+                                            type: 'bar',
+                                            stack: 'sum',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#fff',
+                                                    barBorderColor: '#26C0C0',
+                                                    barBorderWidth: 2,
+                                                    barBorderRadius: 0
+                                                }
+                                            },
+                                            data: (function () {
+                                                var d = [];
+                                                var min = 0;
+                                                if (arrayData.length > 0) {
+                                                    min = arrayData[0].split(":")[1];
+                                                    for (var i = 0; i < arrayData.length; i++) {
+                                                        if (min > parseFloat(arrayData[i].split(":")[1])) {
+                                                            min = parseFloat(arrayData[i].split(":")[1]);
+                                                        }
+                                                    }
+                                                    for (var i = 0; i < arrayData.length; i++) {
+                                                        d.push(min);
+                                                    }
+                                                }
+                                                return d;
+                                            })(),
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv003() {
+            $.ajax({
+                url: "BaseInfo003GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '平均规模年趋势分析 ',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 60,
+                                        x2: 50,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["平均规模", "年增长率"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万吨<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(0, 4)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '平均规模(万吨)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '年增长率(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '平均规模',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '年增长率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv004() {
+            $.ajax({
+                url: "BaseInfo004GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/pie'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main4'), 'macarons');
+                                if (arrayData == "" || arrayData == null) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '运营年限结构分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{a} <br/>{b} : {c}个 ({d}%)"
+                                    },
+                                    legend: {
+                                        show: false,
+                                        orient: 'virtical',
+                                        x: 'left',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(arrayData[i].name);
+                                            }
+                                            return d;
+                                        })()
+                                    },
+                                    calculable: true,
+                                    series: [
+                                        {
+                                            name: '运营年限',
+                                            type: 'pie',
+                                            radius: '55%',
+                                            center: ['50%', '60%'],
+                                            data: arrayData
+                                        }
+                                    ]
+                                };
+
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv005() {
+            $.ajax({
+                url: "BaseInfo005GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '投资额趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 60,
+                                        x2: 50,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["投资额", "年增长率"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(0, 4)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '投资额(万元)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '年增长率(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '投资额',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '年增长率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv006() {
+            $.ajax({
+                url: "BaseInfo006GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/pie'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main6'), 'macarons');
+                                if (arrayData == "" || arrayData == null) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '项目性质数量及投资额结构分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: function (params) {
+                                            console.log(params);
+                                            if (params.seriesIndex == "0") {
+                                                return params.seriesName + "<br/>" + params.name + " : " + params.value + "万元 ({" + params.percent + "}%)";
+                                            } else {
+                                                return params.seriesName + "<br/>" + params.name + " : " + params.value + "个 ({" + params.percent + "}%)";
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        show: false,
+                                        orient: 'virtical',
+                                        x: 'left',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(arrayData[i].name);
+                                            }
+                                            return d;
+                                        })()
+                                    },
+                                    calculable: true,
+                                    series: [
+                                        {
+                                            name: '投资额',
+                                            type: 'pie',
+                                            radius: [0, 50],
+                                            center: ['50%', '60%'],
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {
+                                                        show: false,
+                                                        position: 'inner'
+                                                    },
+                                                    labelLine: {
+                                                        show: false
+                                                    }
+                                                }
+                                            },
+                                            data: [
+                                                {value: 3523, name: '合资'},
+                                                {value: 6923, name: '增资扩股'},
+                                                {value: 6923, name: '股权收购'},
+                                                {value: 6943, name: '委托运营'},
+                                                {value: 6932, name: '资产转让'},
+                                                {value: 6912, name: 'BOT'},
+                                                {value: 6932, name: 'BOO'},
+                                                {value: 6923, name: 'PPP'},
+                                                {value: 14823, name: 'TOT'}
+                                            ]
+                                        },
+                                        {
+                                            name: '项目性质数量',
+                                            type: 'pie',
+                                            radius: [60, 90],
+                                            center: ['50%', '60%'],
+                                            data: [
+                                                {value: 2, name: '合资'},
+                                                {value: 3, name: '增资扩股'},
+                                                {value: 3, name: '股权收购'},
+                                                {value: 3, name: '委托运营'},
+                                                {value: 2, name: '资产转让'},
+                                                {value: 2, name: 'BOT'},
+                                                {value: 2, name: 'BOO'},
+                                                {value: 3, name: 'PPP'},
+                                                {value: 3, name: 'TOT'}
+                                            ]
+                                        }
+                                    ]
+                                };
+
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv004();
+            showDiv005();
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body class="easyui-layout" id="cc">
+<div data-options="region:'center',border:false">
+    <div class="div1 drag-item" id="main1">
+
+    </div>
+    <div class="div2 drag-item" id="main2">
+
+    </div>
+    <div class="div3 drag-item" id="main3">
+
+    </div>
+    <div class="div4 drag-item" id="main4">
+
+    </div>
+    <div class="div5 drag-item" id="main5">
+
+    </div>
+    <div class="div6 drag-item" id="main6">
+
+    </div>
+</div>
+<div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+     style="width:175px;padding:10px;">
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'center',border:false" style="padding:10px;background:#fff;border:1px solid #ccc;">
+            <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                   style="width: 120px;"></input>
+            <script type="text/javascript">
+                function myformatter(date) {
+                    var y = date.getFullYear();
+                    var m = date.getMonth() + 1;
+                    return y + '-' + (m < 10 ? ('0' + m) : m);
+                }
+                function myparser(s) {
+                    if (!s) return new Date();
+                    var ss = (s.split('-'));
+                    var y = parseInt(ss[0], 10);
+                    var m = parseInt(ss[1], 10);
+                    if (!isNaN(y) && !isNaN(m)) {
+                        return new Date(y, m - 1);
+                    } else {
+                        return new Date();
+                    }
+                }
+            </script>
+            <br>
+            <br>
+            <select id="DeptID" style="width: 120px;"></select>
+            <div style="text-align:right;padding:10px 0;">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                   onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../../scripts/myIndicator/myIndicator3.js"></script>
+<script>
+
+    $(function () {
+        getDataGrid();
+        showDiv001();
+    });
+
+    function getCity() {
+        var url = window.location.href;
+        var params = url.split("?")[1];
+        var city = params.split("=")[1];
+        return city + "分项整体趋势图";
+    }
+    function confirmIt() {
+        getDataGrid();
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "div1.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                require.config({
+                    paths: {
+                        echarts: '../../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            var option = {
+                                title : {
+                                    text: '某地区蒸发量和降水量',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                grid:{
+                                    y2:100
+                                },
+                                tooltip : {
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    y:30,
+                                    data:['水费回收率']
+                                },
+                                toolbox: {
+                                    show : false,
+                                    feature : {
+                                        mark : {show: true},
+                                        dataView : {show: true, readOnly: false},
+                                        magicType : {show: true, type: ['line', 'bar']},
+                                        restore : {show: true},
+                                        saveAsImage : {show: true}
+                                    }
+                                },
+                                calculable : true,
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        axisLabel : {
+                                            rotate: 45
+                                        },
+                                        data : ['包头城市制水','运城首创','淮南首创供水','徐州首创','新乡首创','马鞍山首创(合并)','余姚首创','铜陵首创','包天黄河水源','包头申银','临猗首创','广元首创供水','屏山首创供水','葫芦岛首创','湖南首创(合并)']
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        min:80,
+                                        max:100,
+                                        splitNumber:4
+                                    }
+                                ],
+                                series : [
+                                    {
+                                        name:'水费回收率',
+                                        type:'bar',
+                                        data:[98, 97.4, 96.8, 96.2, 95.6, 95, 94.4, 93.8, 93.2, 92.6, 92, 91.4,90.8,90.2,89.6]
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    function getDataGrid() {
+        $('#tg1').datagrid({
+            url: 'dataGrid1.json',
+            title: '水费回收率分析表',
+            method: 'post',
+            singleSelect: true,
+            nowrap: true,
+            rownumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue')
+            },
+            columns: [[
+                {
+                    field: 'm1',
+                    title: '排名',
+                    width: 110,
+                    align: 'center'
+
+                },
+                {
+                    field: 'm2',
+                    title: '公司简称',
+                    width: 110,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='1.html?city="+value+"'>"+value+"</a>";
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: '水费回收率(%)',
+                    width: 110,
+                    align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='2.html'>"+value+"</a>";
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '分值',
+                    width: 110,
+                    align: 'center'
+                }
+            ]]
+        });
+    }
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main2" style="height:410px;width: 40%;float: left;">
+    <table id="tg1" style="height: 410px;"></table>
+</div>
+<div id="main1" style="height:450px;width: 55%;float: left;"></div>
+</body>
+</html>

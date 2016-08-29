@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>月度财务分析（快报版）</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyScripts_FN.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="FinancialAnalysis_qr/Analysis-table.js"></script>
+    <style type="text/css">
+        table.gridtable {
+            font-family: "微软雅黑", arial, sans-serif;
+            font-size: 12px;
+            color: #333333;
+            border-width: 0;
+            border-collapse: collapse;
+            cellSpacing: 0;
+        }
+
+        table.gridtable th {
+            border-top-width: 2px;
+            padding: 8px;
+            border-top-style: solid;
+            border-top-color: #000000;
+            background-color: #dedede;
+        }
+
+        table.gridtable td {
+            border-top-width: 1px;
+            padding: 8px;
+            border-top-style: dotted;
+            border-top-color: #666666;
+            background-color: #ffffff;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            var Nowdate = new Date();
+            var nowYear = Nowdate.getYear() + 1900;
+            var preYear = Nowdate.getYear() + 1900 - 1;
+
+            //var month = Nowdate.getMonth()+1;
+            var month = 3;  //当月
+            var _month = month - 1;//上个月
+            var _month2 = month - 2;//上上个月
+
+            var today = Nowdate.getDate(); //当前日
+
+            var nowMonth = month < 10 ? "0" + month : month; //当月
+            var preMonth = _month < 10 && _month > 0 ? "0" + _month : _month; //上个月
+            var preMonth2 = _month2 < 10 && _month2 > 0 ? "0" + _month2 : _month2; //上上个月
+            if (preMonth == 0) {
+                nowYear = nowYear - 1;
+                preMonth = "12";
+            }
+            if (preMonth2 == -1) {
+                preMonth2 = "11";
+            } else if (preMonth2 == 0) {
+                nowYear = nowYear - 1;
+                preMonth2 = "12";
+            }
+
+            if (today <= 15) {
+                preMonth = preMonth2;
+            }
+            $("#date").datebox("setValue", nowYear + '-' + preMonth);
+            //$("#date").datebox("setValue", "2015-12");
+            confirmIt();
+        });
+        function confirmIt() {
+            var date = $('#date').datebox('getValue');
+
+            //$(".current_month").css("color","red");
+            $(".current_month").html(date.substr(5, 2));
+
+            //$(".current_year").css("color","blue");
+            $(".current_year").html(date.substr(0, 4));
+
+            //$(".last_year").css("color","green");
+            $(".last_year").html(parseInt(date.substr(0, 4), 10) - 1);
+
+            /* 表1 */
+            operatingRevenue();
+            totalProfit();
+            profitParent();
+            totalAsset();
+            totalDebt();
+            assetLiabilityRatio();
+            assetParent();
+            ROEParent();
+            /* 表2*/
+            IncomeTarget();
+            ProfitTarget();
+            ProfitParentTarget();
+            /* 表3 */
+            Table03();
+            /* 表4 */
+            Table04();
+            /* 表5 */
+            Table05();
+            /* 经营管理风险提示 */
+            RiskTip01();
+            RiskTip02();
+        }
+
+    </script>
+</head>
+<body>
+<div style="background-color: #E0E0E0; padding:5px 10px;width: 100%;position:fixed;">
+    <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+</div>
+<div style="width: 900px;margin-left: auto;margin-right: auto;">
+    <br>
+    <h2 style="width: 900px;text-align: center;">北京首创股份有限公司</h2>
+    <h2 style="width: 900px;text-align: center;"><span class="current_year"></span>年01-<span
+            class="current_month"></span>月经营财务分析(快报版)</h2>
+    <br>
+    <h3>一、<span class="current_year"></span>年01-<span class="current_month"></span>月公司整体经营财务情况</h3>
+    <h4 style="width: 900px;text-align: center;">表1：<span class="current_year"></span>年01-<span
+            class="current_month"></span>月公司整体财务指标情况表</h4>
+    <p style="font-size:12px;width: 900px;text-align: right;">单位：万元</p>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 300px;text-align: left;">损益表关键指标</th>
+            <th style="width: 150px;"><span class="current_year"></span>年01-<span class="current_month"></span>月</th>
+            <th style="width: 150px;"><span class="last_year"></span>年同期</th>
+            <th style="width: 150px;">差异额</th>
+            <th style="width: 150px;">差异率</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>营业收入</td>
+            <td style="text-align: center;"><span class="operating_revenue_ty"></span></td>
+            <td style="text-align: center;"><span class="operating_revenue_ly"></span></td>
+            <td style="text-align: center;"><span class="operating_revenue_tl"></span></td>
+            <td style="text-align: center;"><span class="operating_revenue_tlr"></span></td>
+        </tr>
+        <tr>
+            <td>利润总额</td>
+            <td style="text-align: center;"><span class="total_profit_ty"></span></td>
+            <td style="text-align: center;"><span class="total_profit_ly"></span></td>
+            <td style="text-align: center;"><span class="total_profit_tl"></span></td>
+            <td style="text-align: center;"><span class="total_profit_tlr"></span></td>
+        </tr>
+        <tr>
+            <td>归属母公司净利润</td>
+            <td style="text-align: center;"><span class="profit_parent_ty"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_ly"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_tl"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_tlr"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 300px;text-align: left;">其他关键指标</th>
+            <th style="width: 150px;"><span class="current_year"></span>年-<span class="current_month"></span>-31</th>
+            <th style="width: 150px;"><span class="last_year"></span>年年末</th>
+            <th style="width: 150px;">差异额</th>
+            <th style="width: 150px;">差异率</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>资产总额</td>
+            <td style="text-align: center;"><span class="total_asset_ty"></span></td>
+            <td style="text-align: center;"><span class="total_asset_ly"></span></td>
+            <td style="text-align: center;"><span class="total_asset_tl"></span></td>
+            <td style="text-align: center;"><span class="total_asset_tlr"></span></td>
+        </tr>
+        <tr>
+            <td>负债总额</td>
+            <td style="text-align: center;"><span class="total_debt_ty"></span></td>
+            <td style="text-align: center;"><span class="total_debt_ly"></span></td>
+            <td style="text-align: center;"><span class="total_debt_tl"></span></td>
+            <td style="text-align: center;"><span class="total_debt_tlr"></span></td>
+        </tr>
+        <tr>
+            <td>资产负债率</td>
+            <td style="text-align: center;"><span class="asset_liability_ratio_ty"></span></td>
+            <td style="text-align: center;"><span class="asset_liability_ratio_ly"></span></td>
+            <td style="text-align: center;"><span class="asset_liability_ratio_tl"></span></td>
+            <td style="text-align: center;"><span class="asset_liability_ratio_tlr"></span></td>
+        </tr>
+        <tr>
+            <td>归属母公司净资产</td>
+            <td style="text-align: center;"><span class="asset_parent_ty"></span></td>
+            <td style="text-align: center;"><span class="asset_parent_ly"></span></td>
+            <td style="text-align: center;"><span class="asset_parent_tl"></span></td>
+            <td style="text-align: center;"><span class="asset_parent_tlr"></span></td>
+        </tr>
+        <tr style="border-bottom: 2px solid;">
+            <td>归属母公司净资产收益率</td>
+            <td style="text-align: center;"><span class="roe_parent_ty"></span></td>
+            <td style="text-align: center;"><span class="roe_parent_ly"></span></td>
+            <td style="text-align: center;"><span class="roe_parent_tl"></span></td>
+            <td style="text-align: center;"><span class="roe_parent_tlr"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 style="width: 900px;text-align: center;">图1：......</h4>
+    <h4>(一) 公司整体营业收入变动分析</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年01月-<span
+            class="current_month"></span>月，公司整体实现营业收入<span class="operating_revenue_ty"></span>万元，同比增加<span
+            class="operating_revenue_tl"></span>万元，增长率<span class="operating_revenue_tlr"></span>%。</p>
+    <p>变动主要由于：①②③......</p>
+    <h4>(二) 公司整体利润总额变动分析</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年01月-<span
+            class="current_month"></span>月，公司整体实现利润总额<span class="total_profit_ty"></span>万元，同比增加<span
+            class="total_profit_tl"></span>万元，增长率<span class="total_profit_tlr"></span>%。</p>
+    <p>变动主要由于：①②③......</p>
+    <h4>(三) 公司整体归属母公司净利润变动分析</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年01月-<span
+            class="current_month"></span>月，公司整体实现归属母公司净利润<span class="profit_parent_ty"></span>万元，同比增加<span
+            class="profit_parent_tl"></span>万元，增长率<span class="profit_parent_tlr"></span>%。</p>
+    <p>变动主要由于：①②③......</p>
+    <h4>(一) 公司其他关键指标变动分析</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;1. 资产负债率</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年<span
+            class="current_month"></span>月末，公司整体资产负债率水平<span class="asset_liability_ratio_ty"></span>%，较上年末<span
+            class="roe_parent_ly"></span>%。</p>
+    <p>变动主要由于：①②③......</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2. 归属母公司净资产收益率</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年<span
+            class="current_month"></span>月末，归属母公司净资产收益率<span class="roe_parent_ty"></span>%，较上年末<span
+            class="roe_parent_ly"></span>%。</p>
+    <p>变动主要由于：①②③......</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;3. ......</p>
+    <h4>(五) 指标完成情况分析</h4>
+    <h4 style="width: 900px;text-align: center;">表2：<span class="current_year"></span>年01-<span
+            class="current_month"></span>月公司财务指标完成情况</h4>
+    <p style="font-size:12px;width: 900px;text-align: right;">单位：万元</p>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 150px;text-align: left;">损益表关键指标</th>
+            <th style="width: 150px;"><span class="current_year"></span>年01-<span class="current_month"></span>月</th>
+            <th style="width: 150px;"><span class="current_year"></span>年内部<br>预算分解指标</th>
+            <th style="width: 150px;">内部预算指标<br>完成率</th>
+            <th style="width: 150px;"><span class="current_year"></span>年集团<br>下达指标</th>
+            <th style="width: 150px;">集团指标<br>完成率</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>营业收入</td>
+            <td style="text-align: center;"><span class="revenue_tar"></span></td>
+            <td style="text-align: center;"><span class="revenue_self"></span></td>
+            <td style="text-align: center;"><span class="revenue_self_rate"></span></td>
+            <td style="text-align: center;"><span class="revenue_group"></span></td>
+            <td style="text-align: center;"><span class="revenue_group_rate"></span></td>
+        </tr>
+        <tr>
+            <td>利润总额</td>
+            <td style="text-align: center;"><span class="profit_tar"></span></td>
+            <td style="text-align: center;"><span class="profit_self"></span></td>
+            <td style="text-align: center;"><span class="profit_self_rate"></span></td>
+            <td style="text-align: center;"><span class="profit_group"></span></td>
+            <td style="text-align: center;"><span class="profit_group_rate"></span></td>
+        </tr>
+        <tr style="border-bottom: 2px solid;">
+            <td>归属母公司净利润</td>
+            <td style="text-align: center;"><span class="profit_parent_tar"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_self"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_self_rate"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_group"></span></td>
+            <td style="text-align: center;"><span class="profit_parent_group_rate"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;1. 公司内部预算指标完成情况分析</p>
+    <p>.....</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2. 集团指标完成情况分析</p>
+    <p>......</p>
+    <h3>二、<span class="current_year"></span>年01-<span class="current_month"></span>月分业务板块经营财务情况</h3>
+    <h4>(一) <span class="current_year"></span>年01月-<span class="current_month"></span>月主要业务板块经营财务分析表</h4>
+    <h4 style="width: 900px;text-align: center;">表3：公司主要业务板块同比分析表</h4>
+    <p style="font-size:12px;width: 900px;text-align: right;">单位：万元</p>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 100px;border-right: 1px dotted;" rowspan="2">业务板块</th>
+            <th style="width: 400px;border-right: 1px dotted;" colspan="4">营业收入</th>
+            <th style="width: 400px;" colspan="4">归属母公司净利润</th>
+        </tr>
+        <tr>
+            <th style="width: 130px;border-right: 1px dotted;"><span class="current_year"></span>年01-<span
+                    class="current_month"></span>月
+            </th>
+            <th style="width: 90px;border-right: 1px dotted;"><span class="last_year"></span>同期</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异额</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异率</th>
+            <th style="width: 130px;border-right: 1px dotted;"><span class="current_year"></span>年01-<span
+                    class="current_month"></span>月
+            </th>
+            <th style="width: 90px;border-right: 1px dotted;"><span class="last_year"></span>同期</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异额</th>
+            <th style="width: 90px;">差异率</th>
+        </tr>
+        </thead>
+        <tbody id="table03">
+
+        </tbody>
+    </table>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;1. 环保业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="current_year"></span>年<span
+            class="current_month"></span>月末，环保业务实现营业收入xxx万元，同比增长xxx万元，增长率xxx%；实现归属母公司净利润xxx万元，同比增长xxx万元，增长率xxx%。</p>
+    <p>变动主要由于：①②③......</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环保业务中，主要业务板块同比变动为：</p>
+    <h4 style="width: 900px;text-align: center;">表4：环保板块主要业务同比分析表</h4>
+    <p style="font-size:12px;width: 900px;text-align: right;">单位：万元</p>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 100px;border-right: 1px dotted;" rowspan="2">业务板块</th>
+            <th style="width: 400px;border-right: 1px dotted;" colspan="4">营业收入同比分析</th>
+            <th style="width: 400px;" colspan="4">归属母公司净利润同比分析</th>
+        </tr>
+        <tr>
+            <th style="width: 130px;border-right: 1px dotted;"><span class="current_year"></span>年01-<span
+                    class="current_month"></span>月
+            </th>
+            <th style="width: 90px;border-right: 1px dotted;"><span class="last_year"></span>同期</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异额</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异率</th>
+            <th style="width: 130px;border-right: 1px dotted;"><span class="current_year"></span>年01-<span
+                    class="current_month"></span>月
+            </th>
+            <th style="width: 90px;border-right: 1px dotted;"><span class="last_year"></span>同期</th>
+            <th style="width: 90px;border-right: 1px dotted;">差异额</th>
+            <th style="width: 90px;">差异率</th>
+        </tr>
+        </thead>
+        <tbody id="table04">
+
+        </tbody>
+    </table>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) 供水业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) 污水业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) 固废业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) 海水淡化业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) 工程/设备/技术</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6) 其他参股公司</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;2. 快速路业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;3. 酒店业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;4. 土地开发业务</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;5. 本部及其他</p>
+    <h3>三、<span class="current_year"></span>年01-<span class="current_month"></span>月分区域经营财务情况</h3>
+    <h4 style="width: 900px;text-align: center;">表5：分公司分区域经营财务状况及预算完成情况</h4>
+    <p style="font-size:12px;width: 900px;text-align: right;">单位：万元</p>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 300px;text-align: center;border-right: 1px dotted;">区域</th>
+            <th style="width: 150px;border-right: 1px dotted;"><span class="current_year"></span>年01-<span
+                    class="current_month"></span>月<br>实际数
+            </th>
+            <th style="width: 150px;border-right: 1px dotted;"><span class="last_year"></span>年<br>同期数</th>
+            <th style="width: 150px;border-right: 1px dotted;">差异额</th>
+            <th style="width: 150px;border-right: 1px dotted;">差异率</th>
+            <th style="width: 150px;border-right: 1px dotted;"><span class="current_year"></span>年内部<br>预算分解数</th>
+            <th style="width: 150px;border-right: 1px dotted;">预算<br>完成率</th>
+        </tr>
+        </thead>
+        <tbody id="table05">
+
+        </tbody>
+    </table>
+    <h4>(一) 北京大区</h4>
+    <h4>(二) 北方大区</h4>
+    <h4>(三) 中原大区</h4>
+    <h4>(四) 东南大区</h4>
+    <h4>(五) 中南大区</h4>
+    <h4>(六) 西南大区</h4>
+    <h4>(七) 工程事业部</h4>
+    <h4>(八) 生态环境事业部</h4>
+    <h4>(久) 集团直管</h4>
+    <h4>(十) 公司直管</h4>
+    <h3>四、<span class="current_year"></span>年01-<span class="current_month"></span>月业务板块经营管理风险提示</h3>
+    <h4>(一) 获利能力待加强公司(末位排名10位，归属于项目公司净资产收益率最为主排名，归属于首创净利润为次排名)</h4>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 50px;">序号</th>
+            <th style="width: 300px;text-align: left;">公司名称</th>
+            <th style="width: 200px;">归属于项目公司净资产收益率</th>
+            <th style="width: 200px;">归属于首创净利润</th>
+        </tr>
+        </thead>
+        <tbody id="risk_tip_01">
+        </tbody>
+    </table>
+    <h4>(二) 重点关注持续亏损公司(持续亏损公司排名)</h4>
+    <h4>(三) 成本费用控制风险(成本费用利润率末位排名)</h4>
+    <table class="gridtable">
+        <thead style="font-size: 12px;height: 25px;">
+        <tr>
+            <th style="width: 50px;">序号</th>
+            <th style="width: 300px;text-align: left;">公司名称</th>
+            <th style="width: 400px;">成本费用利润率</th>
+        </tr>
+        </thead>
+        <tbody id="risk_tip_02">
+        </tbody>
+    </table>
+    <h4>(四) 应收账款回款风险(应收账款期末大额排名)</h4>
+    <h4>(五) ......</h4>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+</body>
+</html>

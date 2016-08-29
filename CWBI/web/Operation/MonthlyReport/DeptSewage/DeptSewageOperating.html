@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>大区污水生产运营月度分析报告-经营分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/OPMR/opmr.css"/>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_MR_dept.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        setTimeout("confirmIt()", 1000);
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 1000);
+    });
+
+    function confirmIt() {
+        var DeptName = $('#DeptName').val();
+        if (DeptName == "" || DeptName == null) {
+            alert("请填写大区名称！");
+            return;
+        }
+        $("#tab_deptName").html($('#DeptName').val());
+        $("#tab_date").html($('#date').datebox('getValue'));
+
+        table001();
+        table002();
+    }
+    function table001() {
+        $.ajax({
+            url: "DeptSewageOperating001GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                DeptID: $('#DeptID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                //console.log(arrayData);
+                $("#table001").empty();
+                if (arrayData.operation.length > 0) {
+                    for (var i = 0; i < arrayData.operation.length; i++) {
+                        $("#table001").append("<tr>"
+                                + "<td >" + arrayData.operation[i].company_name + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].kpi_unit + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m1 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m2 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m3 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m4 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m5 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m6 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m7 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m8 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m9 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m10 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m11 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m12 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.operation[i].m13 + "</td>"
+                                + "</tr>");
+                    }
+                    $("#table001").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"14\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main001\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "</tr>"
+                            + "<tr style=\"height: 100px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"14\" style=\"align:center\">"
+                            + "<textarea id=\"reason001\" style=\"resize:none; width:99%; height:100px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason001").html(arrayData.reason[0].reason);
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main001'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: (function () {
+                                            var data = [];
+                                            for (var i = 0; i < arrayData.operation.length; i++) {
+                                                if (arrayData.operation.length <= 0) {
+                                                    return data;
+                                                } else {
+                                                    for (var i = 0; i < arrayData.operation.length; i++) {
+                                                        data.push(arrayData.operation[i].company_name);
+                                                    }
+                                                    return data;
+                                                }
+                                            }
+                                        })()
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '百分率(%)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: (function () {
+                                        var data = [];
+                                        if (arrayData.operation.length <= 0) {
+                                            return data;
+                                        } else {
+                                            for (var i = 0; i < arrayData.operation.length; i++) {
+                                                var obj = {};
+                                                obj.name = arrayData.operation[i].company_name;
+                                                obj.type = 'line';
+                                                obj.data = [arrayData.operation[i].m1,
+                                                    arrayData.operation[i].m2,
+                                                    arrayData.operation[i].m3,
+                                                    arrayData.operation[i].m4,
+                                                    arrayData.operation[i].m5,
+                                                    arrayData.operation[i].m6,
+                                                    arrayData.operation[i].m7,
+                                                    arrayData.operation[i].m8,
+                                                    arrayData.operation[i].m9,
+                                                    arrayData.operation[i].m10,
+                                                    arrayData.operation[i].m11,
+                                                    arrayData.operation[i].m12
+                                                ]
+                                                data.push(obj);
+                                            }
+                                            return data;
+                                        }
+                                    })()
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+    function table002() {
+        $.ajax({
+            url: "DeptSewageOperating002GD.jsp",
+            dataType: "text",
+            type: "post",
+            data: {
+                DeptID: $('#DeptID').val(),
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                var arrayData = eval("(" + return_data + ")");
+                console.log(arrayData);
+                $("#table002").empty();
+                if (arrayData.opt_a.length > 0) {
+                    for (var i = 0; i < arrayData.opt_a.length; i++) {
+                        $("#table002").append("<tr>"
+                                + "<td>" + arrayData.opt_a[i].company_name + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].type + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m1 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m2 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m3 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m4 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m5 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m6 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m7 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m8 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m9 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m10 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m11 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m12 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_a[i].m13 + "</td>"
+                                + "</tr>");
+                        $("#table002").append("<tr>"
+                                + "<td>" + arrayData.opt_b[i].company_name + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].type + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m1 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m2 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m3 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m4 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m5 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m6 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m7 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m8 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m9 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m10 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m11 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m12 + "</td>"
+                                + "<td style=\"text-align:center;\">" + arrayData.opt_b[i].m13 + "</td>"
+                                + "</tr>");
+                    }
+                    $("#table002").append("<tr style=\"height: 230px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">图表分析</td>"
+                            + "<td colspan=\"14\">"
+                            + "<div style=\"height: 100%;width:100%;border: 1px solid green;\">"
+                            + "<div id=\"main002\" style=\"height: 230px;z-index: 999;\"></div>"
+                            + "</div>"
+                            + "</td>"
+                            + "</tr>"
+                            + "<tr style=\"height: 100px;\">"
+                            + "<td style=\"background-color:#c5d9f1;text-align: center;\">原因说明</td>"
+                            + "<td colspan=\"14\" style=\"align:center\">"
+                            + "<textarea id=\"reason002\" style=\"resize:none; width:99%; height:100px;\"></textarea>"
+                            + "</td>"
+                            + "</tr>");
+
+                    $("#reason002").html(arrayData.reason[0].reason);
+                    //图表
+                    require.config({
+                        paths: {
+                            echarts: '../../../scripts'
+                        }
+                    });
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main002'));
+                                option = {
+                                    grid: {
+                                        x: 55,
+                                        x2: 20,
+                                        y: 55,
+                                        y2: 35
+                                    },
+                                    legend: {
+                                        data: (function () {
+                                            var data = [];
+                                            for (var i = 0; i < arrayData.opt_a.length; i++) {
+                                                if (arrayData.opt_a.length <= 0) {
+                                                    return data;
+                                                } else {
+                                                    for (var i = 0; i < arrayData.opt_a.length; i++) {
+                                                        data.push(arrayData.opt_a[i].company_name + "[实际]");
+                                                        if (arrayData.opt_b[i].company_name != "") {
+                                                            data.push(arrayData.opt_b[i].company_name + "[计划]");
+                                                        }
+                                                    }
+                                                    return data;
+                                                }
+                                            }
+                                        })()
+                                    },
+                                    calculable: true,
+                                    tooltip: {
+                                        trigger: 'axis'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            boundaryGap: false,
+                                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '净利润(万元)',
+                                            type: 'value'
+                                        }
+                                    ],
+                                    series: (function () {
+                                        var data = [];
+                                        if (arrayData.opt_a.length <= 0) {
+                                            return data;
+                                        } else {
+                                            for (var i = 0; i < arrayData.opt_a.length; i++) {
+                                                var obj = {};
+                                                obj.name = arrayData.opt_a[i].company_name + "[实际]";
+                                                obj.type = 'line';
+                                                obj.data = [arrayData.opt_a[i].m1,
+                                                    arrayData.opt_a[i].m2,
+                                                    arrayData.opt_a[i].m3,
+                                                    arrayData.opt_a[i].m4,
+                                                    arrayData.opt_a[i].m5,
+                                                    arrayData.opt_a[i].m6,
+                                                    arrayData.opt_a[i].m7,
+                                                    arrayData.opt_a[i].m8,
+                                                    arrayData.opt_a[i].m9,
+                                                    arrayData.opt_a[i].m10,
+                                                    arrayData.opt_a[i].m11,
+                                                    arrayData.opt_a[i].m12
+                                                ]
+                                                data.push(obj);
+                                                if (arrayData.opt_b[i].company_name != "") {
+                                                    var obj = {};
+                                                    obj.name = arrayData.opt_b[i].company_name + "[计划]";
+                                                    obj.type = 'line';
+                                                    obj.data = [arrayData.opt_b[i].m1,
+                                                        arrayData.opt_b[i].m2,
+                                                        arrayData.opt_b[i].m3,
+                                                        arrayData.opt_b[i].m4,
+                                                        arrayData.opt_b[i].m5,
+                                                        arrayData.opt_b[i].m6,
+                                                        arrayData.opt_b[i].m7,
+                                                        arrayData.opt_b[i].m8,
+                                                        arrayData.opt_b[i].m9,
+                                                        arrayData.opt_b[i].m10,
+                                                        arrayData.opt_b[i].m11,
+                                                        arrayData.opt_b[i].m12
+                                                    ]
+                                                    data.push(obj);
+                                                }
+                                            }
+                                            return data;
+                                        }
+                                    })()
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            }
+        });
+    }
+</script>
+<body>
+<div style="background-color: #E0E0E0; padding:5px 0;width: 100%;position:fixed;z-index: 9999;">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">日期：</span><input id="date" class="easyui-datebox"
+                                                    data-options="formatter:myformatter,parser:myparser"
+                                                    value="01"></input>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 12px;">大区名称：</span><input type="text" size="40" id="DeptName"><input type="hidden"
+                                                                                                 id="DeptID">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+</div>
+<div style="width: 1100px;margin-left: auto;margin-right: auto;">
+    <br>
+    <br>
+    <h3 style="width: 1100px;text-align: center;line-height: 30px; "><img src="../../../images/CW_logo.png" align="top"
+                                                                          width="25px" height="25px;">&nbsp;大区污水生产运营月度分析报告-经营分析
+    </h3>
+    <div style="width: 1100px;">
+        <p style="font-size: 12px;">大区名称：<span id="tab_deptName"></span></p>
+        <p style="font-size: 12px;">编制时间：<span id="tab_date"></span></p>
+    </div>
+    <table class="gridtable">
+        <tbody>
+        <!-- 一、水费管理 -->
+        <tr>
+            <td class="item_text" colspan="16">一、水费管理</td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td class="item_text">本期水费回收率</td>
+            <td colspan="16" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <thead>
+                    <tr>
+                        <th style="width: 140px;">项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目</th>
+                        <th style="width: 60px;">单位</th>
+                        <th style="width: 40px;">1月</th>
+                        <th style="width: 40px;">2月</th>
+                        <th style="width: 40px;">3月</th>
+                        <th style="width: 40px;">4月</th>
+                        <th style="width: 40px;">5月</th>
+                        <th style="width: 40px;">6月</th>
+                        <th style="width: 80px;">7月</th>
+                        <th style="width: 40px;">8月</th>
+                        <th style="width: 40px;">9月</th>
+                        <th style="width: 40px;">10月</th>
+                        <th style="width: 40px;">11月</th>
+                        <th style="width: 40px;">12月</th>
+                        <th style="width: 40px;">累计</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table001">
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+        <tbody>
+        <!-- 二、利润总额 -->
+        <tr>
+            <td class="item_text" colspan="16">二、净利润</td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td class="item_text">利润完成情况</td>
+            <td colspan="16" style="padding: 0;margin: 0;">
+                <table class="gridtable_">
+                    <thead>
+                    <tr>
+                        <th style="width: 140px;">项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目</th>
+                        <th style="width: 60px;">单位</th>
+                        <th style="width: 40px;">1月</th>
+                        <th style="width: 40px;">2月</th>
+                        <th style="width: 40px;">3月</th>
+                        <th style="width: 40px;">4月</th>
+                        <th style="width: 40px;">5月</th>
+                        <th style="width: 40px;">6月</th>
+                        <th style="width: 80px;">7月</th>
+                        <th style="width: 40px;">8月</th>
+                        <th style="width: 40px;">9月</th>
+                        <th style="width: 40px;">10月</th>
+                        <th style="width: 40px;">11月</th>
+                        <th style="width: 40px;">12月</th>
+                        <th style="width: 40px;">累计</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table002">
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

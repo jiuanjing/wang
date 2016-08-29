@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>供水量分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+<!-- 设置时间 -->
+<script src="../../../scripts/MyDate.js"></script>
+<script src="../../../scripts/OP_Operation_Kpi.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var indicator = myIndicator("正在加载中...");
+        showDiv1();
+        window.setTimeout(function () {
+            indicator.hide();
+        }, 500);
+    });
+    function showDiv1() {
+        $.ajax({
+            url: "a.json",
+            dataType: "text",
+            type: "post",
+            /*
+             data : {
+             date1 : d1,
+             date2 : d2,
+             kpiCodeNum : '1022'//指标code
+             },
+             */
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                //var arrayData = eval("("+return_data+")");
+
+                //echarts
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/scatter'
+                        ],
+                        function (ec) {
+                            var myChart = ec.init(document.getElementById('main'), "macarons");
+
+                            option = {
+                                title: {
+                                    text: '供水规模及项目数量分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        color: '#1b1b1b',
+                                        fontWeight: 'bold',
+                                        fontSize: 14
+                                    }
+                                },
+                                dataRange: {
+                                    show: false,
+                                    min: 1,
+                                    max: 100,
+                                },
+                                tooltip: {
+                                    trigger: 'axis',//触发器
+                                    showDelay: 0,//显示延迟
+                                    axisPointer: {
+                                        show: true,
+                                        type: 'cross',
+                                        lineStyle: {
+                                            type: 'solid',
+                                            width: 1
+                                        }
+                                    }
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        mark: {show: true},
+
+                                        dataView: {show: true, readOnly: false},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '数量',
+                                        splitNumber: 10,
+                                        scale: false
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        name: '平均规模',
+                                        splitNumber: 10,
+                                        scale: false
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '数量',
+                                        type: 'scatter',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function (params) {
+                                                return params.value[3] + '<br/>' + '公司数量：' + params.value[0] + '个<br/>'
+                                                        + '平均规模：' + params.value[1] + '万吨/个<br/>'
+                                                        + '规模：' + params.value[2] + '万吨<br/>';
+                                            },
+                                            axisPointer: {
+                                                show: true
+                                            }
+                                        },
+                                        symbolSize: function (value) {
+                                            return value[1]
+                                        },
+                                        data: [
+                                            [4, 20, 80, '包头黄河水源'],
+                                            [10, 10, 100, '包头申银'],
+                                            [5, 30, 150, '包头城市制水'],
+                                            [10, 18, 180, '临猗首创'],
+                                            [2, 25, 50, '运城首创']
+                                        ]
+                                    }
+                                ]
+                            };
+                            var ecConfig = require('echarts/config');
+
+                            myChart.setOption(option);
+                        }
+                );
+            }
+        });
+    }
+
+    function confirmIt() {
+        showDiv1();
+    }
+
+</script>
+<body style="overflow: hidden;">
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="5%"><span style="font-size: 12px;">年度：</span></td>
+            <td width="5%">
+                <input id="cc" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="110">
+            </td>
+            <td width="5%"><span style="font-size: 12px;">大区：</span></td>
+            <td width="5%">
+                <select name="dept" id="dept">
+                    <option>东南大区</option>
+                    <option>北方大区</option>
+                    <option>中原大区</option>
+                    <option>北京大区</option>
+                    <option>东南大区</option>
+                    <option>西南大区</option>
+                </select>
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            return y + '-' + (m < 10 ? ('0' + m) : m);
+        }
+        function myparser(s) {
+            if (!s) return new Date();
+            var ss = (s.split('-'));
+            var y = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            if (!isNaN(y) && !isNaN(m)) {
+                return new Date(y, m - 1);
+            } else {
+                return new Date();
+            }
+        }
+    </script>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+<div id="main" style="width: 95%;margin-top: 40px;height: 450px;"></div>
+</body>
+</html>

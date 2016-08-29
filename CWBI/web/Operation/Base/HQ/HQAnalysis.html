@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>企业运营概览</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyDate.js"></script>
+    <script src="../../../scripts/OP_OperationGeneral.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/operation_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div3 {
+            position: absolute;
+            z-index: 110;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 98;
+        }
+
+        .div6 {
+            position: absolute;
+            z-index: 99;
+        }
+    </style>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 1;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            //showTotal();
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv004();
+            showDiv005();
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 500);
+        });
+        //northdiv获得数据
+        function showTotal() {
+            $.ajax({
+                url: "EnterpriseGetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    arrayData = ['86,500', '3583', '54', '86,500', '34,360', '134,542'];
+                    for (var i = 0; i < arrayData.length; i++) {
+                        $(".total_span").eq(i).text(arrayData[i]);
+                    }
+                }
+            });
+        }
+        function showDiv001() {
+            $.ajax({
+                url: "div1.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: '总规模趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                        },
+                                        formatter: "{b}年 <br/>{a} : {c}万吨<br/>{a1}:{c1}万吨 <br/>{a2}:{c2}万吨 <br/>{a3}:{c3}万吨<br/>{a4}:{c4}%"
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ['供水', '污水', '再生水', '固废', '总增长率']
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'right',
+                                        y: 'center',
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+
+                                            data: ['2009', '2010', '2011', '2012', '2013', '2014', '2015']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '水量(万吨)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '总增长率(%)'
+                                        }
+                                    ],
+                                    series: [
+
+                                        {
+                                            name: '固废',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [120, 132, 101, 134, 90, 230, 210]
+                                        },
+                                        {
+                                            name: '再生水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [220, 182, 191, 234, 290, 330, 310]
+                                        },
+                                        {
+                                            name: '污水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [170, 232, 271, 154, 240, 300, 410]
+                                        },
+                                        {
+                                            name: '供水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [150, 232, 201, 154, 190, 330, 410]
+                                        },
+                                        {
+                                            name: '总增长率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 1,     //点的大小
+                                            data: [70, 32, 71, 54, 40, 34, 10],
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#4e72b8'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        //取数组最大值,并取整
+        function max_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 100;
+            } else if (max == 0 && min < 0) {
+                max = 0 - min;
+            }
+            for (var i = 1; i < tmp.length; i++) {
+                if (max < tmp[i])max = tmp[i];
+            }
+            max = max.toFixed(0);//取整
+            var len = max.length;
+            if (len > 5) {
+                len = len - 2;
+                max = parseFloat(max.substr(0, 2)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            } else {
+                len = len - 1;
+                max = parseFloat(max.substr(0, 1)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            }
+            return max;
+        }
+        //取数组最小值,并取整
+        function min_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 0;
+            } else if (max == 0 && min < 0) {
+                return (Math.floor(min / 1000)) * 1000;
+            } else if (min == 0 && max < 0) {
+                return (Math.floor(max / 1000)) * 1000;
+            } else if (max < 0 && min < 0) {
+                max = -max;
+                min = -min;
+                for (var i = 1; i < tmp.length; i++) {
+                    if (max < tmp[i])max = tmp[i];
+                }
+                return -(Math.ceil(min / 1000)) * 1000;
+            }
+            return 0;
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "div1.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    /*
+                     var arrayData = eval('('+return_data+')');
+                     var list = [];
+                     list.push(arrayData.cy[0].value);
+                     list.push(arrayData.ly[0].value);
+                     var max = max_value(list);
+                     var min = min_value(list);
+                     */
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: '项目数量趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                        },
+                                        formatter: "{b}年 <br/>{a} : {c}万吨<br/>{a1}:{c1}万吨 <br/>{a2}:{c2}万吨 <br/>{a3}:{c3}万吨<br/>{a4}:{c4}%"
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ['供水', '污水', '再生水', '固废', '增长率']
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'right',
+                                        y: 'center',
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+
+                                            data: ['2009', '2010', '2011', '2012', '2013', '2014', '2015']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '项目数量(个)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '增长率(%)'
+                                        }
+                                    ],
+                                    series: [
+
+                                        {
+                                            name: '固废',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [12, 13, 10, 13, 9, 23, 21]
+                                        },
+                                        {
+                                            name: '再生水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [22, 18, 19, 23, 29, 33, 31]
+                                        },
+                                        {
+                                            name: '污水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [15, 23, 20, 15, 19, 33, 41]
+                                        },
+                                        {
+                                            name: '供水',
+                                            type: 'bar',
+                                            stack: '广告',
+                                            data: [17, 23, 27, 15, 24, 30, 41]
+                                        },
+                                        {
+                                            name: '增长率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 1,     //点的大小
+                                            data: [1, 3, 4, 5, 5, 6, 3],
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#4e72b8'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv003() {
+            $.ajax({
+                url: "div3.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    //var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: '平均规模趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                        },
+                                        formatter: "{b}年 <br/>{a} : {c}万吨<br/>{a1}:{c1}万吨<br/>{a2}:{c2}万吨<br/>{a3}:{c3}万吨"
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ['供水', '污水', '再生水', '固废']
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'right',
+                                        y: 'center',
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+
+                                            data: ['2009', '2010', '2011', '2012', '2013', '2014', '2015']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '平均规模(万吨)'
+                                        }
+                                    ],
+                                    series: [
+
+                                        {
+                                            name: '固废',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [12, 13, 10, 13, 9, 23, 21]
+                                        },
+                                        {
+                                            name: '再生水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [22, 18, 19, 23, 29, 33, 31]
+                                        },
+                                        {
+                                            name: '污水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [15, 23, 20, 15, 19, 33, 41]
+                                        },
+                                        {
+                                            name: '供水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [17, 23, 27, 15, 24, 30, 41]
+                                        },
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function random() {
+            var r = Math.round(Math.random() * 100);
+            return (r * (r % 2 == 0 ? 1 : -1));
+        }
+
+        function randomDataArray() {
+            var d = [];
+            var len = 38;
+            while (len--) {
+                d.push([
+                    Math.abs(random()),
+                    Math.abs(random()),
+                    Math.abs(random()),
+                    "首创" + Math.abs(random())
+                ]);
+            }
+            return d;
+        }
+        function showDiv004() {
+            $.ajax({
+                url: "div4.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    //var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar',
+                                'echarts/chart/pie'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main4'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: '运营年限分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{b}： {c}个"
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {
+                                                show: true,
+                                                type: ['pie', 'funnel'],
+                                                option: {
+                                                    funnel: {
+                                                        x: '25%',
+                                                        width: '50%',
+                                                        funnelAlign: 'left',
+                                                        max: 1548
+                                                    }
+                                                }
+                                            },
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    series: [
+                                        {
+                                            name: '运营年限',
+                                            type: 'pie',
+                                            radius: '55%',
+                                            center: ['50%', '60%'],
+                                            data: [
+                                                {value: 33, name: '0年'},
+                                                {value: 31, name: '0-5年'},
+                                                {value: 23, name: '5-10年'},
+                                                {value: 13, name: '10年以上'},
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv005() {
+            $.ajax({
+                url: "div5.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    //var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/pie',
+                                'echarts/chart/bar',
+                                'echarts/chart/line'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                                /*
+                                 if(arrayData == "" || arrayData == null){
+                                 myChart.showLoading({
+                                 text : '暂无数据',
+                                 effect : 'whirling',
+                                 textStyle : {
+                                 fontSize : 20
+                                 }
+                                 });
+                                 return;
+                                 }
+                                 */
+                                option = {
+                                    title: {
+                                        text: '投资额趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: "{b}年 <br/>{a} : {c}万元<br/>{a1}:{c1}万元<br/>{a2}:{c2}万元<br/>{a3}:{c3}万元",
+                                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                        }
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ['供水', '污水', '再生水', '固废']
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'right',
+                                        y: 'center',
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            },
+
+                                            data: ['2009', '2010', '2011', '2012', '2013', '2014', '2015']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '投资额(万元)'
+                                        }
+                                    ],
+                                    series: [
+
+                                        {
+                                            name: '供水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [12, 13, 10, 13, 9, 23, 21]
+                                        },
+                                        {
+                                            name: '污水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [22, 18, 19, 23, 29, 33, 31]
+                                        },
+                                        {
+                                            name: '固废',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [15, 23, 20, 15, 19, 33, 41]
+                                        },
+                                        {
+                                            name: '再生水',
+                                            type: 'line',
+                                            stack: '广告',
+                                            data: [17, 23, 27, 15, 24, 30, 41]
+                                        },
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv006() {
+            $.ajax({
+                url: "div6.json",
+                dataType: "text",
+                type: "post",
+                data: {
+                    //date : $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    console.log("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    //var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar',
+                                'echarts/chart/pie'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main6'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: '项目性质分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{a} <br/>{b}: {c}个({d}%)"
+                                    },
+                                    toolbox: {
+                                        show: false,
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            magicType: {
+                                                show: true,
+                                                type: ['pie', 'funnel'],
+                                                option: {
+                                                    funnel: {
+                                                        x: '25%',
+                                                        width: '50%',
+                                                        funnelAlign: 'left',
+                                                        max: 1548
+                                                    }
+                                                }
+                                            },
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    calculable: false,
+                                    series: [
+                                        {
+                                            name: '项目性质',
+                                            type: 'pie',
+                                            radius: '55%',
+                                            center: ['50%', '60%'],
+                                            data: [
+                                                {value: 33, name: 'BOT'},
+                                                {value: 31, name: 'TOT'},
+                                                {value: 23, name: '独资'},
+                                                {value: 13, name: 'PPP'},
+                                            ]
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            showTotal();
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv004();
+            showDiv005();
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="center" id="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+
+        </div>
+        <div class="div5 drag-item" id="main5">
+
+        </div>
+        <div class="div6 drag-item" id="main6">
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年份选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <select>
+                    <option>2011</option>
+                    <option>2012</option>
+                    <option>2013</option>
+                    <option>2014</option>
+                    <option>2015</option>
+                    <option>2016</option>
+                    <option>2017</option>
+                </select>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

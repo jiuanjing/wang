@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>企业运营概览</title>
+    <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+    <script src="../../../scripts/DatePicker_zh_cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+    <script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+    <script src="../../../scripts/echarts.js"></script>
+    <!-- 设置时间 -->
+    <script src="../../../scripts/MyDate.js"></script>
+    <script src="../../../scripts/OP_OperationGeneral.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+    <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+    <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/operation_general.css"/>
+    <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
+    <style type="text/css">
+        .div3 {
+            position: absolute;
+            z-index: 110;
+        }
+
+        .div5 {
+            position: absolute;
+            z-index: 98;
+        }
+
+        .div6 {
+            position: absolute;
+            z-index: 99;
+        }
+    </style>
+    <script type="text/javascript">
+        function setSize() {
+            var h = $(window).height() - 80;
+            var w = $(window).width() - 29;
+            $(".drag-item").css({"width": (w) / 3, "height": (h) / 2});
+            $(".div2").css({"left": (w) / 3});
+            $(".div3").css({"left": 2 * (w) / 3});
+            $(".div4").css({"top": (h) / 2});
+            $(".div5").css({"top": (h) / 2, "left": (w) / 3});
+            $(".div6").css({"top": (h) / 2, "left": 2 * (w) / 3});
+        }
+        $(function () {
+            var indicator = myIndicator("正在加载中...");
+            setSize();
+            require.config({
+                paths: {
+                    echarts: '../../../scripts'
+                }
+            });
+            showTotal();
+            /* 一*********************************************************************** */
+            showDiv001();
+            /* 二 ************************************************************************/
+            showDiv002();
+            /* 三*********************************************************************** */
+            showDiv003();
+            /* 四*********************************************************************** */
+            showDiv004();
+            /* 五*********************************************************************** */
+            showDiv005();
+            /* 六*********************************************************************** */
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        });
+        function showTotal() {
+            $.ajax({
+                url: "EnterpriseGetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    arrayData = ['86,500', '3583', '54', '86,500', '34,360', '134,542'];
+                    for (var i = 0; i < arrayData.length; i++) {
+                        $(".total_span").eq(i).text(arrayData[i]);
+                    }
+                }
+            });
+        }
+        function showDiv001() {
+            $.ajax({
+                url: "Enterprise001GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main1'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '投资回报率、供水和污水趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["供水量", "污水处理量", "投资回报率"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万吨<br/>{a1}:{c1}万吨<br/>{a2}:{c2}%'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '水量(万吨)'
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '回报率(%)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '供水量',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '污水处理量',
+                                            type: 'bar',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FE8463'
+                                                }
+                                            },
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '投资回报率',
+                                            type: 'line',
+                                            yAxisIndex: 1,
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[3]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#4e72b8'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        //取数组最大值,并取整
+        function max_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 100;
+            } else if (max == 0 && min < 0) {
+                max = 0 - min;
+            }
+            for (var i = 1; i < tmp.length; i++) {
+                if (max < tmp[i])max = tmp[i];
+            }
+            max = max.toFixed(0);//取整
+            var len = max.length;
+            if (len > 5) {
+                len = len - 2;
+                max = parseFloat(max.substr(0, 2)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            } else {
+                len = len - 1;
+                max = parseFloat(max.substr(0, 1)) + 1;
+                for (var i = 0; i < len; i++) {
+                    max += "0";
+                }
+            }
+            return max;
+        }
+        //取数组最小值,并取整
+        function min_value(tmp) {
+            var max = tmp[0];
+            var min = tmp[1];
+            if (max == 0 && min == 0) {
+                return 0;
+            } else if (max == 0 && min < 0) {
+                return (Math.floor(min / 1000)) * 1000;
+            } else if (min == 0 && max < 0) {
+                return (Math.floor(max / 1000)) * 1000;
+            } else if (max < 0 && min < 0) {
+                max = -max;
+                min = -min;
+                for (var i = 1; i < tmp.length; i++) {
+                    if (max < tmp[i])max = tmp[i];
+                }
+                return -(Math.ceil(min / 1000)) * 1000;
+            }
+            return 0;
+        }
+        function showDiv002() {
+            $.ajax({
+                url: "Enterprise002GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval('(' + return_data + ')');
+                    var list = [];
+                    list.push(arrayData.cy[0].value);
+                    list.push(arrayData.ly[0].value);
+                    var max = max_value(list);
+                    var min = min_value(list);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/gauge'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main2'), 'macarons');
+                                option = {
+                                    title: {
+                                        text: "净利润与去年同期对比分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: "{b} : {c}万元"
+                                    },
+                                    series: [
+                                        {
+                                            name: '本期净利润',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.6, '#ff4500'], [0.8, '#ffd400'], [1, '#228b22']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '本期：' + result + '万元';
+                                                },
+                                                offsetCenter: [0, '55%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.cy,
+                                        },
+                                        {
+                                            name: '同期净利润',
+                                            type: 'gauge',
+                                            center: ['50%', '55%'],
+                                            radius: [0, '85%'],
+                                            min: min,
+                                            max: max,
+                                            splitNumber: 8,
+                                            axisLine: {            // 坐标轴线
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: [[0.6, '#ff4500'], [0.8, '#ffd400'], [1, '#228b22']],
+                                                    width: 10
+                                                }
+                                            },
+                                            axisTick: {            // 坐标轴小标记
+                                                splitNumber: 10,   // 每份split细分多少段
+                                                length: 15,        // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            splitLine: {           // 分隔线
+                                                show: true,        // 默认显示，属性show控制显示与否
+                                                length: 20,         // 属性length控制线长
+                                                lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                    color: 'auto'
+                                                }
+                                            },
+                                            pointer: {
+                                                width: 8
+                                            },
+                                            title: {
+                                                show: false,
+                                                offsetCenter: [0, '-40%'],       // x, y，单位px
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    fontWeight: 'bolder'
+                                                }
+                                            },
+                                            detail: {
+                                                formatter: function (num) {
+                                                    var num = (num || 0).toString(), result = '';
+                                                    while (num.length > 3) {
+                                                        result = ',' + num.slice(-3) + result;
+                                                        num = num.slice(0, num.length - 3);
+                                                    }
+                                                    if (num) {
+                                                        result = num + result;
+                                                    }
+                                                    return '同期：' + result + '万元';
+                                                },
+                                                offsetCenter: [0, '75%'],
+                                                textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                    color: 'auto',
+                                                    fontSize: 16
+                                                }
+                                            },
+                                            data: arrayData.ly,
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv003() {
+            $.ajax({
+                url: "Enterprise003GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/scatter'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main3'), 'macarons');
+                                if (arrayData == "" || arrayData == null) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: "投资额、利润率和净利润分析",
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 45,
+                                        x2: 50,
+                                        y: 50,
+                                        y2: 30
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        showDelay: 0,
+                                        axisPointer: {
+                                            show: true,
+                                            type: 'cross',
+                                            lineStyle: {
+                                                type: 'dashed',
+                                                width: 1
+                                            }
+                                        },
+                                        formatter: function (param) {
+                                            console.log(param);
+                                            var dataArray = param.data;
+                                            var b = "";
+                                            b += dataArray[3] + "<br>";
+                                            b += "投资额：" + dataArray[0] + "万元<br>";
+                                            b += "利润率：" + dataArray[1] + "%<br>";
+                                            b += "净利润：" + dataArray[2] + "万元";
+                                            return b;
+                                        }
+                                    },
+                                    xAxis: [
+                                        {
+                                            name: '投资额(万元)',
+                                            type: 'value',
+                                            splitNumber: 4,
+                                            scale: true
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            name: '利润率(%)',
+                                            type: 'value',
+                                            splitNumber: 4,
+                                            scale: true
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: 'scatter1',
+                                            type: 'scatter',
+                                            symbolSize: function (value) {
+                                                return Math.round(value[2] / 5);
+                                            },
+                                            data: randomDataArray()
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function random() {
+            var r = Math.round(Math.random() * 100);
+            return (r * (r % 2 == 0 ? 1 : -1));
+        }
+
+        function randomDataArray() {
+            var d = [];
+            var len = 38;
+            while (len--) {
+                d.push([
+                    Math.abs(random()),
+                    Math.abs(random()),
+                    Math.abs(random()),
+                    "首创" + Math.abs(random())
+                ]);
+            }
+            return d;
+        }
+        function showDiv004() {
+            $.ajax({
+                url: "Enterprise004GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main4'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '人均效率趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["人均效率(供水)", "人均效率(污水)"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}<br/>{a1}:{c1}'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '人均效率'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '人均效率(供水)',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#26C0C0'
+                                                }
+                                            }
+                                        },
+                                        {
+                                            name: '人均效率(污水)',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbolSize: 2,     //点的大小
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })(),
+                                            symbol: 'rectangle',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FF6600'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv005() {
+            $.ajax({
+                url: "Enterprise005GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/pie',
+                                'echarts/chart/bar',
+                                'echarts/chart/line'
+                            ],
+                            function (ec) {
+                                var myChart = ec.init(document.getElementById('main5'), 'macarons');
+                                if (arrayData == "" || arrayData == null) {
+                                    myChart.showLoading({
+                                        text: '暂无数据',
+                                        effect: 'whirling',
+                                        textStyle: {
+                                            fontSize: 20
+                                        }
+                                    });
+                                    return;
+                                }
+                                option = {
+                                    title: {
+                                        text: '净利润结构分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{a} <br/>{b} : {c}万元 ({d}%)"
+                                    },
+                                    legend: {
+                                        show: false,
+                                        orient: 'vertical',
+                                        x: 'left',
+                                        data: (function () {
+                                            var d = [];
+                                            for (var i = 0; i < arrayData.length; i++) {
+                                                d.push(arrayData[i].name);
+                                            }
+                                            return d;
+                                        })()
+                                    },
+                                    calculable: true,
+                                    series: [
+                                        {
+                                            name: '净利润',
+                                            clockWise: true,
+                                            type: 'pie',
+                                            radius: '55%',
+                                            center: ['50%', '60%'],
+                                            data: arrayData
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function showDiv006() {
+            $.ajax({
+                url: "Enterprise006GetData.jsp",
+                dataType: "text",
+                type: "post",
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                error: function (msg) {
+                    alert("Ajax获取数据失败");
+                },
+                success: function (return_data) {
+                    var arrayData = eval(return_data);
+                    require(
+                            [
+                                'echarts',
+                                'echarts/chart/line',
+                                'echarts/chart/bar'
+                            ],
+                            function (ec, theme) {
+                                var myChart = ec.init(document.getElementById('main6'), 'macarons');
+                                var option = {
+                                    title: {
+                                        text: '供水和污水收入趋势分析',
+                                        x: 'center',
+                                        textStyle: {
+                                            color: '#1b1b1b',
+                                            fontWeight: 'bold',
+                                            fontSize: 14
+                                        }
+                                    },
+                                    grid: {
+                                        x: 65,
+                                        x2: 40,
+                                        y: 70,
+                                        y2: 40
+                                    },
+                                    legend: {
+                                        y: 30,
+                                        data: ["供水收入", "污水收入"]
+
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        formatter: '{b}<br/>{a}:{c}万元<br/>{a1}:{c1}万元'
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            splitNumber: 12,      //表示X轴上有24个标签
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push((arrayData[i].substring(2, 4)).toString() + '-' + (arrayData[i].substring(4, 6)).toString());
+                                                }
+                                                return d;
+                                            })(),
+                                            axisLabel: {
+                                                show: true,
+                                                interval: 0,    // {number}
+                                                rotate: 45,
+                                                textStyle: {
+                                                    fontSize: 10
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: '收入(万元)'
+                                        }
+                                    ],
+                                    series: [
+                                        {
+                                            name: '供水收入',
+                                            type: 'bar',
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[1]));
+                                                }
+                                                return d;
+                                            })()
+                                        },
+                                        {
+                                            name: '污水收入',
+                                            type: 'bar',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#FE8463'
+                                                }
+                                            },
+                                            data: (function () {
+                                                var d = [];
+                                                for (var i = 0; i < arrayData.length; i++) {
+                                                    d.push(parseFloat(arrayData[i].split(":")[2]));
+                                                }
+                                                return d;
+                                            })()
+                                        }
+                                    ]
+                                };
+                                myChart.setOption(option);
+                            }
+                    );
+                }
+            });
+        }
+        function confirmIt() {
+            var indicator = myIndicator("正在加载中...");
+            $('#cc').layout('collapse', 'east');
+            showTotal();
+            showDiv001();
+            showDiv002();
+            showDiv003();
+            showDiv004();
+            showDiv005();
+            showDiv006();
+            window.setTimeout(function () {
+                indicator.hide();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" fit="true">
+    <div region="north" style="height:80px;">
+        <div class="north_div">
+            <ul class="up_ul">
+                <li class="bgjb0">
+                    <span>水处理量</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万吨</span>
+                </li>
+                <li class="bgjb1">
+                    <span>服务人口</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万人</span>
+                </li>
+                <li class="bgjb2">
+                    <span>覆盖城市</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>座</span>
+                </li>
+                <li class="bgjb3">
+                    <span>在岗人数</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>人</span>
+                </li>
+                <li class="bgjb4">
+                    <span>净利润</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+                <li class="bgjb5">
+                    <span>收入</span>
+                    <span style="font-size: 22px; font-weight:bolder;width: 90px;" class="total_span">-</span>
+                    <span>万元</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div region="center" id="center" border="false">
+        <div class="div1 drag-item" id="main1">
+
+        </div>
+        <div class="div2 drag-item" id="main2">
+
+        </div>
+        <div class="div3 drag-item" id="main3">
+
+        </div>
+        <div class="div4 drag-item" id="main4">
+
+        </div>
+        <div class="div5 drag-item" id="main5">
+
+        </div>
+        <div class="div6 drag-item" id="main6">
+        </div>
+    </div>
+    <div data-options="region:'east',split:false,collapsed:true,title:'年月选择',iconCls:'icon-calendar'"
+         style="width:175px;padding:10px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center',border:false"
+                 style="padding:10px;background:#fff;border:1px solid #ccc;">
+                <input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="01"
+                       style="width: 120px;"></input>
+                <script type="text/javascript">
+                    function myformatter(date) {
+                        var y = date.getFullYear();
+                        var m = date.getMonth() + 1;
+                        return y + '-' + (m < 10 ? ('0' + m) : m);
+                    }
+                    function myparser(s) {
+                        if (!s) return new Date();
+                        var ss = (s.split('-'));
+                        var y = parseInt(ss[0], 10);
+                        var m = parseInt(ss[1], 10);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            return new Date(y, m - 1);
+                        } else {
+                            return new Date();
+                        }
+                    }
+                </script>
+                <div style="text-align:right;padding:10px 0;">
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                       onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
