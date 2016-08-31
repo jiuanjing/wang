@@ -20,17 +20,22 @@
 <script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
 <script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
-<script src="../../../../scripts/myIndicator/myIndicator3.js"></script>
-<!-- 设置时间 -->
-<script src="../../../../scripts/MyDate.js"></script>
-<script src="../../../../scripts/OP_Operation_Kpi.js"></script>
 <script>
     $(function () {
-        $("#main1").css("height", $(window).height() - 240);
-        $("#main2").css("height", $(window).height() - 240);
+        $("#main1").css("height", $(window).height() - 55);
+        $("#main2").css("height", $(window).height() - 55);
         showDiv001();
         getDataGrid();
     });
+    function confirmIt() {
+        showDiv001();
+        $('#tg1').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+    }
+    
+    function changeDiv() {
+        showDiv001();
+    }
+
     function getDataGrid() {
         $('#tg1').datagrid({
             url: 'dataGrid.json',
@@ -38,60 +43,122 @@
             method: 'post',
             singleSelect: true,
             nowrap: true,
-            rownumbers: false,
+            multiSort:true,
+            sortOrder: 'desc',
+            remoteSort: false,
+            rowNumbers: false,
             striped: true,
             loadMsg: '正在加载数据，请稍等......',
             queryParams: {
                 date: $('#date').datebox('getValue')
             },
+            onClickRow:function (rowIndex, rowData) {
+                $("#city").val(rowData.m2);
+            },
             columns: [[
                 {
                     field: 'm1',
                     title: '排名',
-                    width: 111,
+                    width: 40,
                     align: 'center'
 
                 },
                 {
                     field: 'm2',
                     title: '公司简称',
-                    width: 111,
-                    align: 'center',
+                    width: 90,
+                    align: 'left',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='1.html?city="+value+"'>"+value+"</a>";
+                        var city = value;
+                        return "<a href='javascript:changeDiv() '>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm3',
                     title: '分项整体分值',
-                    width: 111,
-                    align: 'center',
+                    width: 90,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a *10> b*10 ? 1:-1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='TotalTrend.html?city=" + rowData.m2 + "'>" + value + "</a>";
+                    }
                 },
                 {
                     field: 'm4',
-                    title: '水费回收率',
-                    width: 111,
-                    align: 'center',
+                    title: '投资回报率',
+                    width: 80,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a *10> b*10 ? 1:-1);
+                    },
+                    align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='2.html'>"+value+"</a>";
+                        return "<a href='WaterFeeRecover.html'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm5',
-                    title: '产销差率',
-                    width: 111,
-                    align: 'center'
+                    title: '工程毛利率',
+                    width: 75,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a *10> b*10 ? 1:-1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='DistributionLoss.html'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm6',
+                    title: '水处理毛利率',
+                    width: 85,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a *10> b*10 ? 1:-1);
+                    },
+                    align: 'right'
+                },
+                {
+                    field: 'm7',
+                    title: '综合水价',
+                    width: 60,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a*10 > b*10 ? 1:-1);
+                    },
+                    align: 'right'
+                },
+                {
+                    field: 'm8',
+                    title: '综合电价',
+                    width: 60,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a*10 > b*10 ? 1:-1);
+                    },
+                    align: 'right'
+                },
+                {
+                    field: 'm9',
+                    title: '综合毛利率',
+                    width: 70,
+                    sortable:true,
+                    sorter: function (a, b) {
+                        return (a *10> b*10 ? 1:-1);
+                    },
+                    align: 'right'
                 }
             ]]
         });
     }
-    function confirmIt() {
-        var indicator = myIndicator("正在加载中...");
-        showDiv001();
-        $('#tg1').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
-        window.setTimeout(function () {
-            indicator.hide();
-        }, 1000);
+
+    function getCity() {
+        var city = $("#city").val();
+        return city;
     }
     function showDiv001() {
         $.ajax({
@@ -99,7 +166,9 @@
             dataType: "text", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
-                date: $('#date').datebox('getValue')
+                date: $('#date').datebox('getValue'),
+                city : getCity()
+
             },
             error: function (msg) { //若Ajax处理失败后返回的信息
                 alert("Ajax获取数据失败");
@@ -121,7 +190,7 @@
 
                             var option = {
                                 title: {
-                                    text: '盈利能力分析',
+                                    text: getCity()+"分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -133,10 +202,11 @@
                                     trigger: 'axis'
                                 },
                                 legend: {
+                                    show: false,
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['预期指标', '完成指标']
+                                    data: ['预算值', '实际值']
                                 },
                                 toolbox: {
                                     show: false,
@@ -162,140 +232,21 @@
                                 calculable: true,
                                 series: [
                                     {
-                                        name: '预期指标 vs 完成指标',
+                                        name: '预算值 vs 实际值',
                                         type: 'radar',
                                         data: [
                                             {
                                                 value: [4300, 10000, 28000, 35000, 50000, 19000],
-                                                name: '预期指标'
+                                                name: '预算值'
                                             },
                                             {
                                                 value: [5000, 14000, 28000, 31000, 42000, 21000],
-                                                name: '完成指标'
+                                                name: '实际值'
                                             }
                                         ]
                                     }
                                 ]
                             };
-
-                            var ecConfig = require('echarts/config');
-                            myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $('#date').datebox('getValue');
-                                window.location = "../DeptDispatch/WaterMade.html?date=" + date;
-                            });
-                            myChart.setOption(option);
-                            window.onresize = myChart.resize;
-                        }
-                );
-            }
-        });
-    }
-    function showDiv003() {
-        $.ajax({
-            url: "div1.json",
-            dataType: "text", //传参的数据类型
-            type: "post", //传参方式，get 或post
-            data: {
-                date: $('#date').datebox('getValue')
-            },
-            error: function (msg) { //若Ajax处理失败后返回的信息
-                alert("Ajax获取数据失败");
-            },
-            success: function (return_data) { //若Ajax处理成功后返回的信息
-//                var arrayData = eval("(" + return_data + ")");
-                //console.log(arrayData);
-                require.config({
-                    paths: {
-                        echarts: '../../../../scripts'
-                    }
-                });
-                // 使用
-                require(
-                        [
-                            'echarts',
-                            'echarts/chart/line',
-                            'echarts/chart/bar'
-                        ],
-                        function (ec, theme) {
-                            var myChart = ec.init(document.getElementById('main3'), 'macarons');
-                            var option = {
-                                title: {
-                                    text: '预算指标 vs 实际指标',
-                                    x: 'center',
-                                    textStyle: {
-                                        fontSize: 15,
-                                        fontWeight: 'bolder',
-                                        color: '#666666'
-                                    }
-                                },
-                                tooltip: {
-                                    trigger: 'axis'
-                                },
-                                legend: {
-                                    data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
-                                },
-                                toolbox: {
-                                    show: false,
-                                    feature: {
-                                        mark: {show: true},
-                                        dataView: {show: true, readOnly: false},
-                                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                                        restore: {show: true},
-                                        saveAsImage: {show: true}
-                                    }
-                                },
-                                calculable: true,
-                                xAxis: [
-                                    {
-                                        type: 'category',
-                                        boundaryGap: false,
-                                        data: ['2011', '2012', '2013', '2014', '2015', '2016']
-                                    }
-                                ],
-                                yAxis: [
-                                    {
-                                        type: 'value'
-                                    }
-                                ],
-                                series: [
-                                    {
-                                        name: '邮件营销',
-                                        type: 'line',
-                                        stack: '总量',
-                                        data: [120, 132, 101, 134, 90, 230, 210]
-                                    },
-                                    {
-                                        name: '联盟广告',
-                                        type: 'line',
-                                        stack: '总量',
-                                        data: [220, 182, 191, 234, 290, 330, 310]
-                                    },
-                                    {
-                                        name: '视频广告',
-                                        type: 'line',
-                                        stack: '总量',
-                                        data: [150, 232, 201, 154, 190, 330, 410]
-                                    },
-                                    {
-                                        name: '直接访问',
-                                        type: 'line',
-                                        stack: '总量',
-                                        data: [320, 332, 301, 334, 390, 330, 320]
-                                    },
-                                    {
-                                        name: '搜索引擎',
-                                        type: 'line',
-                                        stack: '总量',
-                                        data: [820, 932, 901, 934, 1290, 1330, 1320]
-                                    }
-                                ]
-                            };
-
-                            var ecConfig = require('echarts/config');
-                            myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $('#date').datebox('getValue');
-                                window.location = "../DeptDispatch/WaterMade.html?date=" + date;
-                            });
                             myChart.setOption(option);
                             window.onresize = myChart.resize;
                         }
@@ -304,42 +255,28 @@
         });
     }
 </script>
-<body>
+<body style="">
 <div id="query_condition" class="condition_div">
     <table class="condition_table">
         <tr>
-            <td width="7%">年-月：</td>
-            <td width="8%"><input id="date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"
-                                  value="01" style="width: 100px;"></td>
-
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
+            <td><input type="hidden" id="city" value="包头城市治水"></td>
             <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
         </tr>
     </table>
-    <script type="text/javascript">
-        function myformatter(date) {
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            return y + '-' + (m < 10 ? ('0' + m) : m);
-        }
-        function myparser(s) {
-            if (!s) return new Date();
-            var ss = (s.split('-'));
-            var y = parseInt(ss[0], 10);
-            var m = parseInt(ss[1], 10);
-            if (!isNaN(y) && !isNaN(m)) {
-                return new Date(y, m - 1);
-            } else {
-                return new Date();
-            }
-        }
-    </script>
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
-<div id="main1" style="height:410px;width: 45%;float: left;"></div>
-<div id="main2" style="height:410px;width: 50%;float: left;">
-    <table id="tg1" style="height: 410px;"></table>
+
+<div id="main1" style="height:510px;width: 43%;float: left;"></div>
+<div id="main2" style="height:510px;width: 57%;float: right;">
+    <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>
 </html>
