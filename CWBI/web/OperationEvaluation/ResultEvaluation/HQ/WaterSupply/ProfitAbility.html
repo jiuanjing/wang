@@ -1,25 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="Cache" content="no-cache">
+    <meta charset=UTF-8">
     <title>供水板块盈利能力分析</title>
 </head>
+
 <script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
-<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
 <script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
 <script src="../../../../scripts/echarts.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
 <link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
-<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
-<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
 <script>
     $(function () {
         $("#main1").css("height", $(window).height() - 55);
@@ -29,21 +22,21 @@
     });
     function confirmIt() {
         showDiv001();
-        $('#tg1').datagrid({queryParams: {date: $('#date').datebox('getValue')}});
+        getDataGrid();
     }
-    
+
     function changeDiv() {
         showDiv001();
     }
 
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'dataGrid.json',
+            url: 'ProfitAbilityDiv2.jsp',
             title: '盈利能力分项整体分析表',
             method: 'post',
             singleSelect: true,
             nowrap: true,
-            multiSort:true,
+            fitColumns: true,
             sortOrder: 'desc',
             remoteSort: false,
             rowNumbers: false,
@@ -52,128 +45,122 @@
             queryParams: {
                 date: $('#date').datebox('getValue')
             },
-            onClickRow:function (rowIndex, rowData) {
-                $("#city").val(rowData.m2);
+            onClickRow: function (rowIndex, rowData) {
+                $("#company").val(rowData.m2);
             },
             columns: [[
                 {
                     field: 'm1',
                     title: '排名',
-                    width: 40,
                     align: 'center'
 
                 },
                 {
                     field: 'm2',
                     title: '公司简称',
-                    width: 90,
                     align: 'left',
                     formatter: function (value, rowData, rowIndex) {
-                        var city = value;
+                        var company = value;
                         return "<a href='javascript:changeDiv() '>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm3',
                     title: '分项整体分值',
-                    width: 90,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a *10> b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='TotalTrend.html?city=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='TotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm4',
                     title: '投资回报率',
-                    width: 80,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a *10> b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='WaterFeeRecover.html'>" + value + "</a>";
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm5',
                     title: '工程毛利率',
-                    width: 75,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a *10> b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='DistributionLoss.html'>" + value + "</a>";
+                        return "<a href='ProfitSingleIndex1.html?company=" + rowData.m2 + "'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm6',
                     title: '水处理毛利率',
-                    width: 85,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a *10> b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right'
                 },
                 {
                     field: 'm7',
                     title: '综合水价',
-                    width: 60,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a*10 > b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right'
                 },
                 {
                     field: 'm8',
                     title: '综合电价',
-                    width: 60,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a*10 > b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right'
                 },
                 {
                     field: 'm9',
                     title: '综合毛利率',
-                    width: 70,
-                    sortable:true,
+                    sortable: true,
                     sorter: function (a, b) {
-                        return (a *10> b*10 ? 1:-1);
+                        return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right'
                 }
             ]]
         });
     }
-
-    function getCity() {
-        var city = $("#city").val();
-        return city;
+    function getRank() {
+        window.location.href = "ProfitRank.html";
+    }
+    function getCompany() {
+        var company = $("#company").val();
+        return company;
     }
     function showDiv001() {
         $.ajax({
-            url: "div1.json",
-            dataType: "text", //传参的数据类型
+            url: "ProfitAbilityDiv1.jsp",
+            dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
                 date: $('#date').datebox('getValue'),
-                city : getCity()
-
+                company: getCompany()
             },
-            error: function (msg) { //若Ajax处理失败后返回的信息
+            error: function (msg) {
                 alert("Ajax获取数据失败");
             },
-            success: function (return_data) { //若Ajax处理成功后返回的信息
+            success: function (return_data) {
+                console.log(return_data);
+                console.log(return_data.pole);
                 require.config({
                     paths: {
                         echarts: '../../../../scripts'
@@ -190,7 +177,7 @@
 
                             var option = {
                                 title: {
-                                    text: getCity()+"分项整体分析",
+                                    text: getCompany() + "分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -202,11 +189,11 @@
                                     trigger: 'axis'
                                 },
                                 legend: {
-                                    show: false,
+                                    show: true,
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['预算值', '实际值']
+                                    data: ['标杆值', '2016', '2015', '2014']
                                 },
                                 toolbox: {
                                     show: false,
@@ -220,28 +207,36 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '投资回报率', max: 6000},
-                                            {text: '综合毛利率', max: 16000},
-                                            {text: '工程毛利率', max: 30000},
-                                            {text: '水处理毛利率', max: 38000},
-                                            {text: '综合水价', max: 52000},
-                                            {text: '综合电价', max: 25000}
+                                            {text: '投资回报率', max: 100},
+                                            {text: '综合毛利率', max: 100},
+                                            {text: '工程毛利率', max: 100},
+                                            {text: '水处理毛利率', max: 100},
+                                            {text: '综合水价', max: 100},
+                                            {text: '综合电价', max: 100}
                                         ]
                                     }
                                 ],
                                 calculable: true,
                                 series: [
                                     {
-                                        name: '预算值 vs 实际值',
+                                        name: '标杆值 vs 近三年',
                                         type: 'radar',
                                         data: [
                                             {
-                                                value: [4300, 10000, 28000, 35000, 50000, 19000],
-                                                name: '预算值'
+                                                value: return_data.data1,
+                                                name: '标杆值'
                                             },
                                             {
-                                                value: [5000, 14000, 28000, 31000, 42000, 21000],
-                                                name: '实际值'
+                                                value: return_data.data2,
+                                                name: '2016'
+                                            },
+                                            {
+                                                value: return_data.data3,
+                                                name: '2015'
+                                            },
+                                            {
+                                                value: return_data.data4,
+                                                name: '2014'
                                             }
                                         ]
                                     }
@@ -267,8 +262,9 @@
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
-            <td><input type="hidden" id="city" value="包头城市治水"></td>
-            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+            <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
+                              onclick="getRank();">排名</a></td>
+            <td><input type="hidden" id="company" value="包头城市制水"></td>
         </tr>
     </table>
 </div>
