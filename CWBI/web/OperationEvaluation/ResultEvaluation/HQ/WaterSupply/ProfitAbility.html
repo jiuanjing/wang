@@ -85,7 +85,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 投资回报率'>" + value + "</a>";
                     }
                 },
                 {
@@ -97,7 +97,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex1.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 工程毛利率'>" + value + "</a>";
                     }
                 },
                 {
@@ -107,7 +107,10 @@
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
-                    align: 'right'
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 水处理毛利率'>" + value + "</a>";
+                    }
                 },
                 {
                     field: 'm7',
@@ -116,7 +119,10 @@
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
-                    align: 'right'
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合水价'>" + value + "</a>";
+                    }
                 },
                 {
                     field: 'm8',
@@ -125,7 +131,10 @@
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
-                    align: 'right'
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合电价'>" + value + "</a>";
+                    }
                 },
                 {
                     field: 'm9',
@@ -134,7 +143,10 @@
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
-                    align: 'right'
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合毛利率'>" + value + "</a>";
+                    }
                 }
             ]]
         });

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script src="../../../../scripts/auto/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/auto/jquery.autocomplete.css"/>
+<script src="../../../../scripts/myIndicator/myIndicator3.js"></script>
+<script>
+
+    $(function () {
+        getDataGrid();
+        showDiv001();
+    });
+
+    function getKpiName() {
+        var val = $('#kpi').combobox('getText');
+        if (val.length == 0){
+            return "投资回报率";
+        }else {
+            return val;
+        }
+    }
+    function confirmIt() {
+        getDataGrid();
+        showDiv001();
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "div1.json",
+            dataType: "text", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                require.config({
+                    paths: {
+                        echarts: '../../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/bar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            var option = {
+                                title: {
+                                    text: $('#date').combobox('getText')+"年"+$('#kpi').combobox('getText') + '排名分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                dataZoom: {
+                                    show: true,
+                                    orient:'vertical'
+                                },
+                                grid: {
+                                    x:130,
+                                    y2: 100
+                                },
+                                tooltip: {
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    show: false,
+                                    orient: 'vertical',
+                                    y: 30,
+                                    data: ['投资回报率']
+                                },
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                xAxis: [
+                                    {
+                                        type: 'value',
+                                        min: 80,
+                                        max: 100,
+                                        splitNumber: 4
+                                    }
+                                ],
+                                yAxis: [
+
+                                    {
+
+                                        type: 'category',
+                                        axisLabel: {
+                                            rotate: 45
+                                        },
+                                        data: ['湖南首创(合并)', '葫芦岛首创', '屏山首创供水', '广元首创供水', '临猗首创', '包头申银', '包天黄河水源', '铜陵首创', '余姚首创', '马鞍山首创(合并)', '新乡首创', '徐州首创', '淮南首创供水', '运城首创', '包头城市制水',]
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '投资回报率',
+                                        type: 'bar',
+                                        data: [89.6, 90.2, 90.8, 91.4, 92, 92.6, 93.2, 93.8, 94.4, 94.8, 95.6, 96.2, 96.8, 97.4, 98],
+                                        markLine: {
+                                            data: [
+                                                [
+                                                    {name: '行业标杆值', value: 96, x: 550, y: 420},
+                                                    {x: 550, y: 60}
+                                                ],
+                                                {type: 'average', name: '平均值'}
+                                            ]
+                                        }
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    function getDataGrid() {
+        $('#tg1').datagrid({
+            url: 'dataGrid1.json',
+            method: 'post',
+            singleSelect: true,
+            nowrap: true,
+            fitColumns: true,
+            rowNumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue')
+            },
+            columns: [[
+                {
+                    field: 'm1',
+                    title: '排名',
+                    width: 50,
+                    align: 'center',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+
+                },
+                {
+                    field: 'm2',
+                    title: '公司简称',
+                    width: 130,
+                    align: 'left',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: getKpiName(),
+                    width: 110,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '分值',
+                    width: 80,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                }
+            ]]
+        });
+    }
+
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="4%">指标：</td>
+            <td width="12%">
+                <input id="kpi" class="easyui-combobox" name="kpi"
+                       data-options="valueField:'id',textField:'text',url:'kpi.json'" panelHeight="100"
+                       style="width:120px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="100%"/>
+<div id="main2" style="height:520px;width: 33%;float: left;">
+    <table id="tg1" style="height: 520px;"></table>
+</div>
+<div id="main1" style="height:520px;width: 63%;float: right;"></div>
+</body>
+</html>

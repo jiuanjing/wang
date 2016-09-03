@@ -6,7 +6,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Cache" content="no-cache">
-    <title>盈利能力总体趋势分析</title>
+    <title>盈利能力单项指标趋势分析</title>
 </head>
 <script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
@@ -26,8 +26,14 @@
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        var company = params.split("=")[1];
+        var company = params.split("&")[0].split("=")[1].trim();
         return company;
+    }
+    function getKpi() {
+        var url = window.location.href;
+        var params = url.split("?")[1];
+        var kpi = params.split("&")[1].split("=")[1].trim();
+        return kpi;
     }
     function fillCombobox() {
         $('#company').combobox({
@@ -39,11 +45,12 @@
     function confirmIt() {
         var val = $('#company').combobox('getValue');
         $.ajax({
-            url: 'TotalTrendDiv.jsp',
+            url: 'ProfitSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
-                company: val
+                company: val,
+                kpi : getKpi()
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -65,7 +72,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: val + "分项整体趋势分析",
+                                    text: val + getKpi()+"趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -79,7 +86,7 @@
                                 },
                                 legend: {
                                     y: 30,
-                                    data: ['分项整体分值', '排名']
+                                    data: [getKpi()]
                                 },
                                 toolbox: {
                                     show: true,
@@ -102,28 +109,13 @@
                                     {
                                         name: '分值',
                                         type: 'value'
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: '分项整体分值',
+                                        name: getKpi(),
                                         type: 'line',
-                                        data: return_data.score,
-                                        itemStyle: {
-                                            normal: {
-                                                label: {show: true}
-                                            }
-                                        }
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'line',
-                                        yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.data1,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
@@ -143,11 +135,12 @@
     }
     function showDiv() {
         $.ajax({
-            url: 'TotalTrendDiv.jsp',
+            url: 'ProfitSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
-                company: getCompany()
+                company: getCompany(),
+                kpi : getKpi()
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -169,7 +162,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: getCompany() + "分项整体趋势分析",
+                                    text: getCompany() + getKpi()+"趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -183,7 +176,7 @@
                                 },
                                 legend: {
                                     y: 30,
-                                    data: ['分项整体分值', '排名']
+                                    data: [getKpi()]
                                 },
                                 toolbox: {
                                     show: true,
@@ -206,28 +199,13 @@
                                     {
                                         name: '分值',
                                         type: 'value'
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: '分项整体分值',
+                                        name: getKpi(),
                                         type: 'line',
-                                        data: return_data.score,
-                                        itemStyle: {
-                                            normal: {
-                                                label: {show: true}
-                                            }
-                                        }
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'line',
-                                        yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.data1,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
