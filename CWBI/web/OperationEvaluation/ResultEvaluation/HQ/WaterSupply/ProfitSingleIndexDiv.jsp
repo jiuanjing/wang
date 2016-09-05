@@ -14,6 +14,7 @@
     //获取前台传递的2个参数
     String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
     String kpi = new String(request.getParameter("kpi").getBytes("ISO-8859-1"), "utf-8");
+
     DBOperation dbOperation = new DBOperation(true);
     Map<String, Object> gsonMap = new HashMap<String, Object>();
     List<String> sqlList = new ArrayList<String>();
@@ -28,19 +29,17 @@
                 "order by t.date_id";
         //todo 修改为行业标杆值(company_id 修改为-1)
         String sql2 = "select t.actual_value,t.company_id,t.date_id" +
-                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
+                "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
-                "   and t.company_id = t2.company_id" +
                 "   and t1.kpi_name = '" + kpi + "'" +
-                "   and t2.brief_name ='" + company + "'" +
+                "   and t.company_id = -1 " +
                 "order by t.date_id";
         //todo 修改为行业平均值(company_id 修改为0)
         String sql3 = "select t.actual_value,t.company_id,t.date_id" +
-                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
+                "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
-                "   and t.company_id = t2.company_id" +
                 "   and t1.kpi_name = '" + kpi + "'" +
-                "   and t2.brief_name ='" + company + "'" +
+                "   and t.company_id = 0 " +
                 "order by t.date_id";
         sqlList.add(sql1);
         sqlList.add(sql2);
