@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../js/jquery-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<form action="/myweb/loginServlet" method="post">
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" name="password"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="登陆">
+            </td>
+            <td>
+                <input type="button" onclick="window.location.href = 'register.html';" value="注册">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

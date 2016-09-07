@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Combo - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../css/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/easyui/demo/demo.css">
+    <script type="text/javascript" src="../js/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="pinyinUtils.js"></script>
+    <script>
+
+        $(function () {
+            loadData();
+        });
+
+        function loadData() {
+            $('#cc').combobox({
+                url: 'kpi.json',
+                valueField: 'id',
+                textField: 'text',
+                panelHeight: 'auto',
+                filter: function(q, row){
+                    var opts = $(this).combobox('options');
+                    return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+                }
+            });
+        }
+
+        function setValue() {
+            $('#cc').combobox('setValue', 'CO');
+        }
+        function getValue() {
+            var val = $('#cc').combobox('getValue');
+            alert(val);
+        }
+        function disable() {
+            $('#cc').combobox('disable');
+        }
+        function enable() {
+            $('#cc').combobox('enable');
+        }
+    </script>
+</head>
+<body>
+<h2>ComboBox</h2>
+<div class="demo-info">
+    <div class="demo-tip icon-tip"></div>
+    <div>Type in combobox to try auto complete.</div>
+</div>
+
+<div style="margin:10px 0;">
+    <a href="#" class="easyui-linkbutton" onclick="loadData()">LoadData</a>
+    <a href="#" class="easyui-linkbutton" onclick="setValue()">SetValue</a>
+    <a href="#" class="easyui-linkbutton" onclick="getValue()">GetValue</a>
+    <a href="#" class="easyui-linkbutton" onclick="disable()">Disable</a>
+    <a href="#" class="easyui-linkbutton" onclick="enable()">Enable</a>
+</div>
+
+<p>Simple ComboBox: </p>
+<input id="cc" class="easyui-combobox" name="state" style="width:200px;">
+</body>
+</html>
