@@ -5,11 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %><%--
-  User: wangdegang
-  Date: 2016/8/30
-  Time: 18:36
---%>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     DBOperation db = new DBOperation(true);

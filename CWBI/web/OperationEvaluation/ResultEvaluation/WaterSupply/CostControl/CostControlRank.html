@@ -31,13 +31,22 @@
             return val;
         }
     }
+    function getUnit() {
+        var name = getKpiName();
+        var val = name.charAt(name.length - 1)
+        if (val == '率'){
+            return "%";
+        }else if(val == '价'){
+            return "元";
+        }
+    }
     function confirmIt() {
         getDataGrid();
         showDiv001();
     }
     function showDiv001() {
         $.ajax({
-            url: "ProfitRankDiv2.jsp",
+            url: "CostControlRankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -91,6 +100,7 @@
 //                                    y2: 100
 //                                },
                                 tooltip: {
+                                    formatter: '{a}<br>{b}:{c}'+getUnit(),
                                     trigger: 'item'
                                 },
 //                                legend: {
@@ -155,7 +165,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'ProfitRankDiv1.jsp',
+            url: 'CostControlRankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,
@@ -193,7 +203,7 @@
                 },
                 {
                     field: 'm3',
-                    title: getKpiName(),
+                    title: getKpiName()+'('+getUnit()+')',
                     width: 110,
                     align: 'right',
                     sortable: true,
@@ -203,7 +213,7 @@
                 },
                 {
                     field: 'm4',
-                    title: '分值',
+                    title: '分值(分)',
                     width: 80,
                     align: 'right',
                     sortable: true,
@@ -218,10 +228,10 @@
     function setKpi() {
         $('#kpi').combobox({
             url: 'kpi.json',
-            editable : true,
+            editable: true,
             valueField: 'id',
             textField: 'text',
-            filter: function (q,row) {
+            filter: function (q, row) {
                 var opts = $(this).combobox('options');
                 return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
             }

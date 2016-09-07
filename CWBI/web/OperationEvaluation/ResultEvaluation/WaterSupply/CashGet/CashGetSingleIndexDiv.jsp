@@ -27,14 +27,12 @@
                 "   and t1.kpi_name = '" + kpi + "'" +
                 "   and t2.brief_name ='" + company + "'" +
                 "order by t.date_id";
-        //todo 修改为行业标杆值(company_id 修改为-1)
         String sql2 = "select t.actual_value,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
                 "   and t1.kpi_name = '" + kpi + "'" +
                 "   and t.company_id = -1 " +
                 "order by t.date_id";
-        //todo 修改为行业平均值(company_id 修改为0)
         String sql3 = "select t.actual_value,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
