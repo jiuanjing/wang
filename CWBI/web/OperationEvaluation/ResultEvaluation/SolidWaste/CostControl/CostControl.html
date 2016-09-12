@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=UTF-8">
+    <title>固废板块成本控制分析</title>
+</head>
+
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script>
+    $(function () {
+        $("#main1").css("height", $(window).height() - 55);
+        $("#main2").css("height", $(window).height() - 55);
+        showDiv001();
+        getDataGrid();
+    });
+    function confirmIt() {
+        showDiv001();
+        getDataGrid();
+    }
+
+    function changeDiv() {
+        showDiv001();
+    }
+
+    function getDataGrid() {
+        $('#tg1').datagrid({
+            url: 'CostControlDiv2.jsp',
+            title: '成本控制整体分析表',
+            method: 'post',
+            singleSelect: true,
+            nowrap: true,
+            fitColumns: true,
+            sortOrder: 'desc',
+            remoteSort: false,
+            rowNumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue')
+            },
+            onClickRow: function (rowIndex, rowData) {
+                $("#company").val(rowData.m2);
+            },
+            columns: [[
+                {
+                    field: 'm1',
+                    title: '排名',
+                    align: 'center'
+
+                },
+                {
+                    field: 'm2',
+                    title: '公司简称',
+                    align: 'left',
+                    formatter: function (value, rowData, rowIndex) {
+                        var company = value;
+                        return "<a href='javascript:changeDiv() '>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: '成本控制整体分值(分)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '管理费用成本比(%)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 管理费用成本比'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm5',
+                    title: '人均可控管理费用(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 人均可控管理费用'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm6',
+                    title: '吨垃圾经营成本(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾经营成本'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm7',
+                    title: '吨垃圾人工成本(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾人工成本'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm8',
+                    title: '吨垃圾药剂费(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾药剂费'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm9',
+                    title: '吨垃圾电耗(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾电耗'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm10',
+                    title: '吨垃圾电费(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾电费'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm11',
+                    title: '吨垃圾油耗(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾油耗'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm12',
+                    title: '吨水维修费(元)',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='CostControlSingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水维修费'>" + value + "</a>";
+                    }
+                }
+            ]]
+        });
+    }
+    function getRank() {
+        window.location.href = "CostControlRank.html";
+    }
+    function getCompany() {
+        var company = $("#company").val();
+        return company;
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "CostControlDiv1.jsp",
+            dataType: "json", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue'),
+                company: getCompany()
+            },
+            error: function (msg) {
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) {
+                console.log(return_data);
+                console.log(return_data.pole);
+                require.config({
+                    paths: {
+                        echarts: '../../../../scripts'
+                    }
+                });
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/radar'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            var option = {
+                                        title: {
+                                            text: getCompany() + "成本控制整体分析",
+                                            x: 'center',
+                                            textStyle: {
+                                                fontSize: 15,
+                                                fontWeight: 'bolder',
+                                                color: '#666666'
+                                            }
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
+//                                            formatter: function (params) {
+//                                                var returnStr = params[0].name + '<br />';
+//                                                for (var i = 0; i < params.length; i++) {
+//                                                    returnStr += params[i].seriesName + ':' + Util.commafy(params[i].data) + '<br />';
+//                                                }
+//                                                return returnStr;
+//                                            }
+                                        },
+                                        legend: {
+                                            show: true,
+                                            orient: 'vertical',
+                                            x: 'right',
+                                            y: 'bottom',
+                                            data: ['标杆值', '2016年', '2015年', '2014年']
+                                        }
+                                        ,
+                                        toolbox: {
+                                            show: false,
+                                            feature: {
+                                                mark: {
+                                                    show: true
+                                                }
+                                                ,
+                                                dataView: {
+                                                    show: true, readOnly: false
+                                                }
+                                                ,
+                                                restore: {
+                                                    show: true
+                                                }
+                                                ,
+                                                saveAsImage: {
+                                                    show: true
+                                                }
+                                            }
+                                        }
+                                        ,
+                                        polar: [
+                                            {
+                                                indicator: [
+                                                    {text: '管理费用成本比', max: 100},
+                                                    {text: '人均可控管理费用', max: 100},
+                                                    {text: '吨垃圾经营成本', max: 100},
+                                                    {text: '吨垃圾人工成本', max: 100},
+                                                    {text: '吨垃圾药剂费', max: 100},
+                                                    {text: '吨垃圾电耗', max: 100},
+                                                    {text: '吨垃圾电费', max: 100},
+                                                    {text: '吨垃圾油耗', max: 100},
+                                                    {text: '吨水维修费', max: 100},
+                                                ],
+                                                name : {
+                                                    textStyle:{
+                                                        fontSize:11
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        calculable: true,
+                                        series: [
+                                            {
+                                                name: '标杆值 vs 近三年',
+                                                type: 'radar',
+                                                data: [
+                                                    {
+                                                        value: return_data.data1,
+                                                        name: '标杆值'
+                                                    },
+                                                    {
+                                                        value: return_data.data2,
+                                                        name: '2016年'
+                                                    },
+                                                    {
+                                                        value: return_data.data3,
+                                                        name: '2015年'
+                                                    },
+                                                    {
+                                                        value: return_data.data4,
+                                                        name: '2014年'
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                    ;
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+</script>
+<body style="">
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
+                              onclick="getRank();">排名</a></td>
+            <td><input type="hidden" id="company" value="包头城市制水"></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="95%"/>
+
+<div id="main1" style="height:510px;width: 43%;float: left;"></div>
+<div id="main2" style="height:510px;width: 57%;float: right;">
+    <table id="tg1" style="height: 510px;"></table>
+</div>
+</body>
+</html>

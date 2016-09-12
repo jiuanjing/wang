@@ -26,7 +26,7 @@
     function getKpiName() {
         var val = $('#kpi').combobox('getText');
         if (val.length == 0) {
-            return "投资回报率";
+            return "资产负债率";
         } else {
             return val;
         }
@@ -36,8 +36,8 @@
         var val = name.charAt(name.length - 1)
         if (val == '率'){
             return "%";
-        }else if(val == '价'){
-            return "元";
+        }else if(val == '数'){
+            return "倍";
         }
     }
     function confirmIt() {
@@ -46,7 +46,7 @@
     }
     function showDiv001() {
         $.ajax({
-            url: "ProfitRankDiv2.jsp",
+            url: "DebtRankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -128,7 +128,7 @@
                                 yAxis: [
                                     {
                                         type: 'category',
-                                        boundaryGap: false,
+                                        boundaryGap: true,
                                         axisLabel: {
                                             rotate: 45
                                         },
@@ -143,12 +143,12 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '公司平均值', xAxis: getAverage(), yAxis: 100},
-                                                    {value: getAverage(), xAxis: getAverage(), yAxis: 0}
+                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
+                                                    {xAxis: getAverage(), yAxis: 110}
                                                 ],
                                                 [
-                                                    {name: '行业标杆值', xAxis: poleValue, yAxis: 100},
-                                                    {value: poleValue, xAxis: poleValue, yAxis: 0}
+                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},
+                                                    {xAxis: poleValue, yAxis: 100}
                                                 ]
                                             ]
                                         }
@@ -165,7 +165,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'ProfitRankDiv1.jsp',
+            url: 'DebtRankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,

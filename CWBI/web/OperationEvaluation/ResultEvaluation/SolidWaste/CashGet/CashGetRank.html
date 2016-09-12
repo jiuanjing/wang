@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../../../scripts/hanzi2pinyin.js"></script>
+<script>
+
+    $(function () {
+        setKpi();
+        getDataGrid();
+        showDiv001();
+    });
+
+    function getKpiName() {
+        var val = $('#kpi').combobox('getText');
+        if (val.length == 0) {
+            return "经营性现金流量净额";
+        } else {
+            return val;
+        }
+    }
+    function getUnit() {
+        var name = getKpiName();
+        var val = name.charAt(name.length - 1)
+        if (val == '率'){
+            return "%";
+        }else if(val == '额'){
+            return "元";
+        }
+    }
+    function confirmIt() {
+        getDataGrid();
+        showDiv001();
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "CashGetRankDiv2.jsp",
+            dataType: "json", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue'),
+                kpi: getKpiName()
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+                require.config({
+                    paths: {
+                        echarts: '../../../../scripts'
+                    }
+                });
+                function getAverage() {
+                    var result = 0;
+                    for (var i = 0; i < return_data.data2.length; i++) {
+                        result += parseInt(return_data.data2[i]);
+                    }
+                    return (result / return_data.data2.length).toFixed(2);
+                }
+
+                var poleValue = return_data.data3[0];
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/bar',
+                            'echarts/chart/line'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            var option = {
+                                title: {
+                                    text: $('#date').combobox('getText') + "年" + $('#kpi').combobox('getText') + '排名分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                dataZoom: {
+                                    show: true,
+                                    orient: 'vertical'
+                                },
+//                                grid: {
+//                                    x: 130,
+//                                    y2: 100
+//                                },
+                                tooltip: {
+                                    formatter: '{a}<br>{b}:{c}'+getUnit(),
+                                    trigger: 'item'
+                                },
+//                                legend: {
+//                                    show: false,
+//                                    orient: 'vertical',
+//                                    y: 30,
+//                                    data: getKpiName()
+//                                },
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                xAxis: [
+                                    {
+                                        type: 'value'
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'category',
+                                        boundaryGap: true,
+                                        axisLabel: {
+                                            rotate: 45
+                                        },
+                                        data: return_data.data1
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: getKpiName(),
+                                        type: 'bar',
+                                        data: return_data.data2,
+                                        markLine: {
+                                            data: [
+                                                [
+                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
+                                                    {xAxis: getAverage(), yAxis: 110}
+                                                ],
+                                                [
+                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},
+                                                    {xAxis: poleValue, yAxis: 100}
+                                                ]
+                                            ]
+                                        }
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    function getDataGrid() {
+        $('#tg1').datagrid({
+            url: 'CashGetRankDiv1.jsp',
+            method: 'post',
+            singleSelect: true,
+            nowrap: true,
+            fitColumns: true,
+            sortOrder: 'desc',
+            remoteSort: false,
+            rowNumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue'),
+                kpi: getKpiName()
+            },
+            columns: [[
+                {
+                    field: 'm1',
+                    title: '排名',
+                    width: 50,
+                    align: 'center',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+
+                },
+                {
+                    field: 'm2',
+                    title: '公司简称',
+                    width: 130,
+                    align: 'left',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: getKpiName()+'('+getUnit()+')',
+                    width: 110,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '分值(分)',
+                    width: 80,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                }
+            ]]
+        });
+    }
+
+    function setKpi() {
+        $('#kpi').combobox({
+            url: 'kpi.json',
+            editable: true,
+            valueField: 'id',
+            textField: 'text',
+            filter: function (q, row) {
+                var opts = $(this).combobox('options');
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+            }
+        });
+    }
+
+
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="4%">指标：</td>
+            <td width="12%">
+                <input id="kpi" class="easyui-combobox" name="kpi" panelHeight="100" style="width:120px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="100%"/>
+<div id="main2" style="height:520px;width: 33%;float: left;">
+    <table id="tg1" style="height: 520px;"></table>
+</div>
+<div id="main1" style="height:520px;width: 63%;float: right;"></div>
+</body>
+</html>
