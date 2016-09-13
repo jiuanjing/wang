@@ -23,6 +23,24 @@
     function confirmIt() {
         showDiv001();
         getDataGrid();
+        var city ;
+        $.ajax({
+            url: 'ProfitAbilityDiv2.jsp',
+            async : false,
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            dataType: 'json',
+            success: function (d) {
+                city = d.rows[0].m2;
+            }
+        });
+        var city1 = $("#company").val();
+        if (city1.length == 0) {
+            return city;
+        } else {
+            return city1;
+        }
     }
 
     function changeDiv() {
