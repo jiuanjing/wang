@@ -131,8 +131,24 @@
         window.location.href = "BussRiseRank.html";
     }
     function getCompany() {
-        var company = $("#company").val();
-        return company;
+        var city ;
+        $.ajax({
+            url: 'BussRiseDiv2.jsp',
+            async : false,
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            dataType: 'json',
+            success: function (d) {
+                city = d.rows[0].m2;
+            }
+        });
+        var city1 = $("#company").val();
+        if (city1.length == 0) {
+            return city;
+        } else {
+            return city1;
+        }
     }
     function showDiv001() {
         $.ajax({
@@ -214,11 +230,16 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '营业收入增长率', max: 100},
-                                                    {text: '利润总额增长率', max: 100},
-                                                    {text: '人工成本增长率', max: 100},
-                                                    {text: '售水量增长率', max: 100}
-                                                ]
+                                                    {text: '营业收入增长率(%)', max: 100},
+                                                    {text: '利润总额增长率(%)', max: 100},
+                                                    {text: '人工成本增长率(%)', max: 100},
+                                                    {text: '售水量增长率(%)', max: 100}
+                                                ],
+                                                name : {
+                                                    textStyle:{
+                                                        fontSize:11
+                                                    }
+                                                }
                                             }
                                         ],
                                         calculable: true,
@@ -276,8 +297,8 @@
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 
-<div id="main1" style="height:510px;width: 43%;float: left;"></div>
-<div id="main2" style="height:510px;width: 57%;float: right;">
+<div id="main1" style="height:510px;width: 54%;float: left;"></div>
+<div id="main2" style="height:510px;width: 46%;float: right;">
     <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>

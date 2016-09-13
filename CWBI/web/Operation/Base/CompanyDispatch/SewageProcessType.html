@@ -21,10 +21,6 @@
 <script src="../../../scripts/auto/jquery.autocomplete.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
 <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
-<!-- 设置时间 -->
-<script src="../../../scripts/MyDate.js"></script>
-<script src="../../../scripts/OP_Operation_Kpi.js"></script>
-
 <script type="text/javascript">
     $(function () {
         var indicator = myIndicator("正在加载中...");
@@ -177,24 +173,7 @@
             <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
         </tr>
     </table>
-    <script type="text/javascript">
-        function myformatter(date) {
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            return y + '-' + (m < 10 ? ('0' + m) : m);
-        }
-        function myparser(s) {
-            if (!s) return new Date();
-            var ss = (s.split('-'));
-            var y = parseInt(ss[0], 10);
-            var m = parseInt(ss[1], 10);
-            if (!isNaN(y) && !isNaN(m)) {
-                return new Date(y, m - 1);
-            } else {
-                return new Date();
-            }
-        }
-    </script>
+
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 <div id="main" style="width: 95%;margin-top: 40px;height: 450px;"></div>

@@ -119,8 +119,7 @@
         .tab-content .tab-pane .tab-footer {
             position: absolute;
             line-height: 40px;
-            padding: 0 0 2px;
-            10px;
+            padding: 0 0 2px 10px;
             left: 537px;
             bottom: 0;
             width: 400px;

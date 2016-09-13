@@ -37,7 +37,7 @@
                 _4.height = _7;
                 _4.top = _4.startTop + _4.startHeight - _4.height;
             }
-        };
+        }
         function _8(e) {
             var _9 = e.data;
             var t = $(_9.target);
@@ -48,19 +48,19 @@
             if (t.outerHeight() != _9.height) {
                 t._outerHeight(_9.height);
             }
-        };
+        }
         function _a(e) {
             $.fn.resizable.isResizing = true;
             $.data(e.data.target, "resizable").options.onStartResize.call(e.data.target, e);
             return false;
-        };
+        }
         function _b(e) {
             _3(e);
             if ($.data(e.data.target, "resizable").options.onResize.call(e.data.target, e) != false) {
                 _8(e);
             }
             return false;
-        };
+        }
         function _c(e) {
             $.fn.resizable.isResizing = false;
             _3(e, true);
@@ -69,7 +69,7 @@
             $(document).unbind(".resizable");
             $("body").css("cursor", "");
             return false;
-        };
+        }
         return this.each(function () {
             var _d = null;
             var _e = $.data(this, "resizable");
@@ -107,7 +107,7 @@
                     } else {
                         return val;
                     }
-                };
+                }
                 var _12 = {
                     target: e.data.target,
                     dir: dir,
@@ -158,7 +158,7 @@
                     }
                 }
                 return "";
-            };
+            }
         });
     };
     $.fn.resizable.methods = {

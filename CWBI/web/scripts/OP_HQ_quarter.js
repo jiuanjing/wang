@@ -16,7 +16,7 @@ if (preMonth == 0) {
     preMonth = "12";
 }
 $(document).ready(function () {
-    var Request = new Object();
+    var Request = {};
     Request = GetRequest();
     var date = Request['date'];
     if (date == null || date == "") {
@@ -32,7 +32,7 @@ function FormatDate(date) {
 //获取URL参数
 function GetRequest() {
     var url = location.search; //获取url中"?"符后的字串
-    var theRequest = new Object();
+    var theRequest = {};
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
         strs = str.split("&");

@@ -12,7 +12,7 @@
         var _3 = $.data(_2, "splitbutton").options;
         $(_2).menubutton(_3);
         $(_2).addClass("s-btn");
-    };
+    }
     $.fn.splitbutton = function (_4, _5) {
         if (typeof _4 == "string") {
             var _6 = $.fn.splitbutton.methods[_4];

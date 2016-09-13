@@ -50,7 +50,7 @@
                 $(_2).combo("hidePanel");
             }
             _4.onClickRow.call(this, _12, row);
-        };
+        }
         function _d() {
             var _13 = _5.datagrid("getSelections");
             var vv = [], ss = [];
@@ -66,8 +66,8 @@
             if (!_3.remainText) {
                 $(_2).combo("setText", ss.join(_4.separator));
             }
-        };
-    };
+        }
+    }
     function nav(_14, dir) {
         var _15 = $.data(_14, "combogrid");
         var _16 = _15.options;
@@ -98,7 +98,7 @@
             _15.remainText = false;
             _17.datagrid("selectRow", _19);
         }
-    };
+    }
     function _1a(_1b, _1c, _1d) {
         var _1e = $.data(_1b, "combogrid");
         var _1f = _1e.options;
@@ -129,7 +129,7 @@
                 $(_1b).combo("setText", s);
             }
         }
-    };
+    }
     function _26(_27, q) {
         var _28 = $.data(_27, "combogrid");
         var _29 = _28.options;
@@ -165,7 +165,7 @@
                 }
             });
         }
-    };
+    }
     function _2c(_2d) {
         var _2e = $.data(_2d, "combogrid");
         var _2f = _2e.options;
@@ -192,7 +192,7 @@
         if (!_2f.multiple) {
             $(_2d).combogrid("hidePanel");
         }
-    };
+    }
     $.fn.combogrid = function (_32, _33) {
         if (typeof _32 == "string") {
             var _34 = $.fn.combogrid.methods[_32];

@@ -21,7 +21,7 @@
         String sql = "select t.date_id ,sum(t.score),sum(t.rank)" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t1.brief_name='" + company + "' and t.company_id = t1.company_id" +
-                "   and t.kpi_id in (501, 502, 503, 504)" +
+                "   and t.kpi_id in (1501, 1502, 1503, 1504)" +
                 " group by t.date_id";
         ResultSet resultSet = dbOperation.executeQuery(sql);
         if (resultSet != null) {

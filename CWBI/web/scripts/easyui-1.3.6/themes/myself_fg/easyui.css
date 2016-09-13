@@ -1,6 +1,6 @@
 .panel {
     overflow: hidden;
-    text-align: left;
+    text-align: center;
     margin: 0;
     border: 0;
     -moz-border-radius: 0 0 0 0;
@@ -427,6 +427,7 @@
 
 .combobox-item,
 .combobox-group {
+    text-align: left;
     font-size: 12px;
     padding: 3px;
     padding-right: 0px;

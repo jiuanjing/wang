@@ -29,11 +29,11 @@
         function _b(pp) {
             var _c = pp.panel("options");
             return Math.min(Math.max(_c.height, _c.minHeight), _c.maxHeight);
-        };
+        }
         function _d(pp) {
             var _e = pp.panel("options");
             return Math.min(Math.max(_e.width, _e.minWidth), _e.maxWidth);
-        };
+        }
         function _8(pp, _f) {
             if (!pp.length || !_9(pp)) {
                 return;
@@ -51,7 +51,7 @@
             if (!_10.split && _10.border) {
                 _7.height++;
             }
-        };
+        }
         function _a(pp, _12) {
             if (!pp.length || !_9(pp)) {
                 return;
@@ -69,8 +69,8 @@
             if (!_13.split && _13.border) {
                 _7.width++;
             }
-        };
-    };
+        }
+    }
     function _15(_16) {
         var cc = $(_16);
         cc.addClass("layout");
@@ -81,7 +81,7 @@
                     _1b(_16, _18, this);
                 }
             });
-        };
+        }
         cc.children("form").length ? _17(cc.children("form")) : _17(cc);
         cc.append("<div class=\"layout-split-proxy-h\"></div><div class=\"layout-split-proxy-v\"></div>");
         cc.bind("_resize", function (e, _19) {
@@ -91,7 +91,7 @@
             }
             return false;
         });
-    };
+    }
     function _1b(_1c, _1d, el) {
         _1d.region = _1d.region || "center";
         var _1e = $.data(_1c, "layout").panels;
@@ -210,7 +210,7 @@
                 }
             }, _1d));
         }
-    };
+    }
     function _2a(_2b, _2c) {
         var _2d = $.data(_2b, "layout").panels;
         if (_2d[_2c].length) {
@@ -222,7 +222,7 @@
                 _2d[_2e] = undefined;
             }
         }
-    };
+    }
     function _2f(_30, _31, _32) {
         if (_32 == undefined) {
             _32 = "normal";
@@ -297,7 +297,7 @@
                 $(this).removeClass("layout-expand-over");
             });
             return p;
-        };
+        }
         function _38() {
             var cc = $(_30);
             var _3b = _33.center.panel("options");
@@ -358,8 +358,8 @@
                     }
                 }
             }
-        };
-    };
+        }
+    }
     function _3d(_3e, _3f) {
         var _40 = $.data(_3e, "layout").panels;
         var p = _40[_3f];
@@ -407,8 +407,8 @@
                     }
                 }
             }
-        };
-    };
+        }
+    }
     function _9(pp) {
         if (!pp) {
             return false;
@@ -418,7 +418,7 @@
         } else {
             return false;
         }
-    };
+    }
     function _46(_47) {
         var _48 = $.data(_47, "layout").panels;
         if (_48.east.length && _48.east.panel("options").collapsed) {
@@ -433,7 +433,7 @@
         if (_48.south.length && _48.south.panel("options").collapsed) {
             _2f(_47, "south", 0);
         }
-    };
+    }
     $.fn.layout = function (_49, _4a) {
         if (typeof _49 == "string") {
             return $.fn.layout.methods[_49](this, _4a);

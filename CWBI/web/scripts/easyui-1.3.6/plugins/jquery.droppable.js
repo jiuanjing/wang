@@ -22,7 +22,7 @@
         $(_2).bind("_drop", function (e, _6) {
             $.data(_2, "droppable").options.onDrop.apply(_2, [e, _6]);
         });
-    };
+    }
     $.fn.droppable = function (_7, _8) {
         if (typeof _7 == "string") {
             return $.fn.droppable.methods[_7](this, _8);

@@ -18,7 +18,7 @@
             t.removeAttr("name").attr("sliderName", _4);
         }
         return _3;
-    };
+    }
     function _5(_6, _7) {
         var _8 = $.data(_6, "slider");
         var _9 = _8.options;
@@ -48,7 +48,7 @@
             }
         }
         _b(_6);
-    };
+    }
     function _c(_d) {
         var _e = $.data(_d, "slider");
         var _f = _e.options;
@@ -77,8 +77,8 @@
                     }
                 }
             }
-        };
-    };
+        }
+    }
     function _16(_17) {
         var _18 = $.data(_17, "slider");
         var _19 = _18.options;
@@ -130,8 +130,8 @@
                 _21 = _21 - s + _19.step;
             }
             _22(_17, _21);
-        };
-    };
+        }
+    }
     function _22(_23, _24) {
         var _25 = $.data(_23, "slider");
         var _26 = _25.options;
@@ -166,7 +166,7 @@
         if (_28 != _24) {
             _26.onChange.call(_23, _24, _28);
         }
-    };
+    }
     function _b(_2b) {
         var _2c = $.data(_2b, "slider").options;
         var fn = _2c.onChange;
@@ -174,7 +174,7 @@
         };
         _22(_2b, _2c.value);
         _2c.onChange = fn;
-    };
+    }
     function _29(_2d, _2e) {
         var _2f = $.data(_2d, "slider");
         var _30 = _2f.options;
@@ -188,7 +188,7 @@
             pos = _32 - pos;
         }
         return pos.toFixed(0);
-    };
+    }
     function _33(_34, pos) {
         var _35 = $.data(_34, "slider");
         var _36 = _35.options;
@@ -196,7 +196,7 @@
         var _38 = _36.mode == "h" ? _37.width() : _37.height();
         var _39 = _36.converter.toValue.call(_34, _36.mode == "h" ? (_36.reversed ? (_38 - pos) : pos) : (_38 - pos), _38);
         return _39.toFixed(0);
-    };
+    }
     $.fn.slider = function (_3a, _3b) {
         if (typeof _3a == "string") {
             return $.fn.slider.methods[_3a](this, _3b);

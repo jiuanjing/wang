@@ -58,7 +58,7 @@
 <script>
     $(function () {
         confirmIt();
-    })
+    });
     function confirmIt() {
         var indicator = myIndicator("正在加载中...");
         DoAjaxGetEBITDARATIORankData();
@@ -81,7 +81,7 @@
             },
             success: function (return_data) { //若Ajax处理成功后返回的信息
                 //$('#value1').val(return_data);      //调试用
-                var arrayData = ""
+                var arrayData = "";
                 if (return_data == "" || return_data == null) {
                 } else {
                     arrayData = eval(return_data);
@@ -148,7 +148,7 @@
                                                     }
                                                     data += td;
                                                 }
-                                                data += "</table>"
+                                                data += "</table>";
                                                 return data;
                                             }
                                         },

@@ -14,7 +14,7 @@
             fixedThumbWidth: undefined,
             fixedThumbHeight: undefined,
             preventDefaultScroll: false
-        }
+        };
 
         var Scrollable = function (element, options) {
             this.$element = $(element);
@@ -29,7 +29,7 @@
             this.$element.data("scrollable", this);
             this.initKeyboardScrolling();
             this.bindEvents();
-        }
+        };
 
         Scrollable.prototype = {
 
@@ -98,7 +98,7 @@
 
             addScrollBar: function (orientation, fun) {
                 if (this.$element.find(".scroll-bar." + orientation).length == 0) {
-                    this.$element[fun]("<div class='scroll-bar " + orientation + "'><div class='thumb'></div></div>")
+                    this.$element[fun]("<div class='scroll-bar " + orientation + "'><div class='thumb'></div></div>");
                     this[orientation + "ScrollbarAdded"] = true;
                 }
             },
@@ -178,7 +178,7 @@
                         if (_this.hScrollbar)
                             _this.hScrollbar.keyScroll(event);
                     }
-                }
+                };
 
                 this.$element
                     .attr('tabindex', '-1')
@@ -196,11 +196,11 @@
                     this.$element.on("customScroll", this.options.onCustomScroll);
             }
 
-        }
+        };
 
         var Scrollbar = function (scrollable, sizing) {
             this.scrollable = scrollable;
-            this.sizing = sizing
+            this.sizing = sizing;
             this.$scrollBar = this.sizing.scrollBar(this.scrollable.$element);
             this.$thumb = this.$scrollBar.find(".thumb");
             this.setScrollPosition(0, 0);
@@ -210,7 +210,7 @@
             this.initTouchScrolling();
             this.initMouseClickScrolling();
             this.initWindowResize();
-        }
+        };
 
         Scrollbar.prototype = {
 
@@ -248,12 +248,12 @@
             },
 
             calculateThumbSize: function () {
-                var fixedSize = this.sizing.fixedThumbSize(this.scrollable.options)
+                var fixedSize = this.sizing.fixedThumbSize(this.scrollable.options);
                 var size;
                 if (fixedSize)
                     size = fixedSize;
                 else
-                    size = this.ratio * this.viewPortSize
+                    size = this.ratio * this.viewPortSize;
                 return Math.max(size, this.sizing.minSize(this.$thumb));
             },
 
@@ -302,15 +302,15 @@
                     this.elementTouchstart = function (event) {
                         if (_this.enabled)
                             _this.startTouchScrolling(event);
-                    }
+                    };
                     this.scrollable.$element[0].addEventListener("touchstart", this.elementTouchstart);
                     this.documentTouchmove = function (event) {
                         _this.touchScroll(event);
-                    }
+                    };
                     this.scrollable.$element[0].addEventListener("touchmove", this.documentTouchmove);
                     this.elementTouchend = function (event) {
                         _this.stopTouchScrolling(event);
-                    }
+                    };
                     this.scrollable.$element[0].addEventListener("touchend", this.elementTouchend);
                 }
             },
@@ -565,10 +565,10 @@
                 }
             }
 
-        }
+        };
 
         var HSizing = function () {
-        }
+        };
 
         HSizing.prototype = {
             size: function ($el, arg) {
@@ -632,10 +632,10 @@
                     (elementOffset.left + $element.width() <= wrappingElementOffset.left + $wrappingElement.width());
             }
 
-        }
+        };
 
         var VSizing = function () {
-        }
+        };
 
         VSizing.prototype = {
 
@@ -706,7 +706,7 @@
                     (elementOffset.top + $element.height() <= wrappingElementOffset.top + $wrappingElement.height());
             }
 
-        }
+        };
 
         return this.each(function () {
             if (options == undefined)

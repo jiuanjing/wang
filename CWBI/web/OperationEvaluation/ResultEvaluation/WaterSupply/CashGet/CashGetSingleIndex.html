@@ -47,7 +47,7 @@
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: 'getCompany.jsp?company=' + getCompany(),
+            url: '../../getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {

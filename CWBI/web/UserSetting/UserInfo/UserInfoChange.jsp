@@ -111,15 +111,15 @@
                                                             <td height="21" align="right">
                                                                 <input name="Submit4" type="button" class="button"
                                                                        value="<%=butName%>"
-                                                                       onclick="javascript:sendReq('<%=type%>')"><input
+                                                                       onclick="sendReq('<%=type%>')"><input
                                                                     name="Submit22" type="button" class="button"
-                                                                    value="重置" onclick="javascript:f2.reset();">
+                                                                    value="重置" onclick="f2.reset();">
                                                                 <input class="button"
-                                                                       onclick="javascript:window.location.reload();"
+                                                                       onclick="window.location.reload();"
                                                                        type=button value=刷新 name=refesh><input
                                                                     name="back_but" type="button" class="button"
                                                                     value="返回"
-                                                                    onclick="javascript:self.location='UserInfoChange.jsp';">
+                                                                    onclick="self.location='UserInfoChange.jsp';">
                                                             </td>
                                                         </tr>
                                                     </table>

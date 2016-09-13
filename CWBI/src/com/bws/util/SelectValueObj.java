@@ -34,10 +34,10 @@ public class SelectValueObj //extends entityObj
         if (ve == null || ve.size() == 0) {
             return false;
         }
-        this.SelectValue = ((Vector<String>) (ve.elementAt(0))).elementAt(0).toString();
-        this.SelectName = ((Vector<String>) (ve.elementAt(0))).elementAt(1).toString();
-        this.TypeID = ((Vector<String>) (ve.elementAt(0))).elementAt(2).toString();
-        this.State = ((Vector<String>) (ve.elementAt(0))).elementAt(3).toString();
+        this.SelectValue = ve.elementAt(0).elementAt(0).toString();
+        this.SelectName = ve.elementAt(0).elementAt(1).toString();
+        this.TypeID = ve.elementAt(0).elementAt(2).toString();
+        this.State = ve.elementAt(0).elementAt(3).toString();
 
         return true;
     }

@@ -20,7 +20,7 @@
     public boolean service(String Type, DBOperation db) {
         //如果是增加操作，则生成唯一标识
         if (Type.equals("insert")) {
-            Vector<Vector<String>> v = db.executeQueryVt("select nvl(max(user_id),0)+1 from odccbim.user_info");
+            Vector<Vector<String>> v = db.executeQueryVt("select nvl(max(user_id),0)+1 from bim.user_info");
             if (v == null || v.size() == 0) {
                 return false;//如果生成主键值出错
             } else {
@@ -57,7 +57,7 @@
             if (type.equals("deleteChoosed")) {
                 int re = 0;
                 String sqlstr = "";
-                sqlstr = "delete from odccbim.user_info where user_id in(" + selectedIds + ")";
+                sqlstr = "delete from bim.user_info where user_id in(" + selectedIds + ")";
                 re = db.executeUpdate(sqlstr);
                 db.executeCommit();//提交事务
                 if (re < 1) {

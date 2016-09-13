@@ -215,8 +215,24 @@
         window.location.href = "CostControlRank.html";
     }
     function getCompany() {
-        var company = $("#company").val();
-        return company;
+        var city ;
+        $.ajax({
+            url: 'CostControlDiv2.jsp',
+            async : false,
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            dataType: 'json',
+            success: function (d) {
+                city = d.rows[0].m2;
+            }
+        });
+        var city1 = $("#company").val();
+        if (city1.length == 0) {
+            return city;
+        } else {
+            return city1;
+        }
     }
     function showDiv001() {
         $.ajax({
@@ -300,18 +316,23 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '产销差率', max: 100},
-                                                    {text: '管理费用成本比', max: 100},
-                                                    {text: '人工可控管理费用', max: 100},
-                                                    {text: '吨水经营成本', max: 100},
-                                                    {text: '吨水人工成本', max: 100},
-                                                    {text: '吨水药剂费', max: 100},
-                                                    {text: '吨水电耗', max: 100},
-                                                    {text: '吨水电费', max: 100},
-                                                    {text: '吨水维修费', max: 100},
+                                                    {text: '产销差率(%)', max: 100},
+                                                    {text: '管理费用成本比(%)', max: 100},
+                                                    {text: '人工可控管理费用(万元)', max: 100},
+                                                    {text: '吨水经营成本(万元)', max: 100},
+                                                    {text: '吨水人工成本(万元)', max: 100},
+                                                    {text: '吨水药剂费(万元)', max: 100},
+                                                    {text: '吨水电耗(万元)', max: 100},
+                                                    {text: '吨水电费(万元)', max: 100},
+                                                    {text: '吨水维修费(万元)', max: 100},
                                                     {text: '产销差', max: 100},
-                                                    {text: '自用水率', max: 100}
-                                                ]
+                                                    {text: '自用水率(%)', max: 100}
+                                                ],
+                                                name : {
+                                                    textStyle:{
+                                                        fontSize:11
+                                                    }
+                                                }
                                             }
                                         ],
                                         calculable: true,
@@ -363,14 +384,14 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value="包头城市制水"></td>
+            <td><input type="hidden" id="company" value=""></td>
         </tr>
     </table>
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 
-<div id="main1" style="height:510px;width: 43%;float: left;"></div>
-<div id="main2" style="height:510px;width: 57%;float: right;">
+<div id="main1" style="height:510px;width: 55%;float: left;"></div>
+<div id="main2" style="height:510px;width: 45%;float: right;">
     <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>

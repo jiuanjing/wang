@@ -37,7 +37,7 @@ public class LoginUserManager {
     public static Enumeration<UserInfo> getAllUsers() {
         Enumeration<UserInfo> waitU = waitUsers.elements();
         while (waitU.hasMoreElements()) {
-            UserInfo user = (UserInfo) waitU.nextElement();
+            UserInfo user = waitU.nextElement();
             HttpSession session = user.getSession();
             long lasta = session.getLastAccessedTime();
             long now = (new Date()).getTime();
@@ -51,7 +51,7 @@ public class LoginUserManager {
 
         Enumeration<UserInfo> users = loginUsers.elements();
         while (users.hasMoreElements()) {
-            UserInfo user = (UserInfo) users.nextElement();
+            UserInfo user = users.nextElement();
             HttpSession session = user.getSession();
             long lasta = session.getLastAccessedTime();
             long now = (new Date()).getTime();

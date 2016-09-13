@@ -31,7 +31,7 @@
             }
             create(this);
         });
-    }
+    };
 
     $.fn.kindeditor.parseOptions = function (target) {
         return $.extend({}, $.parser.parseOptions(target, []));

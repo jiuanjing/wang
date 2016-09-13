@@ -21,13 +21,12 @@
     })();
 
     function init(target) {
-        $(target).addClass("my97-text")
+        $(target).addClass("my97-text");
         var wrap = $("<span class=\"my97-wrap\"></span>").insertBefore(target);
         wrap[0].appendChild(target);
         var arrow = $("<span class=\"my97-arrow\"></span>").insertAfter(target);
         return wrap;
-    };
-
+    }
     /**
      * 绑定事件用以触发原生的my97控件
      * @param  {[type]} target [description]
@@ -60,8 +59,7 @@
                 }
             );
         }
-    };
-
+    }
     /**
      * 销毁组件
      * @param  {document object} target 承载组件的输入框
@@ -72,8 +70,7 @@
         input.validatebox("destroy");
         $.data(target, "my97").my97.remove();
         $(target).remove();
-    };
-
+    }
     function validate(target, doit) {
         var opts = $.data(target, "my97").options;
         var input = $.data(target, "my97").my97.find("input.my97-text");
@@ -81,8 +78,7 @@
         if (doit) {
             input.validatebox("validate");
         }
-    };
-
+    }
     function initValue(target) {
         var opts = $.data(target, "my97").options;
         var input = $.data(target, "my97").my97.find("input.my97-text");
@@ -113,8 +109,7 @@
                 }
             );
         }
-    };
-
+    }
     /**
      * 设置输入框宽度，主要这里是指box模型的width
      * @param {document object} target 承载控件的输入框

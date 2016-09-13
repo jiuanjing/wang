@@ -103,12 +103,6 @@
                                     formatter: '{a}<br>{b}:{c}'+getUnit(),
                                     trigger: 'item'
                                 },
-//                                legend: {
-//                                    show: false,
-//                                    orient: 'vertical',
-//                                    y: 30,
-//                                    data: getKpiName()
-//                                },
                                 toolbox: {
                                     show: false,
                                     feature: {
@@ -128,7 +122,7 @@
                                 yAxis: [
                                     {
                                         type: 'category',
-                                        boundaryGap: false,
+                                        boundaryGap: true,
                                         axisLabel: {
                                             rotate: 45
                                         },
@@ -143,12 +137,12 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '公司平均值', xAxis: getAverage(), yAxis: 100},
-                                                    {value: getAverage(), xAxis: getAverage(), yAxis: 0}
+                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
+                                                    {xAxis: getAverage(), yAxis: 110}
                                                 ],
                                                 [
-                                                    {name: '行业标杆值', xAxis: poleValue, yAxis: 100},
-                                                    {value: poleValue, xAxis: poleValue, yAxis: 0}
+                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},
+                                                    {xAxis: poleValue, yAxis: 100}
                                                 ]
                                             ]
                                         }

@@ -19,7 +19,7 @@
         $(_2).removeAttr("style").css("overflow", "hidden");
         _3.panel({border: false, doSize: false, bodyCls: "dialog-content"});
         return _3;
-    };
+    }
     function _4(_5) {
         var _6 = $.data(_5, "dialog").options;
         var _7 = $.data(_5, "dialog").contentPanel;
@@ -100,11 +100,11 @@
         }));
         _6.href = _d;
         _6.content = _e;
-    };
+    }
     function _12(_13, _14) {
         var _15 = $.data(_13, "dialog").contentPanel;
         _15.panel("refresh", _14);
-    };
+    }
     $.fn.dialog = function (_16, _17) {
         if (typeof _16 == "string") {
             var _18 = $.fn.dialog.methods[_16];

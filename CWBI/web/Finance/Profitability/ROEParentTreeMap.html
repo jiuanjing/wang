@@ -58,7 +58,7 @@
 <script>
     $(function () {
         DoAjaxGetDeptData();
-        DoAjaxGetBUData()
+        DoAjaxGetBUData();
         confirmIt();
     });
     function confirmIt() {
@@ -87,7 +87,7 @@
                 //下面用返回值来填充所属管理部门下拉框
                 var html = "";
                 for (var i = 0; i < array.length; i++) {
-                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>"
+                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>";
                     html += option;
                 }
                 $('#DeptId').append(html);
@@ -113,7 +113,7 @@
                 //下面用返回值来填充所属管理部门下拉框
                 var html = "";
                 for (var i = 0; i < array.length; i++) {
-                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>"
+                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>";
                     html += option;
                 }
                 $('#BUId').append(html);
@@ -143,7 +143,7 @@
             success: function (return_data) { //若Ajax处理成功后返回的信息
                 //$('#value1').val(return_data);      //调试用
                 console.log(return_data);
-                var arrayData = ""
+                var arrayData = "";
                 if (return_data == "" || return_data == null) {
 
                 } else {
@@ -208,7 +208,7 @@
                                                             + "<td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].value + "万元</td></tr>";
                                                     data += td;
                                                 }
-                                                data += "</table>"
+                                                data += "</table>";
                                                 return data;
                                             }
                                         },

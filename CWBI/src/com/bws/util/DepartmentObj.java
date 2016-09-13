@@ -32,7 +32,7 @@ public class DepartmentObj extends entityObj {
 
     public boolean Load(String DeptID, DBOperation db) {
         Vector<Vector<String>> ve = new Vector<Vector<String>>();
-        ve = db.executeQueryVt("select * from odccbim.department where dept_id= " + DeptID);
+        ve = db.executeQueryVt("select * from bim.department where dept_id= " + DeptID);
         if (ve == null || ve.size() == 0) {
             return false;
         }
@@ -47,7 +47,7 @@ public class DepartmentObj extends entityObj {
 
     public String getInStr() {
         String str = "";
-        str = "insert into odccbim.department(dept_id,dept_code,dept_name,dept_desc,order_no,dept_level) values("
+        str = "insert into bim.department(dept_id,dept_code,dept_name,dept_desc,order_no,dept_level) values("
                 + this.DeptID + ",'" + this.DeptCode
                 + "','" + this.DeptName
                 + "','" + this.DeptDesc
@@ -59,7 +59,7 @@ public class DepartmentObj extends entityObj {
 
     public String getUpdateStr() {
         String str = "";
-        str = "update odccbim.department set dept_id=" + DeptID + ","
+        str = "update bim.department set dept_id=" + DeptID + ","
                 + "dept_code='" + DeptCode + "',"
                 + "dept_name='" + DeptName + "',"
                 + "dept_desc='" + DeptDesc + "',"
@@ -71,7 +71,7 @@ public class DepartmentObj extends entityObj {
 
     public String getDelStr() {
         String str = "";
-        str = "delete from odccbim.department where dept_id=" + DeptID;
+        str = "delete from bim.department where dept_id=" + DeptID;
         return str;
     }
 

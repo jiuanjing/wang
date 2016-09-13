@@ -9,7 +9,7 @@ $(document).ready(function () {
     $("#begin_date").datebox("setValue", tdate.getYear01());
     //设置结束日期
     $("#end_date").datebox("setValue", tdate.getLastMonth());
-    var Request = new Object();
+    var Request = {};
     Request = GetRequest();
     var date = Request['date'];
     if (date == null || date == "") {
@@ -22,7 +22,7 @@ $(document).ready(function () {
 //获取URL参数
 function GetRequest() {
     var url = location.search; //获取url中"?"符后的字串
-    var theRequest = new Object();
+    var theRequest = {};
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
         strs = str.split("&");

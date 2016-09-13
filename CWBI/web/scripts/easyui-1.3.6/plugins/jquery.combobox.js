@@ -20,7 +20,7 @@
             }
         }
         return -1;
-    };
+    }
     function _8(_9, _a) {
         var _b = $.data(_9, "combobox").options;
         var _c = $(_9).combo("panel");
@@ -36,7 +36,7 @@
                 }
             }
         }
-    };
+    }
     function _e(_f, dir) {
         var _10 = $.data(_f, "combobox").options;
         var _11 = $(_f).combobox("panel");
@@ -72,7 +72,7 @@
                 }
             }
         }
-    };
+    }
     function _15(_16, _17) {
         var _18 = $.data(_16, "combobox").options;
         var _19 = $(_16).combo("getValues");
@@ -85,7 +85,7 @@
             _1a(_16, _19);
             _18.onSelect.call(_16, _18.finder.getRow(_16, _17));
         }
-    };
+    }
     function _1b(_1c, _1d) {
         var _1e = $.data(_1c, "combobox").options;
         var _1f = $(_1c).combo("getValues");
@@ -95,7 +95,7 @@
             _1a(_1c, _1f);
             _1e.onUnselect.call(_1c, _1e.finder.getRow(_1c, _1d));
         }
-    };
+    }
     function _1a(_21, _22, _23) {
         var _24 = $.data(_21, "combobox").options;
         var _25 = $(_21).combo("panel");
@@ -116,7 +116,7 @@
         if (!_23) {
             $(_21).combo("setText", ss.join(_24.separator));
         }
-    };
+    }
     function _26(_27, _28, _29) {
         var _2a = $.data(_27, "combobox");
         var _2b = _2a.options;
@@ -157,7 +157,7 @@
             _1a(_27, _2c.length ? [_2c[_2c.length - 1]] : [], _29);
         }
         _2b.onLoadSuccess.call(_27, _28);
-    };
+    }
     function _2e(_2f, url, _30, _31) {
         var _32 = $.data(_2f, "combobox").options;
         if (url) {
@@ -172,7 +172,7 @@
         }, function () {
             _32.onLoadError.apply(this, arguments);
         });
-    };
+    }
     function _34(_35, q) {
         var _36 = $.data(_35, "combobox");
         var _37 = _36.options;
@@ -213,7 +213,7 @@
             });
             _1a(_35, vv, true);
         }
-    };
+    }
     function _3c(_3d) {
         var t = $(_3d);
         var _3e = t.combobox("options");
@@ -242,7 +242,7 @@
         if (!_3e.multiple) {
             t.combobox("hidePanel");
         }
-    };
+    }
     function _42(_43) {
         var _44 = $.data(_43, "combobox");
         var _45 = _44.options;
@@ -289,7 +289,7 @@
             }
             e.stopPropagation();
         });
-    };
+    }
     $.fn.combobox = function (_49, _4a) {
         if (typeof _49 == "string") {
             var _4b = $.fn.combobox.methods[_49];
@@ -403,7 +403,7 @@
                 row[_59.groupField] = _5c;
             }
             _58.push(row);
-        };
+        }
     };
     $.fn.combobox.defaults = $.extend({}, $.fn.combo.defaults, {
         valueField: "value", textField: "text", groupField: null, groupFormatter: function (_5d) {

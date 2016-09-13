@@ -36,22 +36,22 @@
             e.stopPropagation();
         });
         _8(_2, _4.value);
-    };
+    }
     function _9(_a) {
         var c = $(_a).datetimebox("calendar");
         var t = $(_a).datetimebox("spinner");
         var _b = c.calendar("options").current;
         return new Date(_b.getFullYear(), _b.getMonth(), _b.getDate(), t.timespinner("getHours"), t.timespinner("getMinutes"), t.timespinner("getSeconds"));
-    };
+    }
     function _c(_d, q) {
         _8(_d, q, true);
-    };
+    }
     function _e(_f) {
         var _10 = $.data(_f, "datetimebox").options;
         var _11 = _9(_f);
         _8(_f, _10.formatter.call(_f, _11));
         $(_f).combo("hidePanel");
-    };
+    }
     function _8(_12, _13, _14) {
         var _15 = $.data(_12, "datetimebox").options;
         $(_12).combo("setValue", _13);
@@ -70,14 +70,14 @@
         function _17(_18) {
             function _19(_1a) {
                 return (_1a < 10 ? "0" : "") + _1a;
-            };
+            }
             var tt = [_19(_18.getHours()), _19(_18.getMinutes())];
             if (_15.showSeconds) {
                 tt.push(_19(_18.getSeconds()));
             }
             return tt.join($(_12).datetimebox("spinner").timespinner("options").separator);
-        };
-    };
+        }
+    }
     $.fn.datetimebox = function (_1b, _1c) {
         if (typeof _1b == "string") {
             var _1d = $.fn.datetimebox.methods[_1b];
@@ -164,7 +164,7 @@
 
             function _2a(_2b) {
                 return (_2b < 10 ? "0" : "") + _2b;
-            };
+            }
             var _2c = $(this).datetimebox("spinner").timespinner("options").separator;
             var r = $.fn.datebox.defaults.formatter(_29) + " " + _2a(h) + _2c + _2a(M);
             if ($(this).datetimebox("options").showSeconds) {

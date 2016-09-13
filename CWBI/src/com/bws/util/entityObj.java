@@ -39,10 +39,7 @@ public class entityObj {
         int re = 0;
         re = db.executeUpdate(sqlstr);
 
-        if (re != 1) {
-            return false;
-        }
-        return true;
+        return re == 1;
     }
 
     public String getInStr() {

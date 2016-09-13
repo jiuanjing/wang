@@ -41,7 +41,7 @@
             _a(_1);
             _1 = undefined;
         });
-    };
+    }
     function _a(_b) {
         var t = $(_b);
         if (!t.length) {
@@ -62,7 +62,7 @@
             }
         }
         _c.editIndex = undefined;
-    };
+    }
     $.fn.propertygrid = function (_e, _f) {
         if (typeof _e == "string") {
             var _10 = $.fn.propertygrid.methods[_e];
@@ -204,12 +204,12 @@
                     }
                 }
                 return null;
-            };
+            }
             function _31() {
                 if (!$("#datagrid-group-style").length) {
                     $("head").append("<style id=\"datagrid-group-style\">" + ".datagrid-group{height:25px;overflow:hidden;font-weight:bold;border-bottom:1px solid #ccc;}" + "</style>");
                 }
-            };
+            }
         }
     });
     $.extend($.fn.datagrid.methods, {

@@ -64,7 +64,7 @@
                 });
             }
             tr.find("td").css("width", (100 / _4.buttons.length) + "%");
-        };
+        }
         function _5() {
             var _c = $(_2).combo("panel");
             var cc = _c.children("div.datebox-calendar-inner");
@@ -79,11 +79,11 @@
                 cc._outerHeight(_d);
             }
             _3.calendar.calendar("resize");
-        };
-    };
+        }
+    }
     function _e(_f, q) {
         _10(_f, q, true);
-    };
+    }
     function _11(_12) {
         var _13 = $.data(_12, "datebox");
         var _14 = _13.options;
@@ -92,7 +92,7 @@
             _10(_12, _14.formatter.call(_12, _15));
             $(_12).combo("hidePanel");
         }
-    };
+    }
     function _10(_16, _17, _18) {
         var _19 = $.data(_16, "datebox");
         var _1a = _19.options;
@@ -107,7 +107,7 @@
                 $(_16).combo("setText", _17);
             }
         }
-    };
+    }
     $.fn.datebox = function (_1c, _1d) {
         if (typeof _1c == "string") {
             var _1e = $.fn.datebox.methods[_1c];

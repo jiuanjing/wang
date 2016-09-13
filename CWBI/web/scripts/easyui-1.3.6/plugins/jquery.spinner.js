@@ -12,7 +12,7 @@
         var _3 = $("<span class=\"spinner\">" + "<span class=\"spinner-arrow\">" + "<span class=\"spinner-arrow-up\"></span>" + "<span class=\"spinner-arrow-down\"></span>" + "</span>" + "</span>").insertAfter(_2);
         $(_2).addClass("spinner-text spinner-f").prependTo(_3);
         return _3;
-    };
+    }
     function _4(_5, _6) {
         var _7 = $.data(_5, "spinner").options;
         var _8 = $.data(_5, "spinner").spinner;
@@ -32,7 +32,7 @@
         _a.find("span")._outerHeight(_a.height() / 2);
         _8.insertAfter(_9);
         _9.remove();
-    };
+    }
     function _b(_c) {
         var _d = $.data(_c, "spinner").options;
         var _e = $.data(_c, "spinner").spinner;
@@ -61,7 +61,7 @@
                 $(this).spinner("setValue", $(this).val());
             });
         }
-    };
+    }
     function _f(_10, _11) {
         var _12 = $.data(_10, "spinner").options;
         if (_11) {
@@ -71,14 +71,14 @@
             _12.disabled = false;
             $(_10).removeAttr("disabled");
         }
-    };
+    }
     function _13(_14, _15) {
         var _16 = $.data(_14, "spinner");
         var _17 = _16.options;
         _17.readonly = _15 == undefined ? true : _15;
         var _18 = _17.readonly ? true : (!_17.editable);
         $(_14).attr("readonly", _18).css("cursor", _18 ? "pointer" : "");
-    };
+    }
     $.fn.spinner = function (_19, _1a) {
         if (typeof _19 == "string") {
             var _1b = $.fn.spinner.methods[_19];

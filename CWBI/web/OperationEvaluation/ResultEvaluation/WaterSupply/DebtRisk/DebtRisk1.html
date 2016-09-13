@@ -107,8 +107,24 @@
             window.location.href = "DebtRank.html";
         }
         function getCompany() {
-            var company = $("#company").val();
-            return company;
+            var city ;
+            $.ajax({
+                url: 'DebtRiskDiv2.jsp',
+                async : false,
+                data: {
+                    date: $('#date').datebox('getValue')
+                },
+                dataType: 'json',
+                success: function (d) {
+                    city = d.rows[0].m2;
+                }
+            });
+            var city1 = $("#company").val();
+            if (city1.length == 0) {
+                return city;
+            } else {
+                return city1;
+            }
         }
         function showDiv001() {
             $.ajax({
@@ -151,14 +167,6 @@
                                             },
                                             tooltip: {
                                                 trigger: 'axis',
-                                                //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
-//                                            formatter: function (params) {
-//                                                var returnStr = params[0].name + '<br />';
-//                                                for (var i = 0; i < params.length; i++) {
-//                                                    returnStr += params[i].seriesName + ':' + Util.commafy(params[i].data) + '<br />';
-//                                                }
-//                                                return returnStr;
-//                                            }
                                             },
                                             legend: {
                                                 show: true,
@@ -194,7 +202,14 @@
                                                     indicator: [
                                                         {text: '资产负债率(%)', max: 100},
                                                         {text: '已获利息倍数(%)', max: 100},
-                                                    ]
+                                                        {text: '资产负债率(%)', max: 100},
+                                                        {text: '已获利息倍数(%)', max: 100}
+                                                    ],
+                                                    name : {
+                                                        textStyle:{
+                                                            fontSize:11
+                                                        }
+                                                    }
                                                 }
                                             ],
                                             calculable: true,
@@ -204,19 +219,19 @@
                                                     type: 'radar',
                                                     data: [
                                                         {
-                                                            value: return_data.data1,
+                                                            value: (return_data.data1).concat(return_data.data1),
                                                             name: '标杆值'
                                                         },
                                                         {
-                                                            value: return_data.data2,
+                                                            value: (return_data.data2).concat(return_data.data2),
                                                             name: '2016年'
                                                         },
                                                         {
-                                                            value: return_data.data3,
+                                                            value: (return_data.data3).concat(return_data.data3),
                                                             name: '2015年'
                                                         },
                                                         {
-                                                            value: return_data.data4,
+                                                            value: (return_data.data4).concat(return_data.data4),
                                                             name: '2014年'
                                                         }
                                                     ]
@@ -246,14 +261,14 @@
                                   onclick="confirmIt();">确定</a></td>
                 <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                                   onclick="getRank();">排名</a></td>
-                <td><input type="hidden" id="company" value="包头城市制水"></td>
+                <td><input type="hidden" id="company" value=""></td>
             </tr>
         </table>
     </div>
     <hr class="Main_hr" align="center" width="95%"/>
 
-    <div id="main1" style="height:510px;width: 43%;float: left;"></div>
-    <div id="main2" style="height:510px;width: 57%;float: right;">
+    <div id="main1" style="height:510px;width: 55%;float: left;"></div>
+    <div id="main2" style="height:510px;width: 45%;float: right;">
         <table id="tg1" style="height: 510px;"></table>
     </div>
     </body>

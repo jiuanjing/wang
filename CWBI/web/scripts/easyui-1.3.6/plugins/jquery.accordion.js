@@ -44,8 +44,8 @@
                 }
             }
             return _c;
-        };
-    };
+        }
+    }
     function _e(_f, _10, _11, all) {
         var _12 = $.data(_f, "accordion").panels;
         var pp = [];
@@ -66,17 +66,17 @@
         } else {
             return -1;
         }
-    };
+    }
     function _13(_14) {
         return _e(_14, "collapsed", false, true);
-    };
+    }
     function _15(_16) {
         var pp = _13(_16);
         return pp.length ? pp[0] : null;
-    };
+    }
     function _17(_18, _19) {
         return _e(_18, null, _19);
-    };
+    }
     function _1a(_1b, _1c) {
         var _1d = $.data(_1b, "accordion").panels;
         if (typeof _1c == "number") {
@@ -87,7 +87,7 @@
             }
         }
         return _e(_1b, "title", _1c);
-    };
+    }
     function _1e(_1f) {
         var _20 = $.data(_1f, "accordion").options;
         var cc = $(_1f);
@@ -96,7 +96,7 @@
         } else {
             cc.addClass("accordion-noborder");
         }
-    };
+    }
     function _21(_22) {
         var _23 = $.data(_22, "accordion");
         var cc = $(_22);
@@ -115,7 +115,7 @@
             }
             return false;
         });
-    };
+    }
     function _27(_28, pp, _29) {
         var _2a = $.data(_28, "accordion").options;
         pp.panel($.extend({}, {
@@ -184,7 +184,7 @@
             $(this).find("a.accordion-collapse:visible").triggerHandler("click");
             return false;
         });
-    };
+    }
     function _30(_31, _32) {
         var p = _1a(_31, _32);
         if (!p) {
@@ -193,7 +193,7 @@
         _33(_31);
         var _34 = $.data(_31, "accordion").options;
         p.panel("expand", _34.animate);
-    };
+    }
     function _35(_36, _37) {
         var p = _1a(_36, _37);
         if (!p) {
@@ -202,7 +202,7 @@
         _33(_36);
         var _38 = $.data(_36, "accordion").options;
         p.panel("collapse", _38.animate);
-    };
+    }
     function _39(_3a) {
         var _3b = $.data(_3a, "accordion").options;
         var p = _e(_3a, "selected", true);
@@ -216,14 +216,14 @@
             _3b.animate = false;
             _30(_3a, _3d);
             _3b.animate = _3e;
-        };
-    };
+        }
+    }
     function _33(_3f) {
         var _40 = $.data(_3f, "accordion").panels;
         for (var i = 0; i < _40.length; i++) {
             _40[i].stop(true, true);
         }
-    };
+    }
     function add(_41, _42) {
         var _43 = $.data(_41, "accordion");
         var _44 = _43.options;
@@ -240,7 +240,7 @@
         if (_42.selected) {
             _30(_41, _45.length - 1);
         }
-    };
+    }
     function _46(_47, _48) {
         var _49 = $.data(_47, "accordion");
         var _4a = _49.options;
@@ -265,7 +265,7 @@
             }
         }
         _4a.onRemove.call(_47, _4d, _4e);
-    };
+    }
     $.fn.accordion = function (_50, _51) {
         if (typeof _50 == "string") {
             return $.fn.accordion.methods[_50](this, _51);

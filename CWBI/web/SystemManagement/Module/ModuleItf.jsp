@@ -66,7 +66,7 @@
                 }
             }
 
-            f2.action = "ModuleCtl.jsp?type=" + str
+            f2.action = "ModuleCtl.jsp?type=" + str;
             f2.submit();
         }
 
@@ -116,23 +116,23 @@
                                                         <td height="21" align="right">
                                                             <input name="Submit4" type="button" class="button"
                                                                    value="<%=butName%>"
-                                                                   onclick="javascript:sendReq('<%=type%>')"><input
+                                                                   onclick="sendReq('<%=type%>')"><input
                                                                 name="Submit22" type="button" class="button" value="重置"
-                                                                onclick="javascript:f2.reset();"><%
+                                                                onclick="f2.reset();"><%
                                                             if (type.equals("update"))//如果新增界面，则不显示删除和新建按钮
                                                             {
                                                         %><input name="addNew" type="button" class="button" value="新建"
-                                                                 onclick="javascript:self.location='ModuleItf.jsp'"><input
+                                                                 onclick="self.location='ModuleItf.jsp'"><input
                                                                 name="del" type="button" class="button" value="删除"
-                                                                onclick="javascript:sendReq('delete')"><%
+                                                                onclick="sendReq('delete')"><%
                                                             }
                                                         %><INPUT class="button"
-                                                                 onclick="javascript:window.location.reload();"
+                                                                 onclick="window.location.reload();"
                                                                  type=button value=刷新 name=refesh><input name="back_but"
                                                                                                          type="button"
                                                                                                          class="button"
                                                                                                          value="返回"
-                                                                                                         onclick="javascript:self.location='ModuleList.jsp';">
+                                                                                                         onclick="self.location='ModuleList.jsp';">
                                                         </td>
                                                     </tr>
                                                 </table>

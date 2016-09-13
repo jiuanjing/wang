@@ -116,20 +116,20 @@
                 _d.handler.call(_2);
             });
             return a;
-        };
+        }
         function _6(aa, _e) {
             var _f = $.inArray(_e, aa);
             if (_f >= 0) {
                 aa.splice(_f, 1);
             }
             return aa;
-        };
-    };
+        }
+    }
     function _10(_11, _12) {
         var _13 = $.data(_11, "pagination").options;
         _14(_11, {pageNumber: _12});
         _13.onSelectPage.call(_11, _13.pageNumber, _13.pageSize);
-    };
+    }
     function _14(_15, _16) {
         var _17 = $.data(_15, "pagination");
         var _18 = _17.options;
@@ -198,7 +198,7 @@
             bb.last.linkbutton({disabled: (_18.pageNumber == _19)});
         }
         _1d(_15, _18.loading);
-    };
+    }
     function _1d(_1e, _1f) {
         var _20 = $.data(_1e, "pagination");
         var _21 = _20.options;
@@ -206,7 +206,7 @@
         if (_21.showRefresh && _20.bb.refresh) {
             _20.bb.refresh.linkbutton({iconCls: (_21.loading ? "pagination-loading" : "pagination-load")});
         }
-    };
+    }
     $.fn.pagination = function (_22, _23) {
         if (typeof _22 == "string") {
             return $.fn.pagination.methods[_22](this, _23);

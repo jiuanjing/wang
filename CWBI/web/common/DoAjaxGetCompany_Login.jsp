@@ -18,7 +18,7 @@
     if (db.dbOpen()) {
         try {
             String sqlstr = "";
-            sqlstr = "select company_code,company_name from odccbim.company";
+            sqlstr = "select company_code,company_name from bim.company";
 
             String where = " where length(company_code)<=4";
 

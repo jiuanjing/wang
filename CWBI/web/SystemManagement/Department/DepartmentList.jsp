@@ -49,7 +49,7 @@
             //positionStr=PositionUtil.getPosition("107",db);//根据功能编号，取当前页面所在位置
             //programName=PositionUtil.getProgramName("107",db);
 
-            String sqlstr = "select dept_id,dept_code \"部门编号\",dept_name \"部门名称\",dept_desc \"部门描述信息\",order_no \"排序号\",dept_level \"部门级别\" from odccbim.department";
+            String sqlstr = "select dept_id,dept_code \"部门编号\",dept_name \"部门名称\",dept_desc \"部门描述信息\",order_no \"排序号\",dept_level \"部门级别\" from bim.department";
 
             //取检索条件
             String where = "";
@@ -291,17 +291,17 @@
                                                             </td>
                                                             <td height="21" align="right">
                                                                 <input name="search" type="button" class="button"
-                                                                       value="检索" onclick="javascript:switchSysBar()">
+                                                                       value="检索" onclick="switchSysBar()">
                                                                 <input name="addNew" type="button" class="button"
                                                                        value="新建"
-                                                                       onclick="javascript:self.location='DepartmentItf.jsp'">
+                                                                       onclick="self.location='DepartmentItf.jsp'">
                                                                 <input name="delet_row" type="button" class="button"
                                                                        value="删除" onclick="deleteChoosedItems()">
                                                                 <input name="refresh" type="button" class="button"
                                                                        value="刷新"
-                                                                       onclick="javascript:goPage(tab_list.current_page.value)">
+                                                                       onclick="goPage(tab_list.current_page.value)">
                                                                 <input name="back" type="button" class="button"
-                                                                       value="返回" onclick="javascript:history.back();">
+                                                                       value="返回" onclick="history.back();">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -379,10 +379,10 @@
                                             <td width="59%">
                                                 <input type="hidden" value="<%=show_row%>" name="show_row">每页
                                                 <input size=1 value=<%=pageSize%> name=pageSize id=pageSize>条记录
-                                                <input onClick="javascript:tab_list.submit();" type=button value="GO"
+                                                <input onClick="tab_list.submit();" type=button value="GO"
                                                        class="button" name=go>跳页：
                                                 <input size=1 value="<%=current_page%>" name="goToPage">
-                                                <input onClick="javascript:goPage(tab_list.goToPage.value)" type=button
+                                                <input onClick="goPage(tab_list.goToPage.value)" type=button
                                                        value="确定" class="button" name=go2>
                                             </td>
                                             <td width="41%">

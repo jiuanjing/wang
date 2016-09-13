@@ -185,7 +185,7 @@
         if ($.fn.draggable.isDragging || $.fn.resizable.isResizing) {
             e.preventDefault();
         }
-    };
+    }
     function _16(e) {
         if (e.touches.length != 1) {
             return;
@@ -197,7 +197,7 @@
         if ($.fn.draggable.isDragging || $.fn.resizable.isResizing) {
             e.preventDefault();
         }
-    };
+    }
     function _17(e) {
         if (_11) {
             clearTimeout(_11);
@@ -206,14 +206,14 @@
         if ($.fn.draggable.isDragging || $.fn.resizable.isResizing) {
             e.preventDefault();
         }
-    };
+    }
     function _15(e, _18, _19) {
         var _1a = new $.Event(_18);
         _1a.pageX = e.changedTouches[0].pageX;
         _1a.pageY = e.changedTouches[0].pageY;
         _1a.which = _19 || 1;
         $(e.target).trigger(_1a);
-    };
+    }
     if (document.addEventListener) {
         document.addEventListener("touchstart", _14, true);
         document.addEventListener("touchmove", _16, true);

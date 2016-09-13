@@ -121,7 +121,7 @@
             }
             buildGrid(this);
         });
-    }
+    };
 
     $.fn.propertygrid.methods = {
         options: function (jq) {

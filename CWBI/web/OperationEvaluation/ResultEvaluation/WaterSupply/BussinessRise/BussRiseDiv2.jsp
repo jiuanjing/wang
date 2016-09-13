@@ -18,13 +18,13 @@
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         String sql = "select t1.brief_name," +
                 "       sum(score) as score," +
-                "       sum(decode(t.kpi_id, 501, t.actual_value, null)) as kpi501," +
-                "       sum(decode(t.kpi_id, 502, t.actual_value, null)) as kpi502," +
-                "       sum(decode(t.kpi_id, 503, t.actual_value, null)) as kpi503," +
-                "       sum(decode(t.kpi_id, 504, t.actual_value, null)) as kpi504" +
+                "       sum(decode(t.kpi_id, 1501, t.actual_value, null)) as kpi1501," +
+                "       sum(decode(t.kpi_id, 1502, t.actual_value, null)) as kpi1502," +
+                "       sum(decode(t.kpi_id, 1503, t.actual_value, null)) as kpi1503," +
+                "       sum(decode(t.kpi_id, 1504, t.actual_value, null)) as kpi1504" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = " + dateID + " and t1.company_id = t.company_id and t1.flag_water = 1" +
-                "   and t.kpi_id in (501, 502, 503, 504)" +
+                "   and t.kpi_id in (1501, 1502, 1503, 1504)" +
                 " group by t.company_id,t1.brief_name" +
                 " order by score desc";
 

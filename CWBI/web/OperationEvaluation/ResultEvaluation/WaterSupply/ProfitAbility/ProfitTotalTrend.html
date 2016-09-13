@@ -27,12 +27,11 @@
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        var company = params.split("=")[1];
-        return company;
+        return params.split("=")[1];
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: 'getCompany.jsp?company=' + getCompany(),
+            url: '../../getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {

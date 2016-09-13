@@ -19,7 +19,7 @@
             $(_2).removeAttr("name").attr("searchboxName", _5);
         }
         return _3;
-    };
+    }
     function _6(_7, _8) {
         var _9 = $.data(_7, "searchbox").options;
         var sb = $.data(_7, "searchbox").searchbox;
@@ -42,7 +42,7 @@
         _d._outerHeight(sb.height());
         _d.find("span.l-btn-text").css({height: _d.height() + "px", lineHeight: _d.height() + "px"});
         sb.insertAfter(_7);
-    };
+    }
     function _e(_f) {
         var _10 = $.data(_f, "searchbox");
         var _11 = _10.options;
@@ -71,8 +71,8 @@
             mb.prependTo(_10.searchbox).menubutton({menu: _10.menu, iconCls: _16.iconCls});
             _10.searchbox.find("input.searchbox-text").attr("name", _16.name || _16.text);
             _6(_f);
-        };
-    };
+        }
+    }
     function _17(_18) {
         var _19 = $.data(_18, "searchbox");
         var _1a = _19.options;
@@ -110,7 +110,7 @@
                 $(this).removeClass("searchbox-button-hover");
             });
         }
-    };
+    }
     function _1d(_1e, _1f) {
         var _20 = $.data(_1e, "searchbox");
         var _21 = _20.options;
@@ -131,7 +131,7 @@
                 mb.menubutton("enable");
             }
         }
-    };
+    }
     function _23(_24) {
         var _25 = $.data(_24, "searchbox");
         var _26 = _25.options;
@@ -144,7 +144,7 @@
             _27.val(_26.prompt);
             _27.addClass("searchbox-prompt");
         }
-    };
+    }
     $.fn.searchbox = function (_28, _29) {
         if (typeof _28 == "string") {
             return $.fn.searchbox.methods[_28](this, _29);

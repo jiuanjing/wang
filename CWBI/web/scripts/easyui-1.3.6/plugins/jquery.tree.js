@@ -12,7 +12,7 @@
         var _3 = $(_2);
         _3.addClass("tree");
         return _3;
-    };
+    }
     function _4(_5) {
         var _6 = $.data(_5, "tree").options;
         $(_5).unbind().bind("mouseover", function (e) {
@@ -80,14 +80,14 @@
             _6.onContextMenu.call(_5, e, _c(_5, _b[0]));
             e.stopPropagation();
         });
-    };
+    }
     function _d(_e) {
         var _f = $.data(_e, "tree").options;
         _f.dnd = false;
         var _10 = $(_e).find("div.tree-node");
         _10.draggable("disable");
         _10.css("cursor", "pointer");
-    };
+    }
     function _11(_12) {
         var _13 = $.data(_12, "tree");
         var _14 = _13.options;
@@ -204,11 +204,11 @@
         });
         function _1b(_27, pop) {
             return $(_27).closest("ul.tree").tree(pop ? "pop" : "getData", _27);
-        };
+        }
         function _1c(_28, _29) {
             var _2a = $(_28).draggable("proxy").find("span.tree-dnd-icon");
             _2a.removeClass("tree-dnd-yes tree-dnd-no").addClass(_29 ? "tree-dnd-yes" : "tree-dnd-no");
-        };
+        }
         function _25(_2b, _2c) {
             if (_c(_12, _2c).state == "closed") {
                 _75(_12, _2c, function () {
@@ -221,8 +221,8 @@
                 var _2e = _1b(_2b, true);
                 $(_12).tree("append", {parent: _2c, data: [_2e]});
                 _14.onDrop.call(_12, _2c, _2e, "append");
-            };
-        };
+            }
+        }
         function _26(_2f, _30, _31) {
             var _32 = {};
             if (_31 == "top") {
@@ -234,8 +234,8 @@
             _32.data = _33;
             $(_12).tree("insert", _32);
             _14.onDrop.call(_12, _30, _33, _31);
-        };
-    };
+        }
+    }
     function _34(_35, _36, _37) {
         var _38 = $.data(_35, "tree").options;
         if (!_38.checkbox) {
@@ -266,7 +266,7 @@
             } else {
                 _3e.addClass("tree-checkbox0");
             }
-        };
+        }
         function _3b(_3f) {
             var _40 = _8c(_35, _3f[0]);
             if (_40) {
@@ -295,7 +295,7 @@
                     }
                 });
                 return b;
-            };
+            }
             function _42(n) {
                 var ck = n.find(".tree-checkbox");
                 if (ck.hasClass("tree-checkbox1") || ck.hasClass("tree-checkbox2")) {
@@ -308,9 +308,9 @@
                     }
                 });
                 return b;
-            };
-        };
-    };
+            }
+        }
+    }
     function _43(_44, _45) {
         var _46 = $.data(_44, "tree").options;
         if (!_46.checkbox) {
@@ -359,7 +359,7 @@
                 }
             }
         }
-    };
+    }
     function _4d(_4e, ul, _4f, _50) {
         var _51 = $.data(_4e, "tree");
         var _52 = _51.options;
@@ -410,7 +410,7 @@
             _5d(_4e, _4e);
         }, 0);
         _52.onLoadSuccess.call(_4e, _54, _4f);
-    };
+    }
     function _5d(_5e, ul, _5f) {
         var _60 = $.data(_5e, "tree").options;
         if (_60.lines) {
@@ -449,14 +449,14 @@
         function _64(_66, _67) {
             var _68 = _66.find("span.tree-icon");
             _68.prev("span.tree-indent").addClass("tree-join");
-        };
+        }
         function _63(_69) {
             var _6a = _69.find("span.tree-indent, span.tree-hit").length;
             _69.next().find("div.tree-node").each(function () {
                 $(this).children("span:eq(" + (_6a - 1) + ")").addClass("tree-line");
             });
-        };
-    };
+        }
+    }
     function _6b(_6c, ul, _6d, _6e) {
         var _6f = $.data(_6c, "tree").options;
         _6d = _6d || {};
@@ -486,7 +486,7 @@
         if (_73 == false) {
             _72.removeClass("tree-loading");
         }
-    };
+    }
     function _75(_76, _77, _78) {
         var _79 = $.data(_76, "tree").options;
         var hit = $(_77).children("span.tree-hit");
@@ -544,7 +544,7 @@
                 }
             });
         }
-    };
+    }
     function _7c(_7d, _7e) {
         var _7f = $.data(_7d, "tree").options;
         var hit = $(_7e).children("span.tree-hit");
@@ -571,7 +571,7 @@
             _80.state = "closed";
             _7f.onCollapse.call(_7d, _80);
         }
-    };
+    }
     function _81(_82, _83) {
         var hit = $(_83).children("span.tree-hit");
         if (hit.length == 0) {
@@ -582,7 +582,7 @@
         } else {
             _75(_82, _83);
         }
-    };
+    }
     function _84(_85, _86) {
         var _87 = _4c(_85, _86);
         if (_86) {
@@ -591,7 +591,7 @@
         for (var i = 0; i < _87.length; i++) {
             _75(_85, _87[i].target);
         }
-    };
+    }
     function _88(_89, _8a) {
         var _8b = [];
         var p = _8c(_89, _8a);
@@ -602,7 +602,7 @@
         for (var i = 0; i < _8b.length; i++) {
             _75(_89, _8b[i].target);
         }
-    };
+    }
     function _8d(_8e, _8f) {
         var c = $(_8e).parent();
         while (c[0].tagName != "BODY" && c.css("overflow-y") != "auto") {
@@ -622,7 +622,7 @@
         } else {
             c.scrollTop(_90);
         }
-    };
+    }
     function _92(_93, _94) {
         var _95 = _4c(_93, _94);
         if (_94) {
@@ -631,7 +631,7 @@
         for (var i = 0; i < _95.length; i++) {
             _7c(_93, _95[i].target);
         }
-    };
+    }
     function _96(_97, _98) {
         var _99 = $(_98.parent);
         var _9a = _98.data;
@@ -661,7 +661,7 @@
         }
         _4d(_97, ul[0], _9a, true);
         _43(_97, ul.prev());
-    };
+    }
     function _9c(_9d, _9e) {
         var ref = _9e.before || _9e.after;
         var _9f = _8c(_9d, ref);
@@ -693,7 +693,7 @@
         } else {
             li.insertAfter($(ref).parent());
         }
-    };
+    }
     function _a2(_a3, _a4) {
         var _a5 = del(_a4);
         $(_a4).parent().remove();
@@ -720,8 +720,8 @@
                 }
             }
             return _a8;
-        };
-    };
+        }
+    }
     function _56(_a9, _aa) {
         var _ab = $.data(_a9, "tree").options;
         var _ac = $(_aa.target);
@@ -738,18 +738,18 @@
         if (_ae != _ad.checked) {
             _34(_a9, _aa.target, _ad.checked);
         }
-    };
+    }
     function _af(_b0) {
         var _b1 = _b2(_b0);
         return _b1.length ? _b1[0] : null;
-    };
+    }
     function _b2(_b3) {
         var _b4 = $.data(_b3, "tree").data;
         for (var i = 0; i < _b4.length; i++) {
             _b5(_b4[i]);
         }
         return _b4;
-    };
+    }
     function _4c(_b6, _b7) {
         var _b8 = [];
         var n = _c(_b6, _b7);
@@ -758,11 +758,11 @@
             _b8.push(_b5(_ba));
         });
         return _b8;
-    };
+    }
     function _8c(_bb, _bc) {
         var p = $(_bc).closest("ul").prevAll("div.tree-node:first");
         return _c(_bb, p[0]);
-    };
+    }
     function _bd(_be, _bf) {
         _bf = _bf || "checked";
         if (!$.isArray(_bf)) {
@@ -789,11 +789,11 @@
             _c1.push(_c(_be, _c2[0]));
         });
         return _c1;
-    };
+    }
     function _c3(_c4) {
         var _c5 = $(_c4).find("div.tree-node-selected");
         return _c5.length ? _c(_c4, _c5[0]) : null;
-    };
+    }
     function _c6(_c7, _c8) {
         var _c9 = _c(_c7, _c8);
         if (_c9 && _c9.children) {
@@ -802,13 +802,13 @@
             });
         }
         return _c9;
-    };
+    }
     function _c(_cb, _cc) {
         return _55(_cb, "domId", $(_cc).attr("id"));
-    };
+    }
     function _cd(_ce, id) {
         return _55(_ce, "id", id);
-    };
+    }
     function _55(_cf, _d0, _d1) {
         var _d2 = $.data(_cf, "tree").data;
         var _d3 = null;
@@ -819,13 +819,13 @@
             }
         });
         return _d3;
-    };
+    }
     function _b5(_d5) {
         var d = $("#" + _d5.domId);
         _d5.target = d[0];
         _d5.checked = d.find(".tree-checkbox").hasClass("tree-checkbox1");
         return _d5;
-    };
+    }
     function _5a(_d6, _d7) {
         var _d8 = [];
         for (var i = 0; i < _d6.length; i++) {
@@ -842,7 +842,7 @@
                 }
             }
         }
-    };
+    }
     function _da(_db, _dc) {
         var _dd = $.data(_db, "tree").options;
         var _de = _c(_db, _dc);
@@ -852,10 +852,10 @@
         $(_db).find("div.tree-node-selected").removeClass("tree-node-selected");
         $(_dc).addClass("tree-node-selected");
         _dd.onSelect.call(_db, _de);
-    };
+    }
     function _48(_df, _e0) {
         return $(_e0).children("span.tree-hit").length == 0;
-    };
+    }
     function _e1(_e2, _e3) {
         var _e4 = $.data(_e2, "tree").options;
         var _e5 = _c(_e2, _e3);
@@ -890,7 +890,7 @@
             e.stopPropagation();
             _e8(_e2, _e3);
         });
-    };
+    }
     function _e8(_e9, _ea) {
         var _eb = $.data(_e9, "tree").options;
         $(_ea).css("position", "");
@@ -901,7 +901,7 @@
         _ed.text = val;
         _56(_e9, _ed);
         _eb.onAfterEdit.call(_e9, _ed);
-    };
+    }
     function _ee(_ef, _f0) {
         var _f1 = $.data(_ef, "tree").options;
         $(_f0).css("position", "");
@@ -909,7 +909,7 @@
         var _f2 = _c(_ef, _f0);
         _56(_ef, _f2);
         _f1.onCancelEdit.call(_ef, _f2);
-    };
+    }
     $.fn.tree = function (_f3, _f4) {
         if (typeof _f3 == "string") {
             return $.fn.tree.methods[_f3](this, _f4);
@@ -1085,7 +1085,7 @@
                 }
                 aa.push(item);
             });
-        };
+        }
     };
     var _117 = 1;
     var _118 = {
@@ -1137,7 +1137,7 @@
                     cc.push("</li>");
                 }
                 return cc;
-            };
+            }
         }
     };
     $.fn.tree.defaults = {

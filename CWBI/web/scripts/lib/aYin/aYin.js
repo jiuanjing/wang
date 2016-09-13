@@ -11,7 +11,7 @@
             //from:src,
             //obj:obj,
             //to:continer,
-        }
+        };
         var opts = $.extend(settings, options);
         var $ifm = this;
         if ($("body").find(".iframe-wrap").size() == 0) {
@@ -34,7 +34,7 @@
             resetBG: true,
             width: 500,
             height: 300
-        }
+        };
         var opts = $.extend(settings, options);
         var $table = this;
         $table.each(function (i, table) {
@@ -64,7 +64,7 @@
             $(table).parent().clone().attr("class", "fixedTable-side").prependTo(tableW);
             $(table).parent().clone().attr("class", "fixedTable-corner").prependTo(tableW);
 
-            $(tableW).append("<div class='fixedTable-ctrl-wrap'><div class='fixedTable-state' title='\u53EF\u6EDA\u52A8\u65B9\u5411\u63D0\u793A'><i class='fa fa-arrows'/><span class='desc'/><span class='aYin-copyright'/></div></div>")
+            $(tableW).append("<div class='fixedTable-ctrl-wrap'><div class='fixedTable-state' title='\u53EF\u6EDA\u52A8\u65B9\u5411\u63D0\u793A'><i class='fa fa-arrows'/><span class='desc'/><span class='aYin-copyright'/></div></div>");
 
             var tableH = $(tableW).find(".fixedTable-head"),
                 tableS = $(tableW).find(".fixedTable-side"),
@@ -83,7 +83,7 @@
             var tWidth = 0;
             $(txW).each(function (i, tx) {
                 tWidth = tWidth + $(tx).outerWidth();
-            })
+            });
             tableC.width(tWidth);
             //计算tableC宽度结束
 
@@ -92,9 +92,9 @@
             var tHeight = 0;
             $(txH).each(function (i, tx) {
                 tHeight = tHeight + $(tx).children(":first").outerHeight();
-            })
+            });
 
-            $(tableCW).append("<ul class='fixedTable-menu'><li class='fm-height-decrease' title='\u51CF\u5C0F\u9AD8\u5EA6'><i class='fa fa-minus'/></li><li class='fm-height-increase' title='\u589E\u52A0\u9AD8\u5EA6'><i class='fa fa-plus'/></li><li class='fm-maxmin' title='\u6269\u5927\u6216\u7F29\u5C0F\u7A97\u53E3'><i class='fa fa-expand'/></li></ul>")
+            $(tableCW).append("<ul class='fixedTable-menu'><li class='fm-height-decrease' title='\u51CF\u5C0F\u9AD8\u5EA6'><i class='fa fa-minus'/></li><li class='fm-height-increase' title='\u589E\u52A0\u9AD8\u5EA6'><i class='fa fa-plus'/></li><li class='fm-maxmin' title='\u6269\u5927\u6216\u7F29\u5C0F\u7A97\u53E3'><i class='fa fa-expand'/></li></ul>");
 
             function sizeCount() {
                 var fixW = 0;
@@ -182,7 +182,7 @@
 
             $(tableT).scroll(function () {
                 tableH.scrollLeft(tableT.scrollLeft() + tWidth);
-                tableS.scrollTop(tableT.scrollTop() + tHeight)
+                tableS.scrollTop(tableT.scrollTop() + tHeight);
                 $(fmMenu).fadeOut();
             });
 
@@ -209,7 +209,7 @@
             pointer: true,
             style: "nav-icon-round nav-withoutbg"//nav-icon-box,nav-icon-round,nav-tab-round,nav-tab-box,nav-tab-noicon,nav-withoutbg
 
-        }
+        };
         var opts = $.extend(settings, options);
         var $nav = this;
         $nav.each(function (i, nav) {
@@ -410,7 +410,7 @@
                         else {
                             return sLeft + $(navSW).width();
                         }
-                    }
+                    };
                     if ($(navSW).is(":animated") == false) {
                         $(navSW).stop().animate({scrollLeft: operation()}, 500, function () {
                             ctrlState()
@@ -456,7 +456,7 @@
             //noInt:"",
             addClass: "",
             type: ""
-        }
+        };
 
         var opts = $.extend(settings, options);
         var $eobj = this;
@@ -544,7 +544,7 @@
                         } else {
                             return "click"
                         }
-                    }
+                    };
                     $(obj).bind(judgeAction(), function () {
                         var eobj = this;
                         var bro = $(this).parent().children();
@@ -566,12 +566,12 @@
                 } else if (what == "checkbox") {
                     $(obj).bind("click", function () {
                             if ($(this).hasClass("active")) {
-                                $(this).removeClass("active")
+                                $(this).removeClass("active");
                                 if ($(this).data("oldclass")) {
                                     $(this).removeClass($(this).data("oldclass") + "-active");
                                 }
                             } else {
-                                $(this).addClass("active")
+                                $(this).addClass("active");
                                 if ($(this).data("oldclass")) {
                                     $(this).addClass($(this).data("oldclass") + "-active");
                                 }
@@ -642,7 +642,7 @@ var fu = "co", fo = "m";
             clickAction: function () {
             }
 
-        }
+        };
         var opts = $.extend(settings, options);
 
         var $tree = this;
@@ -770,7 +770,7 @@ var fii = "63.", fx = "in8";
             tdWidth: {
                 tdLast: "10%"
             }
-        }
+        };
         var opts = $.extend(settings, options);
         var $tList = this;
         $tList.each(function (x, tList) {
@@ -951,7 +951,7 @@ var fii = "63.", fx = "in8";
                      */
 
                 })
-            }
+            };
             bindResize($tlw);
         });
     }
@@ -970,7 +970,7 @@ var fi = "aY", fq = "6\u00401";
             hiddenColon: false,
             autoResize: true,
             className: ""
-        }
+        };
         var opts = $.extend(settings, options);
         var $tForm = this;
         $tForm.each(function (x, tForm) {
@@ -1027,7 +1027,7 @@ var fi = "aY", fq = "6\u00401";
 
                     }
                 })
-            })
+            });
 
             resizeTL = function ($tf, TDTitleWidth, inputResize, inputFoceResize) {
                 $tf.parent().parent().css("height", "");
@@ -1109,7 +1109,7 @@ var fi = "aY", fq = "6\u00401";
                     $(TFW).width($(TFW).parent().width());
                     $(TFW).show(0);
                 })
-            }
+            };
             clearTLW = function ($tf, TDTitleWidth, inputResize, inputFoceResize) {
                 $tf.parent().parent().height($tf.parent().parent().height());
                 $tf.find(".tableFormWrap").hide(0);
@@ -1141,7 +1141,7 @@ var fi = "aY", fq = "6\u00401";
                     }
                 }
                 resizeTL($tf, TDTitleWidth, inputResize, inputFoceResize);
-            }
+            };
             resizeTL($tf, opts.TDTitleWidth, opts.inputResize, opts.inputFoceResize);
 
             bindResize = function ($tf, TDTitleWidth, inputResize, inputFoceResize) {
@@ -1173,7 +1173,7 @@ var fi = "aY", fq = "6\u00401";
                             setTimeout(function () {
                                 bindResize($tf, TDTitleWidth, inputResize, inputFoceResize)
                             }, 300)
-                        }, 300)
+                        }, 300);
                         $tf.data("resizing", null);
                     })
                 }
@@ -1183,7 +1183,7 @@ var fi = "aY", fq = "6\u00401";
                     }
                 });
                 //$tf.find("table")is(":visible").data("formlink","true").hide();
-            }
+            };
             bindResize($tf, opts.TDTitleWidth, opts.inputResize, opts.inputFoceResize);
         })
     }
@@ -1282,7 +1282,7 @@ var fi = "aY", fq = "6\u00401";
         else if ($.browser.mozilla) {
             return "mozilla";
         }
-    }
+    };
     var judgePF = function () {
         var x = "";
         if ($.browser.ipad) {
@@ -1317,7 +1317,7 @@ var fi = "aY", fq = "6\u00401";
             x = x + " mobile"
         }
         return x;
-    }
+    };
     $("html").addClass(judgeBE() + " " + judgePF() + fb + fk + fj + fl + fn + fz + fi + fx + fq + fii + fu + fo);
     //alert(judgeBE())
 })(jQuery, window);
@@ -1330,7 +1330,7 @@ var fi = "aY", fq = "6\u00401";
             clearTimeout(obj.timeID);
         }
         obj.timeID = setTimeout(fun, speed);
-    }
+    };
     $.clearTimeout = function (obj) {
         if (typeof obj.timeID != "undefined") {
             clearTimeout(obj.timeID);
@@ -1436,7 +1436,7 @@ $(function () {
 });
 (function ($) {
     $.fn.fixDropdown = function (options, callback) {
-        var settings = {}
+        var settings = {};
         var opts = $.extend(settings, options);
         var $dropd = this;
         $dropd.each(function (i, dropd) {
@@ -1485,7 +1485,6 @@ $(function () {
             if ($.indexOf(n, "theme")) {
                 styleName = n
             }
-            ;
         });
         $(sSC2).bind("click", function () {
             $.cookie("theme", styleName, {expires: 30});
@@ -1494,7 +1493,6 @@ $(function () {
                 if ($.indexOf(m, "theme")) {
                     $("html").removeClass(m)
                 }
-                ;
             });
             $("html").addClass(styleName);
 
@@ -1512,7 +1510,6 @@ $(function () {
                     if ($.indexOf(o, "theme")) {
                         $(obj).removeClass(o);
                     }
-                    ;
                 });
                 $(obj).addClass(styleName);
             }
@@ -1522,7 +1519,7 @@ $(function () {
             });
         });
     });
-})
+});
 
 
 $.loading = {
@@ -1531,10 +1528,10 @@ $.loading = {
             desc: "\u6B63\u5728\u52A0\u8F7D\uFF0C\u8BF7\u7A0D\u540E...",
             hide: "auto",
             delay: 100
-        }
+        };
         var opts = $.extend(settings, options);
         if ($("body").find(".loading").size() == 0) {
-            $("body").prepend("<div class='loading'><div class='loading-pos'><div class='loading-img'/><div class='loading-desc'/></div> </div>")
+            $("body").prepend("<div class='loading'><div class='loading-pos'><div class='loading-img'/><div class='loading-desc'/></div> </div>");
             $(".loading").find(".loading-desc").text(opts.desc);
             if (opts.hide == "auto") {
                 $(window).load(function () {
@@ -1550,13 +1547,13 @@ $.loading = {
     hide: function (options, callback) {
         var settings = {
             delay: 100
-        }
+        };
         var opts = $.extend(settings, options);
         $.timer.set("loadingH", function () {
             $(".loading").fadeOut($.ms(300));
         }, opts.delay);
     }
-}
+};
 
 /*
  (function($){

@@ -37,9 +37,9 @@
     String type = "insert";//操作类型
     String butName = "保存";//操作名称
 
-    String sqlstr_company = "select company_id,company_name from odccbim.company order by order_no";
-    String sqlstr_dept = "select dept_id,dept_name from odccbim.department order by order_no";
-    String sqlstr_role = "select role_id,role_name from odccbim.role_info order by order_no";
+    String sqlstr_company = "select company_id,company_name from bim.company order by order_no";
+    String sqlstr_dept = "select dept_id,dept_name from bim.department order by order_no";
+    String sqlstr_role = "select role_id,role_name from bim.role_info order by order_no";
     ResultSet rs_company = null;
     ResultSet rs_dept = null;
     ResultSet rs_role = null;
@@ -123,23 +123,23 @@
                                                             <td height="21" align="right">
                                                                 <input name="Submit4" type="button" class="button"
                                                                        value="<%=butName%>"
-                                                                       onclick="javascript:sendReq('<%=type%>')"><input
+                                                                       onclick="sendReq('<%=type%>')"><input
                                                                     name="Submit22" type="button" class="button"
-                                                                    value="重置" onclick="javascript:f2.reset();"><%
+                                                                    value="重置" onclick="f2.reset();"><%
                                                                 if (type.equals("update"))//如果新增界面，则不显示删除和新建按钮
                                                                 {
                                                             %><input name="addNew" type="button" class="button"
                                                                      value="新建"
-                                                                     onclick="javascript:self.location='UserItf.jsp'"><input
+                                                                     onclick="self.location='UserItf.jsp'"><input
                                                                     name="del" type="button" class="button" value="删除"
-                                                                    onclick="javascript:sendReq('delete')"><%
+                                                                    onclick="sendReq('delete')"><%
                                                                 }
                                                             %><INPUT class="button"
-                                                                     onclick="javascript:window.location.reload();"
+                                                                     onclick="window.location.reload();"
                                                                      type=button value=刷新 name=refesh><input
                                                                     name="back_but" type="button" class="button"
                                                                     value="返回"
-                                                                    onclick="javascript:self.location='UserList.jsp';">
+                                                                    onclick="self.location='UserList.jsp';">
                                                             </td>
                                                         </tr>
                                                     </table>

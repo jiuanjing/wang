@@ -32,7 +32,7 @@ public class CompanyObj extends entityObj {
 
     public boolean Load(String CompanyID, DBOperation db) {
         Vector<Vector<String>> ve = new Vector<Vector<String>>();
-        ve = db.executeQueryVt("select * from odccbim.company where company_id= " + CompanyID);
+        ve = db.executeQueryVt("select * from bim.company where company_id= " + CompanyID);
         if (ve == null || ve.size() == 0) {
             return false;
         }
@@ -47,7 +47,7 @@ public class CompanyObj extends entityObj {
 
     public String getInStr() {
         String str = "";
-        str = "insert into odccbim.company(company_id,company_code,company_name,brief_name,order_no,company_level) values("
+        str = "insert into bim.company(company_id,company_code,company_name,brief_name,order_no,company_level) values("
                 + this.CompanyID + ",'" + this.CompanyCode
                 + "','" + this.CompanyName
                 + "','" + this.BriefName
@@ -59,7 +59,7 @@ public class CompanyObj extends entityObj {
 
     public String getUpdateStr() {
         String str = "";
-        str = "update odccbim.company set company_id=" + CompanyID + ","
+        str = "update bim.company set company_id=" + CompanyID + ","
                 + "company_code='" + CompanyCode + "',"
                 + "company_name='" + CompanyName + "',"
                 + "brief_name='" + BriefName + "',"
@@ -71,7 +71,7 @@ public class CompanyObj extends entityObj {
 
     public String getDelStr() {
         String str = "";
-        str = "delete from odccbim.company where company_id= " + CompanyID;
+        str = "delete from bim.company where company_id= " + CompanyID;
         return str;
     }
 

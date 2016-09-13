@@ -39,7 +39,7 @@
             });
         }
         _f(_2, _3.disabled);
-    };
+    }
     function _f(_10, _11) {
         var _12 = $.data(_10, "menubutton").options;
         _12.disabled = _11;
@@ -68,7 +68,7 @@
                 }
             });
         }
-    };
+    }
     function _14(_15) {
         var _16 = $.data(_15, "menubutton").options;
         if (_16.disabled || !_16.menu) {
@@ -82,7 +82,7 @@
             mm.menu("show", {alignTo: btn, align: _16.menuAlign});
         }
         btn.blur();
-    };
+    }
     $.fn.menubutton = function (_17, _18) {
         if (typeof _17 == "string") {
             var _19 = $.fn.menubutton.methods[_17];

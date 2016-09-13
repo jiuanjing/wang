@@ -70,8 +70,7 @@ function aotoCompanyName() {
 
             });
         });
-};
-
+}
 function getFactoryList() {
     $.ajax({
         url: "WaterFactoryGetFactory.jsp",

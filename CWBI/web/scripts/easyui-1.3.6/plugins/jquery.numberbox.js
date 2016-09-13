@@ -17,7 +17,7 @@
             $(_2).removeAttr("name").attr("numberboxName", _3);
         }
         return v;
-    };
+    }
     function _4(_5) {
         var _6 = $.data(_5, "numberbox").options;
         var fn = _6.onChange;
@@ -26,7 +26,7 @@
         _7(_5, _6.parser.call(_5, _6.value));
         _6.onChange = fn;
         _6.originalValue = _8(_5);
-    };
+    }
     function _9(_a, _b) {
         var _c = $.data(_a, "numberbox").options;
         if (_b) {
@@ -42,10 +42,10 @@
         t.css("line-height", t.height() + "px");
         t.insertAfter(_d);
         _d.remove();
-    };
+    }
     function _8(_e) {
         return $.data(_e, "numberbox").field.val();
-    };
+    }
     function _7(_f, _10) {
         var _11 = $.data(_f, "numberbox");
         var _12 = _11.options;
@@ -57,7 +57,7 @@
         if (_13 != _10) {
             _12.onChange.call(_f, _10, _13);
         }
-    };
+    }
     function _14(_15) {
         var _16 = $.data(_15, "numberbox").options;
         $(_15).unbind(".numberbox").bind("keypress.numberbox", function (e) {
@@ -71,13 +71,13 @@
                 $(this).val(_16.formatter.call(_15, vv));
             }
         });
-    };
+    }
     function _17(_18) {
         if ($.fn.validatebox) {
             var _19 = $.data(_18, "numberbox").options;
             $(_18).validatebox(_19);
         }
-    };
+    }
     function _1a(_1b, _1c) {
         var _1d = $.data(_1b, "numberbox").options;
         if (_1c) {
@@ -87,7 +87,7 @@
             _1d.disabled = false;
             $(_1b).removeAttr("disabled");
         }
-    };
+    }
     $.fn.numberbox = function (_1e, _1f) {
         if (typeof _1e == "string") {
             var _20 = $.fn.numberbox.methods[_1e];

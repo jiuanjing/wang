@@ -54,4 +54,4 @@ function aotoCompanyName() {
                 $("#CompanyID").val(data002[2]);
             });
         });
-};
+}

@@ -46,7 +46,7 @@
     }
     function showDiv001() {
         $.ajax({
-            url: "BussRiseRankDiv2.jsp",
+            url: "../RankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -128,7 +128,7 @@
                                 yAxis: [
                                     {
                                         type: 'category',
-                                        boundaryGap: false,
+                                        boundaryGap: true,
                                         axisLabel: {
                                             rotate: 45
                                         },
@@ -143,12 +143,12 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '公司平均值', xAxis: getAverage(), yAxis: 100},
-                                                    {value: getAverage(), xAxis: getAverage(), yAxis: 0}
+                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
+                                                    {xAxis: getAverage(), yAxis: 110}
                                                 ],
                                                 [
-                                                    {name: '行业标杆值', xAxis: poleValue, yAxis: 100},
-                                                    {value: poleValue, xAxis: poleValue, yAxis: 0}
+                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},
+                                                    {xAxis: poleValue, yAxis: 100}
                                                 ]
                                             ]
                                         }
@@ -165,7 +165,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'BussRiseRankDiv1.jsp',
+            url: '../RankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,

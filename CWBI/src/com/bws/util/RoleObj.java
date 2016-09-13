@@ -28,7 +28,7 @@ public class RoleObj extends entityObj {
 
     public boolean Load(String RoleID, DBOperation db) {
         Vector<Vector<String>> ve = new Vector<Vector<String>>();
-        ve = db.executeQueryVt("select * from odccbim.role_info where role_id= " + RoleID);
+        ve = db.executeQueryVt("select * from bim.role_info where role_id= " + RoleID);
         if (ve == null || ve.size() == 0) {
             return false;
         }
@@ -41,7 +41,7 @@ public class RoleObj extends entityObj {
 
     public String getInStr() {
         String str = "";
-        str = "insert into odccbim.role_info(role_id,role_name,role_desc,order_no) values("
+        str = "insert into bim.role_info(role_id,role_name,role_desc,order_no) values("
                 + this.RoleID
                 + ",'" + this.RoleName
                 + "','" + this.RoleDesc
@@ -52,7 +52,7 @@ public class RoleObj extends entityObj {
 
     public String getUpdateStr() {
         String str = "";
-        str = "update odccbim.role_info set role_id=" + RoleID + ","
+        str = "update bim.role_info set role_id=" + RoleID + ","
                 + "role_name='" + RoleName + "',"
                 + "role_desc='" + RoleDesc + "',"
                 + "order_no=" + OrderNO
@@ -62,7 +62,7 @@ public class RoleObj extends entityObj {
 
     public String getDelStr() {
         String str = "";
-        str = "delete from odccbim.role_info where role_id=" + RoleID;
+        str = "delete from bim.role_info where role_id=" + RoleID;
         return str;
     }
 

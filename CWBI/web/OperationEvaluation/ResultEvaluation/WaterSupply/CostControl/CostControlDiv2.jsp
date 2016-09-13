@@ -16,22 +16,23 @@
 
         Map<String, Object> gsonmap = new HashMap<String, Object>();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        //34,1402,1403,1404,1405,44,1038,1408,62,1410,31
         String sql = "select t1.brief_name," +
                 "       sum(score) as score," +
-                "       sum(decode(t.kpi_id, 401, t.actual_value, null)) as kpi401," +
-                "       sum(decode(t.kpi_id, 402, t.actual_value, null)) as kpi402," +
-                "       sum(decode(t.kpi_id, 403, t.actual_value, null)) as kpi403," +
-                "       sum(decode(t.kpi_id, 404, t.actual_value, null)) as kpi404," +
-                "       sum(decode(t.kpi_id, 405, t.actual_value, null)) as kpi405," +
-                "       sum(decode(t.kpi_id, 406, t.actual_value, null)) as kpi406," +
-                "       sum(decode(t.kpi_id, 407, t.actual_value, null)) as kpi407," +
-                "       sum(decode(t.kpi_id, 408, t.actual_value, null)) as kpi408," +
-                "       sum(decode(t.kpi_id, 409, t.actual_value, null)) as kpi409," +
-                "       sum(decode(t.kpi_id, 410, t.actual_value, null)) as kpi410," +
-                "       sum(decode(t.kpi_id, 411, t.actual_value, null)) as kpi411" +
+                "       sum(decode(t.kpi_id, 34, t.actual_value, null)) as kpi34," +
+                "       sum(decode(t.kpi_id, 1402, t.actual_value, null)) as kpi1402," +
+                "       sum(decode(t.kpi_id, 1403, t.actual_value, null)) as kpi1403," +
+                "       sum(decode(t.kpi_id, 1404, t.actual_value, null)) as kpi1404," +
+                "       sum(decode(t.kpi_id, 1405, t.actual_value, null)) as kpi1405," +
+                "       sum(decode(t.kpi_id, 44, t.actual_value, null)) as kpi44," +
+                "       sum(decode(t.kpi_id, 1038, t.actual_value, null)) as kpi1038," +
+                "       sum(decode(t.kpi_id, 1408, t.actual_value, null)) as kpi1408," +
+                "       sum(decode(t.kpi_id, 62, t.actual_value, null)) as kpi62," +
+                "       sum(decode(t.kpi_id, 1410, t.actual_value, null)) as kpi1410," +
+                "       sum(decode(t.kpi_id, 31, t.actual_value, null)) as kpi31" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = " + dateID + " and t1.company_id = t.company_id and t1.flag_water = 1" +
-                "   and t.kpi_id in (401, 402, 403, 404, 405, 406,407,408,409,410,411)" +
+                "   and t.kpi_id in (34, 1402, 1403, 1404, 1405, 44,1038,1408,62,1410,31)" +
                 " group by t.company_id,t1.brief_name" +
                 " order by score desc";
 

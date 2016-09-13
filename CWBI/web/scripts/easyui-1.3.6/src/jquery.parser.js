@@ -160,7 +160,7 @@
                 $(this).scrollLeft(left)
             });
         }
-    }
+    };
 
     $.fn._propAttr = $.fn.prop || $.fn.attr;
 

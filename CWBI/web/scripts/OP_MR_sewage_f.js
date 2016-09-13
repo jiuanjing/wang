@@ -69,7 +69,7 @@ function aotoCompanyName() {
                 getFactoryList();
             });
         });
-};
+}
 function getFactoryList() {
     $.ajax({
         url: "SewageFactoryGetFactory.jsp",

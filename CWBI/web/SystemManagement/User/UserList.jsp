@@ -51,7 +51,7 @@
             //positionStr=PositionUtil.getPosition("107",db);//根据功能编号，取当前页面所在位置
             //programName=PositionUtil.getProgramName("107",db);
 
-            String sqlstr = "select a.user_id,a.user_account \"登录账号\",a.user_password \"密码\",a.user_name \"用户名称\",b.company_name \"所属公司\",c.dept_name \"所属部门\",a.position \"职位\",d.role_name \"角色\",a.email,a.phone \"固定电话\",a.mobile \"手机\",a.status \"状态\",a.page_size \"每页行数\",a.micro_msg \"微信号\",a.qq_no \"QQ号\" from odccbim.user_info a,odccbim.company b, odccbim.department c,odccbim.role_info d";
+            String sqlstr = "select a.user_id,a.user_account \"登录账号\",a.user_password \"密码\",a.user_name \"用户名称\",b.company_name \"所属公司\",c.dept_name \"所属部门\",a.position \"职位\",d.role_name \"角色\",a.email,a.phone \"固定电话\",a.mobile \"手机\",a.status \"状态\",a.page_size \"每页行数\",a.micro_msg \"微信号\",a.qq_no \"QQ号\" from bim.user_info a,bim.company b, bim.department c,bim.role_info d";
             sqlstr = sqlstr + " where a.company_id=b.company_id and a.dept_id=c.dept_id and a.role_id=d.role_id";
 
             //取检索条件
@@ -296,17 +296,17 @@
                                                             </td>
                                                             <td height="21" align="right">
                                                                 <input name="search" type="button" class="button"
-                                                                       value="检索" onclick="javascript:switchSysBar()">
+                                                                       value="检索" onclick="switchSysBar()">
                                                                 <input name="addNew" type="button" class="button"
                                                                        value="新建"
-                                                                       onclick="javascript:self.location='UserItf.jsp'">
+                                                                       onclick="self.location='UserItf.jsp'">
                                                                 <input name="delet_row" type="button" class="button"
                                                                        value="删除" onclick="deleteChoosedItems()">
                                                                 <input name="refresh" type="button" class="button"
                                                                        value="刷新"
-                                                                       onclick="javascript:goPage(tab_list.current_page.value)">
+                                                                       onclick="goPage(tab_list.current_page.value)">
                                                                 <input name="back" type="button" class="button"
-                                                                       value="返回" onclick="javascript:history.back();">
+                                                                       value="返回" onclick="history.back();">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -384,10 +384,10 @@
                                             <td width="59%">
                                                 <input type="hidden" value="<%=show_row%>" name="show_row">每页
                                                 <input size=1 value=<%=pageSize%> name=pageSize id=pageSize>条记录
-                                                <input onClick="javascript:tab_list.submit();" type=button value="GO"
+                                                <input onClick="tab_list.submit();" type=button value="GO"
                                                        class="button" name=go>跳页：
                                                 <input size=1 value="<%=current_page%>" name="goToPage">
-                                                <input onClick="javascript:goPage(tab_list.goToPage.value)" type=button
+                                                <input onClick="goPage(tab_list.goToPage.value)" type=button
                                                        value="确定" class="button" name=go2>
                                             </td>
                                             <td width="41%">

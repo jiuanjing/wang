@@ -50,7 +50,7 @@
                 _5.top = _7;
             }
         }
-    };
+    }
     function _8(e) {
         var _9 = $.data(e.data.target, "draggable");
         var _a = _9.options;
@@ -60,7 +60,7 @@
         }
         _b.css({left: e.data.left, top: e.data.top});
         $("body").css("cursor", _a.cursor);
-    };
+    }
     function _c(e) {
         $.fn.draggable.isDragging = true;
         var _d = $.data(e.data.target, "draggable");
@@ -96,7 +96,7 @@
         _8(e);
         _e.onStartDrag.call(e.data.target, e);
         return false;
-    };
+    }
     function _12(e) {
         var _13 = $.data(e.data.target, "draggable");
         _1(e);
@@ -124,7 +124,7 @@
             }
         });
         return false;
-    };
+    }
     function _16(e) {
         $.fn.draggable.isDragging = false;
         _12(e);
@@ -167,7 +167,7 @@
                 _18.remove();
             }
             _17.proxy = null;
-        };
+        }
         function _1a() {
             var _1d = false;
             _17.droppables.each(function () {
@@ -195,9 +195,9 @@
                 _1c();
             }
             return _1d;
-        };
+        }
         return false;
-    };
+    }
     $.fn.draggable = function (_1f, _20) {
         if (typeof _1f == "string") {
             return $.fn.draggable.methods[_1f](this, _20);
@@ -269,7 +269,7 @@
                 var b = _2c.top + _2e - e.pageY;
                 var l = e.pageX - _2c.left;
                 return Math.min(t, r, b, l) > _2a.options.edge;
-            };
+            }
         });
     };
     $.fn.draggable.methods = {

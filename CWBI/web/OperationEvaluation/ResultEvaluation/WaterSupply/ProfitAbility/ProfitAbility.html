@@ -60,7 +60,6 @@
                     title: '公司简称',
                     align: 'left',
                     formatter: function (value, rowData, rowIndex) {
-                        var company = value;
                         return "<a href='javascript:changeDiv() '>" + value + "</a>";
                     }
                 },
@@ -85,7 +84,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 投资回报率'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 投资回报率'>" + value + "</a>";
                     }
                 },
                 {
@@ -97,7 +96,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 工程毛利率'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合毛利率'>" + value + "</a>";
                     }
                 },
                 {
@@ -109,7 +108,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 水处理毛利率'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 工程毛利率'>" + value + "</a>";
                     }
                 },
                 {
@@ -121,7 +120,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合水价'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 水处理毛利率'>" + value + "</a>";
                     }
                 },
                 {
@@ -133,7 +132,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合电价'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合水价'>" + value + "</a>";
                     }
                 },
                 {
@@ -145,20 +144,38 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitSingleIndex.html?company=" + rowData.m2 + "&kpi = 综合毛利率'>" + value + "</a>";
+                        return "<a href='../../SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合电价'>" + value + "</a>";
                     }
                 }
             ]]
         });
     }
     function getRank() {
-        window.location.href = "ProfitRank.html";
+        window.location.href = "Rank.html";
     }
     function getCompany() {
-        var company = $("#company").val();
-        return company;
+        var city ;
+        $.ajax({
+            url: 'ProfitAbilityDiv2.jsp',
+            async : false,
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            dataType: 'json',
+            success: function (d) {
+               city = d.rows[0].m2;
+            }
+        });
+        var city1 = $("#company").val();
+        if (city1.length == 0) {
+            return city;
+        } else {
+            return city1;
+        }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2016 : year1;
         $.ajax({
             url: "ProfitAbilityDiv1.jsp",
             dataType: "json", //传参的数据类型
@@ -171,8 +188,6 @@
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-                console.log(return_data);
-                console.log(return_data.pole);
                 require.config({
                     paths: {
                         echarts: '../../../../scripts'
@@ -198,24 +213,15 @@
                                             }
                                         },
                                         tooltip: {
-                                            trigger: 'axis',
-                                            //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
-//                                            formatter: function (params) {
-//                                                var returnStr = params[0].name + '<br />';
-//                                                for (var i = 0; i < params.length; i++) {
-//                                                    returnStr += params[i].seriesName + ':' + Util.commafy(params[i].data) + '<br />';
-//                                                }
-//                                                return returnStr;
-//                                            }
+                                            trigger: 'axis'
                                         },
                                         legend: {
                                             show: true,
                                             orient: 'vertical',
                                             x: 'right',
                                             y: 'bottom',
-                                            data: ['标杆值', '2016年', '2015年', '2014年']
-                                        }
-                                        ,
+                                            data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
+                                        },
                                         toolbox: {
                                             show: false,
                                             feature: {
@@ -240,13 +246,18 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '投资回报率', max: 100},
-                                                    {text: '综合毛利率', max: 100},
-                                                    {text: '工程毛利率', max: 100},
-                                                    {text: '水处理毛利率', max: 100},
-                                                    {text: '综合水价', max: 100},
-                                                    {text: '综合电价', max: 100}
-                                                ]
+                                                    {text: '投资回报率(%)', max: 100},
+                                                    {text: '综合毛利率(%)', max: 100},
+                                                    {text: '工程毛利率(%)', max: 100},
+                                                    {text: '水处理毛利率(%)', max: 100},
+                                                    {text: '综合水价(元)', max: 100},
+                                                    {text: '综合电价(元)', max: 100}
+                                                ],
+                                                name: {
+                                                    textStyle: {
+                                                        fontSize: 11
+                                                    }
+                                                }
                                             }
                                         ],
                                         calculable: true,
@@ -261,15 +272,15 @@
                                                     },
                                                     {
                                                         value: return_data.data2,
-                                                        name: '2016年'
+                                                        name: year + '年'
                                                     },
                                                     {
                                                         value: return_data.data3,
-                                                        name: '2015年'
+                                                        name: year - 1 + '年'
                                                     },
                                                     {
                                                         value: return_data.data4,
-                                                        name: '2014年'
+                                                        name: year - 2 + '年'
                                                     }
                                                 ]
                                             }
@@ -298,7 +309,7 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value="包头城市制水"></td>
+            <td><input type="hidden" id="company" value=""></td>
         </tr>
     </table>
 </div>

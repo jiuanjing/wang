@@ -55,7 +55,7 @@
                 _8.css({marginLeft: 0, marginRight: _5._outerWidth(), width: _b});
             }
         }
-    };
+    }
     function _c(_d) {
         var _e = $.data(_d, "tabs").options;
         var _f = $(_d).children("div.tabs-header");
@@ -78,7 +78,7 @@
         } else {
             _f.children("div.tabs-tool").remove();
         }
-    };
+    }
     function _12(_13) {
         var _14 = $.data(_13, "tabs");
         var _15 = _14.options;
@@ -135,7 +135,7 @@
                 _17.width("auto");
             }
         }
-    };
+    }
     function _1c(_1d) {
         var _1e = $.data(_1d, "tabs").options;
         var tab = _1f(_1d);
@@ -145,7 +145,7 @@
             var _22 = _1e.height == "auto" ? "auto" : _20.height();
             tab.panel("resize", {width: _21, height: _22});
         }
-    };
+    }
     function _23(_24) {
         var _25 = $.data(_24, "tabs").tabs;
         var cc = $(_24);
@@ -175,7 +175,7 @@
             }
             return false;
         });
-    };
+    }
     function _29(_2a) {
         var _2b = $.data(_2a, "tabs");
         var _2c = _2b.options;
@@ -224,8 +224,8 @@
                 }
             });
             return _30;
-        };
-    };
+        }
+    }
     function _31(_32) {
         var _33 = $.data(_32, "tabs").options;
         var _34 = $(_32).children("div.tabs-header");
@@ -263,7 +263,7 @@
             _34.addClass("tabs-header-noborder");
             _35.addClass("tabs-panels-noborder");
         }
-    };
+    }
     function _36(_37, pp, _38) {
         var _39 = $.data(_37, "tabs");
         _38 = _38 || {};
@@ -285,7 +285,7 @@
         _3a.tab = $("<li></li>").appendTo(_3b);
         _3a.tab.append("<a href=\"javascript:void(0)\" class=\"tabs-inner\">" + "<span class=\"tabs-title\"></span>" + "<span class=\"tabs-icon\"></span>" + "</a>");
         $(_37).tabs("update", {tab: pp, options: _3a});
-    };
+    }
     function _3c(_3d, _3e) {
         var _3f = $.data(_3d, "tabs").options;
         var _40 = $.data(_3d, "tabs").tabs;
@@ -300,7 +300,7 @@
         if (_3e.selected) {
             _41(_3d, _40.length - 1);
         }
-    };
+    }
     function _42(_43, _44) {
         var _45 = $.data(_43, "tabs").selectHis;
         var pp = _44.tab;
@@ -362,7 +362,7 @@
         }
         _12(_43);
         $.data(_43, "tabs").options.onUpdate.call(_43, _47.title, _4b(_43, pp));
-    };
+    }
     function _4c(_4d, _4e) {
         var _4f = $.data(_4d, "tabs").options;
         var _50 = $.data(_4d, "tabs").tabs;
@@ -395,7 +395,7 @@
                 _41(_4d, 0);
             }
         }
-    };
+    }
     function _53(_57, _58, _59) {
         var _5a = $.data(_57, "tabs").tabs;
         if (typeof _58 == "number") {
@@ -419,7 +419,7 @@
             }
         }
         return null;
-    };
+    }
     function _4b(_5b, tab) {
         var _5c = $.data(_5b, "tabs").tabs;
         for (var i = 0; i < _5c.length; i++) {
@@ -428,7 +428,7 @@
             }
         }
         return -1;
-    };
+    }
     function _1f(_5d) {
         var _5e = $.data(_5d, "tabs").tabs;
         for (var i = 0; i < _5e.length; i++) {
@@ -438,7 +438,7 @@
             }
         }
         return null;
-    };
+    }
     function _5f(_60) {
         var _61 = $.data(_60, "tabs");
         var _62 = _61.tabs;
@@ -449,7 +449,7 @@
             }
         }
         _41(_60, _61.options.selected);
-    };
+    }
     function _41(_63, _64) {
         var _65 = $.data(_63, "tabs");
         var _66 = _65.options;
@@ -489,7 +489,7 @@
         }
         _1c(_63);
         _66.onSelect.call(_63, _6c, _4b(_63, _69));
-    };
+    }
     function _6b(_71, _72) {
         var _73 = $.data(_71, "tabs");
         var p = _53(_71, _72);
@@ -503,15 +503,15 @@
                 }
             }
         }
-    };
+    }
     function _52(_75, _76) {
         return _53(_75, _76) != null;
-    };
+    }
     function _77(_78, _79) {
         var _7a = $.data(_78, "tabs").options;
         _7a.showHeader = _79;
         $(_78).tabs("resize");
-    };
+    }
     $.fn.tabs = function (_7b, _7c) {
         if (typeof _7b == "string") {
             return $.fn.tabs.methods[_7b](this, _7c);
@@ -609,7 +609,7 @@
                         w += $(this).outerWidth(true);
                     });
                     return w - _8b.width() + (ul.outerWidth() - ul.width());
-                };
+                }
             });
         }
     };

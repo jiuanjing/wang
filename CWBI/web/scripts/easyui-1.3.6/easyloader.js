@@ -98,7 +98,7 @@
             }
         };
         document.getElementsByTagName("head")[0].appendChild(_8);
-    };
+    }
     function _9(_a, _b) {
         _4(_a, function () {
             document.getElementsByTagName("head")[0].removeChild(this);
@@ -106,7 +106,7 @@
                 _b();
             }
         });
-    };
+    }
     function _c(_d, _e) {
         var _f = document.createElement("link");
         _f.rel = "stylesheet";
@@ -117,7 +117,7 @@
         if (_e) {
             _e.call(_f);
         }
-    };
+    }
     function _10(_11, _12) {
         _3[_11] = "loading";
         var _13 = _1[_11];
@@ -153,8 +153,8 @@
             if (_12) {
                 _12();
             }
-        };
-    };
+        }
+    }
     function _17(_18, _19) {
         var mm = [];
         var _1a = false;
@@ -176,13 +176,13 @@
                 }
             }
             mm.push(_1b);
-        };
+        }
         function _1c() {
             if (_19) {
                 _19();
             }
             easyloader.onLoad(_18);
-        };
+        }
         var _1d = 0;
 
         function _1e() {
@@ -215,9 +215,9 @@
                     _1c();
                 }
             }
-        };
+        }
         _1e();
-    };
+    }
     easyloader = {
         modules: _1,
         locales: _2,

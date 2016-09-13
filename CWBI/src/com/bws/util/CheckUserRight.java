@@ -124,11 +124,7 @@ public class CheckUserRight {
                 if (re.equals("0")) {
                     return false;
 
-                } else if (re.equals("-1")) {
-                    return false;
-                } else {
-                    return true;
-                }
+                } else return !re.equals("-1");
             }
 
         } catch (Exception e) {

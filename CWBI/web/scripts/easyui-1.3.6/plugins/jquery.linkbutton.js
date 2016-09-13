@@ -52,7 +52,7 @@
         });
         _5(_2, _3.selected);
         _6(_2, _3.disabled);
-    };
+    }
     function _5(_7, _8) {
         var _9 = $.data(_7, "linkbutton").options;
         if (_8) {
@@ -73,7 +73,7 @@
                 _9.selected = false;
             }
         }
-    };
+    }
     function _6(_a, _b) {
         var _c = $.data(_a, "linkbutton");
         var _d = _c.options;
@@ -99,7 +99,7 @@
                 _a.onclick = _c.onclick;
             }
         }
-    };
+    }
     $.fn.linkbutton = function (_f, _10) {
         if (typeof _f == "string") {
             return $.fn.linkbutton.methods[_f](this, _10);

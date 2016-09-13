@@ -17,7 +17,7 @@
             }
         }
         return -1;
-    };
+    }
     function _4(a, o, id) {
         if (typeof o == "string") {
             for (var i = 0, _5 = a.length; i < _5; i++) {
@@ -32,7 +32,7 @@
                 a.splice(_6, 1);
             }
         }
-    };
+    }
     function _7(a, o, r) {
         for (var i = 0, _8 = a.length; i < _8; i++) {
             if (a[i][o] == r[o]) {
@@ -40,7 +40,7 @@
             }
         }
         a.push(r);
-    };
+    }
     function _9(_a) {
         var _b = $.data(_a, "datagrid");
         var _c = _b.options;
@@ -109,7 +109,7 @@
                 _e.dirty = [];
             }
         };
-    };
+    }
     function _1c(_1d, _1e) {
         var _1f = $.data(_1d, "datagrid").options;
         var _20 = $.data(_1d, "datagrid").panel;
@@ -127,7 +127,7 @@
             _1f.height = p.height();
         }
         _20.panel("resize", {width: _1f.width, height: _1f.height});
-    };
+    }
     function _21(_22) {
         var _23 = $.data(_22, "datagrid").options;
         var dc = $.data(_22, "datagrid").dc;
@@ -172,7 +172,7 @@
             _28.add(_29).children("div.datagrid-body").css({marginTop: _30, height: (_2f - _30)});
         }
         _27.height(_29.height());
-    };
+    }
     function _31(_32, _33, _34) {
         var _35 = $.data(_32, "datagrid").data.rows;
         var _36 = $.data(_32, "datagrid").options;
@@ -217,7 +217,7 @@
                 tr1.css("height", _3f);
                 tr2.css("height", _3f);
             }
-        };
+        }
         function _3b(cc) {
             var _40 = 0;
             var _41 = 0;
@@ -231,8 +231,8 @@
                 }
             });
             return {width: _40, height: _41};
-        };
-    };
+        }
+    }
     function _42(_43, _44) {
         var _45 = $.data(_43, "datagrid");
         var _46 = _45.options;
@@ -247,8 +247,8 @@
             var _49 = _48 ? 1 : 2;
             var tr = _46.finder.getTr(_43, _44, "body", _49);
             (_48 ? dc.body1 : dc.body2).children("table.datagrid-btable-frozen").append(tr);
-        };
-    };
+        }
+    }
     function _4a(_4b, _4c) {
         function _4d() {
             var _4e = [];
@@ -285,7 +285,7 @@
                 });
             });
             return [_4e, _4f];
-        };
+        }
         var _51 = $("<div class=\"datagrid-wrap\">" + "<div class=\"datagrid-view\">" + "<div class=\"datagrid-view1\">" + "<div class=\"datagrid-header\">" + "<div class=\"datagrid-header-inner\"></div>" + "</div>" + "<div class=\"datagrid-body\">" + "<div class=\"datagrid-body-inner\"></div>" + "</div>" + "<div class=\"datagrid-footer\">" + "<div class=\"datagrid-footer-inner\"></div>" + "</div>" + "</div>" + "<div class=\"datagrid-view2\">" + "<div class=\"datagrid-header\">" + "<div class=\"datagrid-header-inner\"></div>" + "</div>" + "<div class=\"datagrid-body\"></div>" + "<div class=\"datagrid-footer\">" + "<div class=\"datagrid-footer-inner\"></div>" + "</div>" + "</div>" + "</div>" + "</div>").insertAfter(_4b);
         _51.panel({doSize: false});
         _51.panel("panel").addClass("datagrid").bind("_resize", function (e, _52) {
@@ -321,7 +321,7 @@
                 footer2: _57.children("div.datagrid-footer").children("div.datagrid-footer-inner")
             }
         };
-    };
+    }
     function _58(_59) {
         var _5a = $.data(_59, "datagrid");
         var _5b = _5a.options;
@@ -470,7 +470,7 @@
                     td.prependTo($("tr:first", t));
                 }
             }
-        };
+        }
         function _60() {
             var _6e = [];
             var _6f = _70(_59, true).concat(_70(_59));
@@ -483,8 +483,8 @@
             _5a.ss.add(_6e);
             _5a.ss.dirty(_5a.cellSelectorPrefix);
             _5a.cellSelectorPrefix = "." + _5a.cellClassPrefix;
-        };
-    };
+        }
+    }
     function _72(_73) {
         var _74 = $.data(_73, "datagrid");
         var _75 = _74.panel;
@@ -698,11 +698,11 @@
             } else {
                 return tr.attr("node-id");
             }
-        };
+        }
         function _7e(tr) {
             return tr.length && tr.parent().length;
-        };
-    };
+        }
+    }
     function _89(_8a, _8b) {
         var _8c = $.data(_8a, "datagrid");
         var _8d = _8c.options;
@@ -762,7 +762,7 @@
             _96(_8a, $(_8a).datagrid("getData"));
         }
         _8d.onSortColumn.call(_8a, _8d.sortName, _8d.sortOrder);
-    };
+    }
     function _97(_98) {
         var _99 = $.data(_98, "datagrid");
         var _9a = _99.options;
@@ -818,13 +818,13 @@
                 col.width += _a5;
                 col.boxWidth += _a5;
             }
-        };
+        }
         function _9f(col) {
             if (!col.hidden && !col.checkbox && !col.auto && !col.fixed) {
                 return true;
             }
-        };
-    };
+        }
+    }
     function _a6(_a7, _a8) {
         var _a9 = $.data(_a7, "datagrid");
         var _aa = _a9.options;
@@ -883,10 +883,10 @@
                 return _b2;
                 function _b3(_b4) {
                     return _b4.is(":visible") ? _b4._outerWidth() : tmp.html(_b4.html())._outerWidth();
-                };
-            };
-        };
-    };
+                }
+            }
+        }
+    }
     function _54(_b5, _b6) {
         var _b7 = $.data(_b5, "datagrid");
         var _b8 = _b7.options;
@@ -912,8 +912,8 @@
             if (!col.checkbox) {
                 _b7.ss.set("." + col.cellClass, col.boxWidth ? col.boxWidth + "px" : "auto");
             }
-        };
-    };
+        }
+    }
     function _ba(_bc) {
         var dc = $.data(_bc, "datagrid").dc;
         dc.body1.add(dc.body2).find("td.datagrid-td-merged").each(function () {
@@ -926,7 +926,7 @@
             }
             $(this).children("div.datagrid-cell")._outerWidth(_be);
         });
-    };
+    }
     function _bf(_c0) {
         var dc = $.data(_c0, "datagrid").dc;
         dc.view.find("div.datagrid-editable").each(function () {
@@ -939,7 +939,7 @@
                 ed.actions.resize(ed.target, _c1.width());
             }
         });
-    };
+    }
     function _71(_c3, _c4) {
         function _c5(_c6) {
             if (_c6) {
@@ -954,14 +954,14 @@
                 }
             }
             return null;
-        };
+        }
         var _c7 = $.data(_c3, "datagrid").options;
         var col = _c5(_c7.columns);
         if (!col) {
             col = _c5(_c7.frozenColumns);
         }
         return col;
-    };
+    }
     function _70(_c8, _c9) {
         var _ca = $.data(_c8, "datagrid").options;
         var _cb = (_c9 == true) ? (_ca.frozenColumns || [[]]) : _ca.columns;
@@ -982,7 +982,7 @@
                 }
                 i++;
             }
-        };
+        }
         function _cf(r) {
             var ff = [];
             var c = 0;
@@ -1000,12 +1000,12 @@
                 var f = ff[i];
                 _cc[f[0]] = f[1];
             }
-        };
+        }
         for (var i = 0; i < _cb.length; i++) {
             _cf(i);
         }
         return _cc;
-    };
+    }
     function _96(_d0, _d1) {
         var _d2 = $.data(_d0, "datagrid");
         var _d3 = _d2.options;
@@ -1065,7 +1065,7 @@
         dc.body2.triggerHandler("scroll");
         _d9(_d0);
         $(_d0).datagrid("autoSizeColumn");
-    };
+    }
     function _d9(_da) {
         var _db = $.data(_da, "datagrid");
         var _dc = _db.options;
@@ -1097,8 +1097,8 @@
                 }
             }
             return false;
-        };
-    };
+        }
+    }
     function _e3(_e4, row) {
         var _e5 = $.data(_e4, "datagrid");
         var _e6 = _e5.options;
@@ -1113,7 +1113,7 @@
             }
             return -1;
         }
-    };
+    }
     function _e8(_e9) {
         var _ea = $.data(_e9, "datagrid");
         var _eb = _ea.options;
@@ -1127,7 +1127,7 @@
             });
             return _ed;
         }
-    };
+    }
     function _ee(_ef) {
         var _f0 = $.data(_ef, "datagrid");
         var _f1 = _f0.options;
@@ -1140,7 +1140,7 @@
             });
             return _f2;
         }
-    };
+    }
     function _f3(_f4, _f5) {
         var _f6 = $.data(_f4, "datagrid");
         var dc = _f6.dc;
@@ -1162,14 +1162,14 @@
                 }
             }
         }
-    };
+    }
     function _fb(_fc, _fd) {
         var _fe = $.data(_fc, "datagrid");
         var _ff = _fe.options;
         _ff.finder.getTr(_fc, _fe.highlightIndex).removeClass("datagrid-row-over");
         _ff.finder.getTr(_fc, _fd).addClass("datagrid-row-over");
         _fe.highlightIndex = _fd;
-    };
+    }
     function _100(_101, _102, _103) {
         var _104 = $.data(_101, "datagrid");
         var dc = _104.dc;
@@ -1189,7 +1189,7 @@
         opts.finder.getTr(_101, _102).addClass("datagrid-row-selected");
         opts.onSelect.call(_101, _102, row);
         _f3(_101, _102);
-    };
+    }
     function _108(_109, _10a, _10b) {
         var _10c = $.data(_109, "datagrid");
         var dc = _10c.dc;
@@ -1204,7 +1204,7 @@
             _4(_10d, opts.idField, row[opts.idField]);
         }
         opts.onUnselect.call(_109, _10a, row);
-    };
+    }
     function _10f(_110, _111) {
         var _112 = $.data(_110, "datagrid");
         var opts = _112.options;
@@ -1220,7 +1220,7 @@
             }
         }
         opts.onSelectAll.call(_110, rows);
-    };
+    }
     function _106(_116, _117) {
         var _118 = $.data(_116, "datagrid");
         var opts = _118.options;
@@ -1236,7 +1236,7 @@
             }
         }
         opts.onUnselectAll.call(_116, rows);
-    };
+    }
     function _107(_11c, _11d, _11e) {
         var _11f = $.data(_11c, "datagrid");
         var opts = _11f.options;
@@ -1257,7 +1257,7 @@
             _7(_11f.checkedRows, opts.idField, row);
         }
         opts.onCheck.call(_11c, _11d, row);
-    };
+    }
     function _10e(_121, _122, _123) {
         var _124 = $.data(_121, "datagrid");
         var opts = _124.options;
@@ -1275,7 +1275,7 @@
             _4(_124.checkedRows, opts.idField, row[opts.idField]);
         }
         opts.onUncheck.call(_121, _122, row);
-    };
+    }
     function _114(_126, _127) {
         var _128 = $.data(_126, "datagrid");
         var opts = _128.options;
@@ -1293,7 +1293,7 @@
             }
         }
         opts.onCheckAll.call(_126, rows);
-    };
+    }
     function _11a(_129, _12a) {
         var _12b = $.data(_129, "datagrid");
         var opts = _12b.options;
@@ -1311,7 +1311,7 @@
             }
         }
         opts.onUncheckAll.call(_129, rows);
-    };
+    }
     function _12c(_12d, _12e) {
         var opts = $.data(_12d, "datagrid").options;
         var tr = opts.finder.getTr(_12d, _12e);
@@ -1332,7 +1332,7 @@
         });
         _131(_12d, _12e);
         opts.onBeginEdit.call(_12d, _12e, row);
-    };
+    }
     function _132(_133, _134, _135) {
         var opts = $.data(_133, "datagrid").options;
         var _136 = $.data(_133, "datagrid").updatedRows;
@@ -1375,7 +1375,7 @@
         } else {
             opts.onCancelEdit.call(_133, _134, row);
         }
-    };
+    }
     function _13d(_13e, _13f) {
         var opts = $.data(_13e, "datagrid").options;
         var tr = opts.finder.getTr(_13e, _13f);
@@ -1388,7 +1388,7 @@
             }
         });
         return _140;
-    };
+    }
     function _141(_142, _143) {
         var _144 = _13d(_142, _143.index != undefined ? _143.index : _143.id);
         for (var i = 0; i < _144.length; i++) {
@@ -1397,7 +1397,7 @@
             }
         }
         return null;
-    };
+    }
     function _12f(_145, _146) {
         var opts = $.data(_145, "datagrid").options;
         var tr = opts.finder.getTr(_145, _146);
@@ -1434,7 +1434,7 @@
             }
         });
         _31(_145, _146, true);
-    };
+    }
     function _13c(_14d, _14e) {
         var opts = $.data(_14d, "datagrid").options;
         var tr = opts.finder.getTr(_14d, _14e);
@@ -1451,7 +1451,7 @@
                 cell.css("width", "");
             }
         });
-    };
+    }
     function _131(_14f, _150) {
         var tr = $.data(_14f, "datagrid").options.finder.getTr(_14f, _150);
         if (!tr.hasClass("datagrid-row-editing")) {
@@ -1462,7 +1462,7 @@
         vbox.trigger("mouseleave");
         var _151 = tr.find(".validatebox-invalid");
         return _151.length == 0;
-    };
+    }
     function _152(_153, _154) {
         var _155 = $.data(_153, "datagrid").insertedRows;
         var _156 = $.data(_153, "datagrid").deletedRows;
@@ -1487,7 +1487,7 @@
             }
         }
         return [];
-    };
+    }
     function _158(_159, _15a) {
         var _15b = $.data(_159, "datagrid");
         var opts = _15b.options;
@@ -1508,7 +1508,7 @@
             _31(_159);
         }
         $(_159).datagrid("getPager").pagination("refresh", {total: data.total});
-    };
+    }
     function _15e(_15f, _160) {
         var data = $.data(_15f, "datagrid").data;
         var view = $.data(_15f, "datagrid").options.view;
@@ -1516,7 +1516,7 @@
         view.insertRow.call(view, _15f, _160.index, _160.row);
         _161.push(_160.row);
         $(_15f).datagrid("getPager").pagination("refresh", {total: data.total});
-    };
+    }
     function _162(_163, row) {
         var data = $.data(_163, "datagrid").data;
         var view = $.data(_163, "datagrid").options.view;
@@ -1524,7 +1524,7 @@
         view.insertRow.call(view, _163, null, row);
         _164.push(row);
         $(_163).datagrid("getPager").pagination("refresh", {total: data.total});
-    };
+    }
     function _165(_166) {
         var _167 = $.data(_166, "datagrid");
         var data = _167.data;
@@ -1537,7 +1537,7 @@
         _167.updatedRows = [];
         _167.insertedRows = [];
         _167.deletedRows = [];
-    };
+    }
     function _169(_16a) {
         var data = $.data(_16a, "datagrid").data;
         var ok = true;
@@ -1551,7 +1551,7 @@
         if (ok) {
             _165(_16a);
         }
-    };
+    }
     function _16b(_16c) {
         var _16d = $.data(_16c, "datagrid");
         var opts = _16d.options;
@@ -1568,7 +1568,7 @@
                 ids.push(a[i][opts.idField]);
             }
             return ids;
-        };
+        }
         function _174(ids, _175) {
             for (var i = 0; i < ids.length; i++) {
                 var _176 = _e3(_16c, ids[i]);
@@ -1576,7 +1576,7 @@
                     (_175 == "s" ? _100 : _107)(_16c, _176, true);
                 }
             }
-        };
+        }
         for (var i = 0; i < data.rows.length; i++) {
             _132(_16c, i, true);
         }
@@ -1590,7 +1590,7 @@
         _174(_177, "s");
         _174(_178, "c");
         _165(_16c);
-    };
+    }
     function _95(_179, _17a) {
         var opts = $.data(_179, "datagrid").options;
         if (_17a) {
@@ -1628,8 +1628,8 @@
             if (_17d == false) {
                 $(_179).datagrid("loaded");
             }
-        };
-    };
+        }
+    }
     function _17e(_17f, _180) {
         var opts = $.data(_17f, "datagrid").options;
         _180.rowspan = _180.rowspan || 1;
@@ -1666,7 +1666,7 @@
             }
         }
         _ba(_17f);
-    };
+    }
     $.fn.datagrid = function (_182, _183) {
         if (typeof _182 == "string") {
             return $.fn.datagrid.methods[_182](this, _183);
@@ -2332,7 +2332,7 @@
                 if (_228) {
                     tr.find("div.datagrid-cell-check input[type=checkbox]")._propAttr("checked", true);
                 }
-            };
+            }
             _225.call(this, true);
             _225.call(this, false);
             $(_221).datagrid("fixRowHeight", _222);
@@ -2364,7 +2364,7 @@
                         tr.removeClass("datagrid-row-alt").addClass((i + 1) % 2 ? "datagrid-row-alt" : "");
                     }
                 }
-            };
+            }
             function _230(_231) {
                 var _232 = _231 ? 1 : 2;
                 var _233 = $(_229).datagrid("getColumnFields", _231);
@@ -2380,7 +2380,7 @@
                 } else {
                     opts.finder.getTr(_229, _22a + 1, "body", _232).before(tr);
                 }
-            };
+            }
             _22c.call(this, true);
             _22c.call(this, false);
             _230.call(this, true);
@@ -2410,7 +2410,7 @@
                         tr.removeClass("datagrid-row-alt").addClass((i - 1) % 2 ? "datagrid-row-alt" : "");
                     }
                 }
-            };
+            }
             opts.finder.getTr(_235, _236).remove();
             _238.call(this, true);
             _238.call(this, false);

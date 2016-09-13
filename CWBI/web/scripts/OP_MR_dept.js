@@ -53,7 +53,7 @@ function aotoDeptName() {
                 $("#DeptID").val(data002[2]);
             });
         });
-};
+}
 function mergeRow(id, col) {
     var trs = $("#" + id + " > tr");
     var rows = 1;

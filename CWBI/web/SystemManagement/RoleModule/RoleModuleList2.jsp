@@ -275,9 +275,9 @@
                                                                        value="保存">
                                                                 <input name="refresh" type="button" class="button"
                                                                        value="刷新"
-                                                                       onclick="javascript:goPage(tab_list.current_page.value)">
+                                                                       onclick="goPage(tab_list.current_page.value)">
                                                                 <input name="back" type="button" class="button"
-                                                                       value="返回" onclick="javascript:history.back();">
+                                                                       value="返回" onclick="history.back();">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -355,10 +355,10 @@
                                             <td width="59%">
                                                 <input type="hidden" value="<%=show_row%>" name="show_row">每页
                                                 <input size=1 value=<%=pageSize%> name=pageSize id=pageSize>条记录
-                                                <input onClick="javascript:tab_list.submit();" type=button value="GO"
+                                                <input onClick="tab_list.submit();" type=button value="GO"
                                                        class="button" name=go>跳页：
                                                 <input size=1 value="<%=current_page%>" name="goToPage">
-                                                <input onClick="javascript:goPage(tab_list.goToPage.value)" type=button
+                                                <input onClick="goPage(tab_list.goToPage.value)" type=button
                                                        value="确定" class="button" name=go2>
                                             </td>
                                             <td width="41%">

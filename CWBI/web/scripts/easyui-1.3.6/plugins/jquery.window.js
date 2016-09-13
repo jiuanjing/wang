@@ -14,7 +14,7 @@
             $.extend(_4, _3);
         }
         $(_2).panel("resize", _4);
-    };
+    }
     function _5(_6, _7) {
         var _8 = $.data(_6, "window");
         if (_7) {
@@ -29,7 +29,7 @@
         if (_8.shadow) {
             _8.shadow.css({left: _8.options.left, top: _8.options.top});
         }
-    };
+    }
     function _9(_a, _b) {
         var _c = $.data(_a, "window");
         var _d = _c.options;
@@ -46,7 +46,7 @@
         if (_b) {
             _5(_a);
         }
-    };
+    }
     function _10(_11, _12) {
         var _13 = $.data(_11, "window");
         var _14 = _13.options;
@@ -63,7 +63,7 @@
         if (_12) {
             _5(_11);
         }
-    };
+    }
     function _17(_18) {
         var _19 = $.data(_18, "window");
         var _1a = _19.options.closed;
@@ -177,7 +177,7 @@
         if (!_1a) {
             win.window("open");
         }
-    };
+    }
     function _1f(_20) {
         var _21 = $.data(_20, "window");
         _21.window.draggable({
@@ -250,7 +250,7 @@
                 _21.proxy = null;
             }
         });
-    };
+    }
     function _1e() {
         if (document.compatMode == "BackCompat") {
             return {
@@ -263,7 +263,7 @@
                 height: Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight)
             };
         }
-    };
+    }
     $(window).resize(function () {
         $("body>div.window-mask").css({width: $(window)._outerWidth(), height: $(window)._outerHeight()});
         setTimeout(function () {

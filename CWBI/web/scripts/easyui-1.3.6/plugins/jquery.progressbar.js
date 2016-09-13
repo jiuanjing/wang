@@ -12,7 +12,7 @@
         $(_2).addClass("progressbar");
         $(_2).html("<div class=\"progressbar-text\"></div><div class=\"progressbar-value\"><div class=\"progressbar-text\"></div></div>");
         return $(_2);
-    };
+    }
     function _3(_4, _5) {
         var _6 = $.data(_4, "progressbar").options;
         var _7 = $.data(_4, "progressbar").bar;
@@ -25,7 +25,7 @@
             height: _7.height() + "px",
             lineHeight: _7.height() + "px"
         });
-    };
+    }
     $.fn.progressbar = function (_8, _9) {
         if (typeof _8 == "string") {
             var _a = $.fn.progressbar.methods[_8];

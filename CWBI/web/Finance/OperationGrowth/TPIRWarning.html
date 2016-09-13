@@ -46,7 +46,7 @@
             },
             success: function (return_data) { //若Ajax处理成功后返回的信息
                 //$('#value1').val(return_data);      //调试用
-                var arrayData = ""
+                var arrayData = "";
                 if (return_data == "" || return_data == null) {
                 } else {
                     arrayData = eval(return_data);
@@ -195,9 +195,9 @@
                 var array = eval(return_data);
                 //下面用返回值来填充所属管理部门下拉框
                 var html = "";
-                html += "<option value='' selected>全部</option>"
+                html += "<option value='' selected>全部</option>";
                 for (var i = 0; i < array.length; i++) {
-                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>"
+                    var option = "<option value=" + array[i].value1 + ">" + array[i].value2 + "</option>";
                     html += option;
                 }
                 $('#DeptId').append(html);

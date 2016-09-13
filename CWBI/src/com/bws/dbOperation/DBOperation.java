@@ -88,11 +88,7 @@ public class DBOperation {
         if (conn == null) {
             conn = getConn();
         }
-        if (conn != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return conn != null;
     }
 
     //关闭对数据库的访问
@@ -230,12 +226,12 @@ public class DBOperation {
         } catch (SQLException e) {
             Ex = e;
         } catch (Exception ec) {
-            return (Vector<Vector<String>>) null;
+            return null;
         }
         //如果出错写错误日志，主要用于获取程序调试时和数据分析时的SQL语句执行出错的信息。
         if (Ex != null) {
             errLog.writeLog("Program:  " + fileName + "\r\n                       SQL:  " + sqlQuery + "\r\n                       SQL Error Code:  " + String.valueOf(Ex.getErrorCode()) + "\r\n" + "                       SQL Exception:   " + Ex.toString() + "\r\n");
-            return (Vector<Vector<String>>) null;
+            return null;
         }
         return vRS;
     }
@@ -254,7 +250,7 @@ public class DBOperation {
                 int begin_row = (currPage - 1) * rowCount;
                 int end_row = currPage * rowCount;
                 for (int i = begin_row; i < ve.size(); i++) {
-                    Vector<String> v = (Vector<String>) ve.elementAt(i);
+                    Vector<String> v = ve.elementAt(i);
                     re_ve.addElement(v);
                     if (i > end_row) {
                         break;

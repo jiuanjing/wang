@@ -119,8 +119,24 @@
         window.location.href = "CashGetRank.html";
     }
     function getCompany() {
-        var company = $("#company").val();
-        return company;
+        var city ;
+        $.ajax({
+            url: 'CashGetDiv2.jsp',
+            async : false,
+            data: {
+                date: $('#date').datebox('getValue')
+            },
+            dataType: 'json',
+            success: function (d) {
+                city = d.rows[0].m2;
+            }
+        });
+        var city1 = $("#company").val();
+        if (city1.length == 0) {
+            return city;
+        } else {
+            return city1;
+        }
     }
     function showDiv001() {
         $.ajax({
@@ -150,18 +166,18 @@
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
                             var option = {
-                                        title: {
-                                            text: getCompany() + "现金获取整体分析",
-                                            x: 'center',
-                                            textStyle: {
-                                                fontSize: 15,
-                                                fontWeight: 'bolder',
-                                                color: '#666666'
-                                            }
-                                        },
-                                        tooltip: {
-                                            trigger: 'axis',
-                                            //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
+                                title: {
+                                    text: getCompany() + "现金获取整体分析",
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
 //                                            formatter: function (params) {
 //                                                var returnStr = params[0].name + '<br />';
 //                                                for (var i = 0; i < params.length; i++) {
@@ -169,72 +185,76 @@
 //                                                }
 //                                                return returnStr;
 //                                            }
-                                        },
-                                        legend: {
-                                            show: true,
-                                            orient: 'vertical',
-                                            x: 'right',
-                                            y: 'bottom',
-                                            data: ['标杆值', '2016年', '2015年', '2014年']
+                                },
+                                legend: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    x: 'right',
+                                    y: 'bottom',
+                                    data: ['标杆值', '2016年', '2015年', '2014年']
+                                }
+                                ,
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {
+                                            show: true
                                         }
                                         ,
-                                        toolbox: {
-                                            show: false,
-                                            feature: {
-                                                mark: {
-                                                    show: true
-                                                }
-                                                ,
-                                                dataView: {
-                                                    show: true, readOnly: false
-                                                }
-                                                ,
-                                                restore: {
-                                                    show: true
-                                                }
-                                                ,
-                                                saveAsImage: {
-                                                    show: true
-                                                }
-                                            }
+                                        dataView: {
+                                            show: true, readOnly: false
                                         }
                                         ,
-                                        polar: [
-                                            {
-                                                indicator: [
-                                                    {text: '经营性现金流量净额(元)', max: 100},
-                                                    {text: '当年水费回收率(%)', max: 100},
-                                                    {text: '应收账款余额增减率(%)', max: 100}
-                                                ]
-                                            }
+                                        restore: {
+                                            show: true
+                                        }
+                                        ,
+                                        saveAsImage: {
+                                            show: true
+                                        }
+                                    }
+                                }
+                                ,
+                                polar: [
+                                    {
+                                        indicator: [
+                                            {text: '经营性现金流量净额(元)', max: 100},
+                                            {text: '当年水费回收率(%)', max: 100},
+                                            {text: '应收账款余额增减率(%)', max: 100}
                                         ],
-                                        calculable: true,
-                                        series: [
+                                        name: {
+                                            textStyle: {
+                                                fontSize: 11
+                                            }
+                                        }
+                                    }
+                                ],
+                                calculable: true,
+                                series: [
+                                    {
+                                        name: '标杆值 vs 近三年',
+                                        type: 'radar',
+                                        data: [
                                             {
-                                                name: '标杆值 vs 近三年',
-                                                type: 'radar',
-                                                data: [
-                                                    {
-                                                        value: return_data.data1,
-                                                        name: '标杆值'
-                                                    },
-                                                    {
-                                                        value: return_data.data2,
-                                                        name: '2016年'
-                                                    },
-                                                    {
-                                                        value: return_data.data3,
-                                                        name: '2015年'
-                                                    },
-                                                    {
-                                                        value: return_data.data4,
-                                                        name: '2014年'
-                                                    }
-                                                ]
+                                                value: return_data.data1,
+                                                name: '标杆值'
+                                            },
+                                            {
+                                                value: return_data.data2,
+                                                name: '2016年'
+                                            },
+                                            {
+                                                value: return_data.data3,
+                                                name: '2015年'
+                                            },
+                                            {
+                                                value: return_data.data4,
+                                                name: '2014年'
                                             }
                                         ]
                                     }
-                                    ;
+                                ]
+                            };
                             myChart.setOption(option);
                             window.onresize = myChart.resize;
                         }
@@ -257,14 +277,14 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value="包头城市制水"></td>
+            <td><input type="hidden" id="company" value=""></td>
         </tr>
     </table>
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 
-<div id="main1" style="height:510px;width: 43%;float: left;"></div>
-<div id="main2" style="height:510px;width: 57%;float: right;">
+<div id="main1" style="height:510px;width: 53%;float: left;"></div>
+<div id="main2" style="height:510px;width: 47%;float: right;">
     <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>

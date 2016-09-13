@@ -38,7 +38,7 @@
                 });
             }
             return _7;
-        };
+        }
         function _5(_9) {
             var wh = $.parser.parseOptions(_9[0], ["width", "height"]);
             _9[0].originalHeight = wh.height || 0;
@@ -74,8 +74,8 @@
             _f(_2, _9);
             _9.hide();
             _10(_2, _9);
-        };
-    };
+        }
+    }
     function _f(_11, _12) {
         var _13 = $.data(_11, "menu").options;
         var _14 = _12.attr("style") || "";
@@ -99,7 +99,7 @@
         _12.children("div.menu-line")._outerHeight(_17);
         _14 += ";width:" + el.style.width + ";height:" + el.style.height;
         _12.attr("style", _14);
-    };
+    }
     function _10(_18, _19) {
         var _1a = $.data(_18, "menu");
         _19.unbind(".menu").bind("mouseenter.menu", function () {
@@ -114,7 +114,7 @@
                 }, 100);
             }
         });
-    };
+    }
     function _e(_1c, _1d) {
         if (!_1d.hasClass("menu-item")) {
             return;
@@ -162,7 +162,7 @@
                 _1d.removeClass("menu-active");
             }
         });
-    };
+    }
     function _1b(_23) {
         var _24 = $.data(_23, "menu");
         if (_24) {
@@ -172,7 +172,7 @@
             }
         }
         return false;
-    };
+    }
     function _25(_26, _27) {
         var _28, top;
         _27 = _27 || {};
@@ -228,7 +228,7 @@
                 $.data(_29[0], "menu").options.onShow.call(_29[0]);
             }
         });
-    };
+    }
     function _22(_2c) {
         if (!_2c) {
             return;
@@ -246,8 +246,8 @@
                 m[0].shadow.hide();
             }
             m.hide();
-        };
-    };
+        }
+    }
     function _2e(_2f, _30) {
         var _31 = null;
         var tmp = $("<div></div>");
@@ -264,11 +264,11 @@
                     }
                 }
             });
-        };
+        }
         _32($(_2f));
         tmp.remove();
         return _31;
-    };
+    }
     function _d(_35, _36, _37) {
         var t = $(_36);
         if (!t.hasClass("menu-item")) {
@@ -287,7 +287,7 @@
                 _36.onclick1 = null;
             }
         }
-    };
+    }
     function _38(_39, _3a) {
         var _3b = $(_39);
         if (_3a.parent) {
@@ -333,7 +333,7 @@
         _e(_39, _3d);
         _10(_39, _3b);
         _f(_39, _3b);
-    };
+    }
     function _3e(_3f, _40) {
         function _41(el) {
             if (el.submenu) {
@@ -347,9 +347,9 @@
                 el.submenu.remove();
             }
             $(el).remove();
-        };
+        }
         _41(_40);
-    };
+    }
     function _43(_44) {
         $(_44).children("div.menu-item").each(function () {
             _3e(_44, this);
@@ -358,7 +358,7 @@
             _44.shadow.remove();
         }
         $(_44).remove();
-    };
+    }
     $.fn.menu = function (_45, _46) {
         if (typeof _45 == "string") {
             return $.fn.menu.methods[_45](this, _46);

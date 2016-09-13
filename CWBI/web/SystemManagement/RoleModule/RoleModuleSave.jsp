@@ -39,7 +39,7 @@
 
     if (db.dbOpen()) {
         try {
-            v1 = db.executeQueryVt("select nvl(max(role_module_id),0) from odccbim.role_module");
+            v1 = db.executeQueryVt("select nvl(max(role_module_id),0) from bim.role_module");
             str_maxID = v1.elementAt(0).elementAt(0).toString();
             maxID = Integer.parseInt(str_maxID);
             str_test = str_test + "maxID=" + maxID;
@@ -55,24 +55,24 @@
                     String sql_update = "";
                     //str_test = str_test + "str_have_right[" + i + "]:" + str_have_right[i] + "    ";
                     if (!ModuleID.equals("")) {
-                        sql_select = "select count(*) from odccbim.role_module where role_id=" + RoleID + " and module_id=" + ModuleID;
+                        sql_select = "select count(*) from bim.role_module where role_id=" + RoleID + " and module_id=" + ModuleID;
                         v2 = db.executeQueryVt(sql_select);
                         str_row_count = v2.elementAt(0).elementAt(0).toString();
                         str_test = str_test + "  str_have_right[" + i + "]:ModuleID=" + ModuleID + "记录条数： " + str_row_count;
                         v2 = null;
                         if (str_row_count.equals("0")) {
                             maxID = maxID + 1;
-                            sql_insert = "insert into odccbim.role_module(role_module_id,role_id,module_id,right_type) values(" + maxID + "," + RoleID + "," + ModuleID + ",1)";
+                            sql_insert = "insert into bim.role_module(role_module_id,role_id,module_id,right_type) values(" + maxID + "," + RoleID + "," + ModuleID + ",1)";
                             db.executeUpdate(sql_insert);
                         } else {
-                            sql_update = "update odccbim.role_module set right_type=1 where role_id=" + RoleID + " and module_id=" + ModuleID;
+                            sql_update = "update bim.role_module set right_type=1 where role_id=" + RoleID + " and module_id=" + ModuleID;
                             db.executeUpdate(sql_update);
                         }
                     }
                 }
             }
 
-            String sql_update_no_right = "delete odccbim.role_module where role_id=" + RoleID + " and module_id in(" + unselectedIds + ")";
+            String sql_update_no_right = "delete bim.role_module where role_id=" + RoleID + " and module_id in(" + unselectedIds + ")";
             db.executeUpdate(sql_update_no_right);
 
             db.executeCommit();
@@ -80,7 +80,7 @@
 %>
 <script>
     alert("您好，授权信息修改成功！");
-    self.location = "RoleModuleList.jsp?RoleID=" +
+    self.location = "RoleModuleList.jsp?RoleID=" +;
     <%=RoleID %>
 </script>
 <%

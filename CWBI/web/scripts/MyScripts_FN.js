@@ -102,7 +102,7 @@ function aotoCompanyName() {
                 $("#CompanyID").val(data002[2]);
             });
         });
-};
+}
 var click = 1;
 function lookup() {
     if (click == 1) {

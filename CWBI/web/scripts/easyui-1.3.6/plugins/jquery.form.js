@@ -58,7 +58,7 @@
             catch (e) {
                 cb();
             }
-        };
+        }
         var _a = 10;
 
         function cb() {
@@ -96,8 +96,8 @@
                 _b.unbind();
                 _b.remove();
             }, 100);
-        };
-    };
+        }
+    }
     function _f(_10, _11) {
         if (!$.data(_10, "form")) {
             $.data(_10, "form", {options: $.extend({}, $.fn.form.defaults)});
@@ -135,7 +135,7 @@
             }
             _12.onLoadSuccess.call(_10, _16);
             _29(_10);
-        };
+        }
         function _19(_1d, val) {
             var rr = $(_10).find("input[name=\"" + _1d + "\"][type=radio], input[name=\"" + _1d + "\"][type=checkbox]");
             rr._propAttr("checked", false);
@@ -146,7 +146,7 @@
                 }
             });
             return rr;
-        };
+        }
         function _1b(_1e, val) {
             var _1f = 0;
             var pp = ["numberbox", "slider"];
@@ -159,7 +159,7 @@
                 }
             }
             return _1f;
-        };
+        }
         function _1c(_20, val) {
             var _21 = $(_10);
             var cc = ["combobox", "combotree", "combogrid", "datetimebox", "datebox", "combo"];
@@ -177,8 +177,8 @@
                     }
                 }
             }
-        };
-    };
+        }
+    }
     function _23(_24) {
         $("input,select,textarea", _24).each(function () {
             var t = this.type, tag = this.tagName.toLowerCase();
@@ -216,7 +216,7 @@
             }
         }
         _29(_24);
-    };
+    }
     function _2a(_2b) {
         _2b.reset();
         var t = $(_2b);
@@ -229,7 +229,7 @@
             }
         }
         _29(_2b);
-    };
+    }
     function _2e(_2f) {
         var _30 = $.data(_2f, "form").options;
         var _31 = $(_2f);
@@ -239,7 +239,7 @@
             }, 0);
             return false;
         });
-    };
+    }
     function _29(_32) {
         if ($.fn.validatebox) {
             var t = $(_32);
@@ -249,10 +249,10 @@
             return _33.length == 0;
         }
         return true;
-    };
+    }
     function _34(_35, _36) {
         $(_35).find(".validatebox-text:not(:disabled)").validatebox(_36 ? "disableValidation" : "enableValidation");
-    };
+    }
     $.fn.form = function (_37, _38) {
         if (typeof _37 == "string") {
             return $.fn.form.methods[_37](this, _38);

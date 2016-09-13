@@ -19,7 +19,7 @@
             //查询用户所在大区
             //用户dept_id对应DEPARTMENT表，在查出dept_id_op则是对应数据dim_op_dept表id，根据此ID过滤大区数据
             int dept_id = userInfo.getDeptID();
-            String sql4dept = "select a.dept_id_op from odccbim.department a where a.dept_id = " + dept_id;
+            String sql4dept = "select a.dept_id_op from bim.department a where a.dept_id = " + dept_id;
             ResultSet rs = null;
             rs = db.executeQuery(sql4dept);
             if (rs == null) {

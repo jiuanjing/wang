@@ -44,7 +44,7 @@
                 }, _4);
             }
         });
-    };
+    }
     function _7(el, _8, _9) {
         if (el.locked == true) {
             return;
@@ -71,7 +71,7 @@
         setTimeout(function () {
             $(el).window("destroy");
         }, _9);
-    };
+    }
     function _b(_c) {
         var _d = $.extend({}, $.fn.window.defaults, {
             collapsible: false,
@@ -103,7 +103,7 @@
         _e.window("window").css(_d.style);
         _e.window("open");
         return _e;
-    };
+    }
     function _f(_10, _11, _12) {
         var win = $("<div class=\"messager-body\"></div>").appendTo("body");
         win.append(_11);
@@ -132,7 +132,7 @@
         win.window("window").addClass("messager-window");
         win.children("div.messager-button").children("a:first").focus();
         return win;
-    };
+    }
     $.messager = {
         show: function (_14) {
             return _b(_14);

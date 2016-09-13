@@ -34,7 +34,7 @@
     //获取URL参数
     function GetRequest() {
         var url = location.search; //获取url中"?"符后的字串
-        var theRequest = new Object();
+        var theRequest = {};
         if (url.indexOf("?") != -1) {
             var str = url.substr(1);
             strs = str.split("&");
@@ -45,7 +45,7 @@
         return theRequest;
     }
     function getDataGrid() {
-        var Request = new Object();
+        var Request = {};
         Request = GetRequest();
         var DeptID = Request['DeptID'];
         var date = $('#date').datebox('getValue');
@@ -226,7 +226,7 @@
         });
     }
     function getDataSum() {
-        var Request = new Object();
+        var Request = {};
         Request = GetRequest();
         var DeptID = Request['DeptID'];
         var date = $('#date').datebox('getValue');

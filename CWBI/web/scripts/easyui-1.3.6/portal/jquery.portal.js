@@ -29,7 +29,7 @@
             totalWidth += column.outerWidth();
             columnWidths.push(column.outerWidth());
 
-            var td = $('<td class="portal-column-td"></td>').appendTo(tr)
+            var td = $('<td class="portal-column-td"></td>').appendTo(tr);
             column.addClass('portal-column').appendTo(td);
             column.find('>div').each(function () {	// each portal panel
                 var p = $(this).addClass('portal-p').panel({

@@ -47,7 +47,7 @@
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: 'getCompany.jsp?company=' + getCompany(),
+            url: '../../getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {
@@ -59,7 +59,7 @@
     function confirmIt() {
         var val = $('#company').combobox('getValue');
         $.ajax({
-            url: 'ProfitSingleIndexDiv.jsp',
+            url: 'GeneralSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
@@ -169,7 +169,7 @@
     }
     function showDiv() {
         $.ajax({
-            url: 'ProfitSingleIndexDiv.jsp',
+            url: 'GeneralSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {

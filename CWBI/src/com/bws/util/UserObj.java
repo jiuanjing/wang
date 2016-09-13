@@ -51,7 +51,7 @@ public class UserObj extends entityObj {
 
     public boolean Load(String UserID, DBOperation db) {
         Vector<Vector<String>> ve = new Vector<Vector<String>>();
-        ve = db.executeQueryVt("select * from odccbim.user_info where user_id= " + UserID);
+        ve = db.executeQueryVt("select * from bim.user_info where user_id= " + UserID);
         if (ve == null || ve.size() == 0) {
             return false;
         }
@@ -75,7 +75,7 @@ public class UserObj extends entityObj {
 
     public String getInStr() {
         String str = "";
-        str = "insert into odccbim.user_info(user_id,user_account,user_password,user_name,company_ID,dept_ID,position,role_ID,email,phone,mobile,status,page_size,micro_MSG,QQ_NO) values("
+        str = "insert into bim.user_info(user_id,user_account,user_password,user_name,company_ID,dept_ID,position,role_ID,email,phone,mobile,status,page_size,micro_MSG,QQ_NO) values("
                 + this.UserID + ",'" + this.UserAccount
                 + "','" + this.UserPassword
                 + "','" + this.UserName
@@ -96,7 +96,7 @@ public class UserObj extends entityObj {
 
     public String getUpdateStr() {
         String str = "";
-        str = "update odccbim.user_info set user_id=" + UserID + ","
+        str = "update bim.user_info set user_id=" + UserID + ","
                 + "user_account='" + UserAccount + "',"
                 + "user_password='" + UserPassword + "',"
                 + "user_name='" + UserName + "',"
@@ -117,7 +117,7 @@ public class UserObj extends entityObj {
 
     public String getDelStr() {
         String str = "";
-        str = "delete from odccbim.user_info where user_id= " + UserID;
+        str = "delete from bim.user_info where user_id= " + UserID;
         return str;
     }
 

@@ -40,7 +40,7 @@ public class ModuleObj extends entityObj {
 
     public boolean Load(String ModuleID, DBOperation db) {
         Vector<Vector<String>> ve = new Vector<Vector<String>>();
-        ve = db.executeQueryVt("select * from odccbim.module where module_id= " + ModuleID);
+        ve = db.executeQueryVt("select * from bim.module where module_id= " + ModuleID);
         if (ve == null || ve.size() == 0) {
             return false;
         }
@@ -59,7 +59,7 @@ public class ModuleObj extends entityObj {
 
     public String getInStr() {
         String str = "";
-        str = "insert into odccbim.module(module_id,module_code,module_name,URL,module_level,order_NO,status,help_URL,add_value_URL,access_method) values("
+        str = "insert into bim.module(module_id,module_code,module_name,URL,module_level,order_NO,status,help_URL,add_value_URL,access_method) values("
                 + this.ModuleID + ",'" + this.ModuleCode
                 + "','" + this.ModuleName
                 + "','" + this.URL
@@ -75,7 +75,7 @@ public class ModuleObj extends entityObj {
 
     public String getUpdateStr() {
         String str = "";
-        str = "update odccbim.module set " + "module_id=" + ModuleID + ","
+        str = "update bim.module set " + "module_id=" + ModuleID + ","
                 + "module_code='" + ModuleCode + "',"
                 + "module_name='" + ModuleName + "',"
                 + "URL='" + URL + "',"
@@ -91,7 +91,7 @@ public class ModuleObj extends entityObj {
 
     public String getDelStr() {
         String str = "";
-        str = "delete from odccbim.module where module_id= " + ModuleID;
+        str = "delete from bim.module where module_id= " + ModuleID;
         return str;
     }
 

@@ -20,7 +20,7 @@
     };
     function _1(_2) {
         _2._remove();
-    };
+    }
     function _3(_4, _5) {
         var _6 = $.data(_4, "panel").options;
         var _7 = $.data(_4, "panel").panel;
@@ -46,7 +46,7 @@
         _7.css("height", "");
         _6.onResize.apply(_4, [_6.width, _6.height]);
         $(_4).find(">div:visible,>form>div:visible").triggerHandler("_resize");
-    };
+    }
     function _a(_b, _c) {
         var _d = $.data(_b, "panel").options;
         var _e = $.data(_b, "panel").panel;
@@ -60,7 +60,7 @@
         }
         _e.css({left: _d.left, top: _d.top});
         _d.onMove.apply(_b, [_d.left, _d.top]);
-    };
+    }
     function _f(_10) {
         $(_10).addClass("panel-body");
         var _11 = $("<div class=\"panel\"></div>").insertBefore(_10);
@@ -73,7 +73,7 @@
             return false;
         });
         return _11;
-    };
+    }
     function _13(_14) {
         var _15 = $.data(_14, "panel").options;
         var _16 = $.data(_14, "panel").panel;
@@ -141,7 +141,7 @@
         } else {
             _16.children("div.panel-body").addClass("panel-body-noheader");
         }
-    };
+    }
     function _1a(_1b, _1c) {
         var _1d = $.data(_1b, "panel");
         var _1e = _1d.options;
@@ -179,8 +179,8 @@
         function _22(_23) {
             $(_1b).html(_23);
             $.parser.parse($(_1b));
-        };
-    };
+        }
+    }
     function _20(_24) {
         var t = $(_24);
         t.find(".combo-f").each(function () {
@@ -198,12 +198,12 @@
         t.children("div").each(function () {
             $(this)._fit(false);
         });
-    };
+    }
     function _25(_26) {
         $(_26).find("div.panel:visible,div.accordion:visible,div.tabs-container:visible,div.layout:visible").each(function () {
             $(this).triggerHandler("_resize", [true]);
         });
-    };
+    }
     function _27(_28, _29) {
         var _2a = $.data(_28, "panel").options;
         var _2b = $.data(_28, "panel").panel;
@@ -232,7 +232,7 @@
             _1a(_28);
             _25(_28);
         }
-    };
+    }
     function _19(_2f, _30) {
         var _31 = $.data(_2f, "panel").options;
         var _32 = $.data(_2f, "panel").panel;
@@ -245,7 +245,7 @@
         _32.hide();
         _31.closed = true;
         _31.onClose.call(_2f);
-    };
+    }
     function _33(_34, _35) {
         var _36 = $.data(_34, "panel").options;
         var _37 = $.data(_34, "panel").panel;
@@ -257,7 +257,7 @@
         _20(_34);
         _1(_37);
         _36.onDestroy.call(_34);
-    };
+    }
     function _2e(_38, _39) {
         var _3a = $.data(_38, "panel").options;
         var _3b = $.data(_38, "panel").panel;
@@ -281,7 +281,7 @@
             _3a.collapsed = true;
             _3a.onCollapse.call(_38);
         }
-    };
+    }
     function _3e(_3f, _40) {
         var _41 = $.data(_3f, "panel").options;
         var _42 = $.data(_3f, "panel").panel;
@@ -309,7 +309,7 @@
             _1a(_3f);
             _25(_3f);
         }
-    };
+    }
     function _2d(_45) {
         var _46 = $.data(_45, "panel").options;
         var _47 = $.data(_45, "panel").panel;
@@ -334,7 +334,7 @@
         _46.minimized = false;
         _46.maximized = true;
         _46.onMaximize.call(_45);
-    };
+    }
     function _49(_4a) {
         var _4b = $.data(_4a, "panel").options;
         var _4c = $.data(_4a, "panel").panel;
@@ -343,7 +343,7 @@
         _4b.minimized = true;
         _4b.maximized = false;
         _4b.onMinimize.call(_4a);
-    };
+    }
     function _4d(_4e) {
         var _4f = $.data(_4e, "panel").options;
         var _50 = $.data(_4e, "panel").panel;
@@ -359,7 +359,7 @@
         _4f.maximized = false;
         $.data(_4e, "panel").original = null;
         _4f.onRestore.call(_4e);
-    };
+    }
     function _52(_53) {
         var _54 = $.data(_53, "panel").options;
         var _55 = $.data(_53, "panel").panel;
@@ -381,11 +381,11 @@
         } else {
             $(_53).attr("id", "");
         }
-    };
+    }
     function _58(_59, _5a) {
         $.data(_59, "panel").options.title = _5a;
         $(_59).panel("header").find("div.panel-title").html(_5a);
-    };
+    }
     var TO = false;
     var _5b = true;
     $(window).unbind(".panel").bind("resize.panel", function () {

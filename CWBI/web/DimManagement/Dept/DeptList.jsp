@@ -114,7 +114,7 @@
         <a style="float: right;" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
            href="javascript:void(0)" onclick="doRemove();">删除</a>
         <a style="float: right;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
-           href="javascript:void(0)" onclick="javascript:self.location='DeptItf.jsp'">新建</a>
+           href="javascript:void(0)" onclick="self.location='DeptItf.jsp'">新建</a>
     </div>
 </div>
 <div style="height:100%;width: 98%;overflow: visible;padding-left: 10px;padding-right: 10xp;">

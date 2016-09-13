@@ -78,13 +78,13 @@
                                                                 <input name="Submit4" type="button" class="button"
                                                                        value="确定" onclick="changeKeyPIN();"><input
                                                                     name="Submit22" type="button" class="button"
-                                                                    value="重置" onclick="javascript:f2.reset();">
+                                                                    value="重置" onclick="f2.reset();">
                                                                 <input class="button"
-                                                                       onclick="javascript:window.location.reload();"
+                                                                       onclick="window.location.reload();"
                                                                        type=button value=刷新 name=refesh><input
                                                                     name="back_but" type="button" class="button"
                                                                     value="返回"
-                                                                    onclick="javascript:self.location='PasswordChange.jsp';">
+                                                                    onclick="self.location='PasswordChange.jsp';">
                                                             </td>
                                                         </tr>
                                                     </table>

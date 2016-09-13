@@ -10,13 +10,6 @@
          import="com.bws.dbOperation.DBOperation,java.sql.ResultSet" %>
 <jsp:useBean id="userInfo" class="com.bws.util.UserInfo" scope="session"/>
 <%
-    //检查用户权限
-    /****
-     if(CheckUserRight.check(userInfo,"107","1",pageContext) == false)
-     {
-     return ;
-     }//检查用户权限代码结束
-     *****/
     String UserID = "";
     String UserAccount = "";
     String UserName = "";
@@ -32,11 +25,6 @@
 
     String TopicID = "";
     String str_navi_tree_html = "";
-    /****TopicID = request.getParameter("TopicID");
-     if((TopicID==null || TopicID != ""))
-     {
-     TopicID = "1";
-     }****/
     //实例化数据库链接
     DBOperation db = new DBOperation();
 
@@ -192,9 +180,6 @@
             showChildMenu(TopicID);
             $("#" + Topic + " ul li span a")[0].click();
 
-            /*  $('#mb').menubutton({
-             menu: '#mm'
-             }); */
         });
         function showChildMenu(TopicID) {
             var topic = "Topic" + TopicID;
@@ -221,7 +206,7 @@
                 while (rs_level1.next()) {
             %>
             <li id="nav_li<%=rs_level1.getString(1) %>" class="nav_li<%=rs_level1.getString(1) %>"
-                onclick="javascript:showChildMenu(<%=rs_level1.getString(1) %>)">
+                onclick="showChildMenu(<%=rs_level1.getString(1) %>)">
                 &nbsp;&nbsp;&nbsp;&nbsp;<%=rs_level1.getString(3) %>
                 <div id="arrow-up<%=rs_level1.getString(1) %>" class="arrow-up">
                     <!--向上的三角-->

@@ -18,15 +18,15 @@
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         String sql = "select t1.brief_name," +
                 "       sum(score) as score," +
-                "       sum(decode(t.kpi_id, 101, t.actual_value, null)) as kpi101," +
-                "       sum(decode(t.kpi_id, 102, t.actual_value, null)) as kpi102," +
-                "       sum(decode(t.kpi_id, 103, t.actual_value, null)) as kpi103," +
-                "       sum(decode(t.kpi_id, 104, t.actual_value, null)) as kpi104," +
-                "       sum(decode(t.kpi_id, 105, t.actual_value, null)) as kpi105," +
-                "       sum(decode(t.kpi_id, 106, t.actual_value, null)) as kpi106" +
+                "       sum(decode(t.kpi_id, 1101, t.actual_value, null)) as kpi1101," +
+                "       sum(decode(t.kpi_id, 1102, t.actual_value, null)) as kpi1102," +
+                "       sum(decode(t.kpi_id, 1103, t.actual_value, null)) as kpi1103," +
+                "       sum(decode(t.kpi_id, 1104, t.actual_value, null)) as kpi1104," +
+                "       sum(decode(t.kpi_id, 63, t.actual_value, null)) as kpi63," +
+                "       sum(decode(t.kpi_id, 36, t.actual_value, null)) as kpi36" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_water = 1" +
-                "   and t.kpi_id in (101, 102, 103, 104, 105, 106)" +
+                "   and t.kpi_id in (1101, 1102, 1103, 1104, 63, 36)" +
                 " group by t.company_id,t1.brief_name" +
                 " order by score desc";
 
