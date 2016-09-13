@@ -2,19 +2,19 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>盈利能力总体趋势分析</title>
+    <title>单项指标趋势分析</title>
 </head>
-<script type="text/javascript" src="../../../../scripts/jquery-1.6.min.js"></script>
-<script type="text/javascript" src="../../../../scripts/jquery-ui.min.js"></script>
-<script src="../../../../scripts/DatePicker_zh_cn.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../../css/jquery-ui.css"/>
-<script type="text/javascript" src="../../../../scripts/jquery.easyui.min.js"></script>
-<script src="../../../../scripts/echarts.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../../css/condition-table.css"/>
-<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
-<link rel="stylesheet" type="text/css" href="../../../../scripts/easyui-1.3.6/themes/icon.css">
-<script type="text/javascript" src="../../../../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../../../../scripts/hanzi2pinyin.js"></script>
+<script type="text/javascript" src="../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery-ui.min.js"></script>
+<script src="../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../scripts/jquery.easyui.min.js"></script>
+<script src="../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../scripts/hanzi2pinyin.js"></script>
 <script type="text/javascript">
     $(function () {
         fillCombobox();
@@ -23,11 +23,25 @@
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        return params.split("=")[1];
+        return params.split("&")[0].split("=")[1].trim();
+    }
+    function getUnit() {
+        var name = getKpi();
+        var val = name.charAt(name.length - 1);
+        if (val == '率'){
+            return "%";
+        }else if(val == '价'){
+            return "元";
+        }
+    }
+    function getKpi() {
+        var url = window.location.href;
+        var params = url.split("?")[1];
+        return params.split("&")[1].split("=")[1].trim();
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: '../../getCompany.jsp?company=' + getCompany()+'&type=1',
+            url: 'getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {
@@ -39,11 +53,12 @@
     function confirmIt() {
         var val = $('#company').combobox('getValue');
         $.ajax({
-            url: 'TotalTrendDiv.jsp',
+            url: 'SingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
-                company: val
+                company: val,
+                kpi : getKpi()
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -51,7 +66,7 @@
             success: function (return_data) {
                 require.config({
                     paths: {
-                        echarts: '../../../../scripts'
+                        echarts: '../../scripts'
                     }
                 });
                 // 使用
@@ -65,7 +80,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: val + "盈利能力整体趋势分析",
+                                    text: val + getKpi()+"趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -74,12 +89,12 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}分<br/>{a1}:{c1}名',
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}名',
                                     trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
-                                    data: ['盈利能力整体分值', '排名']
+                                    data: [getKpi()+'实际值',getKpi()+'标杆值',getKpi()+'平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -102,17 +117,13 @@
                                     {
                                         name: '分值',
                                         type: 'value'
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: '盈利能力整体分值',
+                                        name: getKpi()+'实际值',
                                         type: 'line',
-                                        data: return_data.score,
+                                        data: return_data.data1,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
@@ -120,10 +131,19 @@
                                         }
                                     },
                                     {
-                                        name: '排名',
+                                        name: getKpi()+'标杆值',
                                         type: 'line',
-                                        yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.data2,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true}
+                                            }
+                                        }
+                                    },
+                                    {
+                                        name: getKpi()+'平均值',
+                                        type: 'line',
+                                        data: return_data.data3,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
@@ -143,11 +163,12 @@
     }
     function showDiv() {
         $.ajax({
-            url: 'TotalTrendDiv.jsp',
+            url: 'SingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
-                company: getCompany()
+                company: getCompany(),
+                kpi : getKpi()
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -155,7 +176,7 @@
             success: function (return_data) {
                 require.config({
                     paths: {
-                        echarts: '../../../../scripts'
+                        echarts: '../../scripts'
                     }
                 });
                 // 使用
@@ -169,7 +190,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: getCompany() + "盈利能力整体趋势分析",
+                                    text: getCompany() + getKpi()+"趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -178,12 +199,12 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}分<br/>{a1}:{c1}名',
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}名',
                                     trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
-                                    data: ['盈利能力整体分值', '排名']
+                                    data: [getKpi()+'实际值',getKpi()+'标杆值',getKpi()+'平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -206,17 +227,13 @@
                                     {
                                         name: '分值',
                                         type: 'value'
-                                    },
-                                    {
-                                        name: '排名',
-                                        type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: '盈利能力整体分值',
+                                        name: getKpi()+'实际值',
                                         type: 'line',
-                                        data: return_data.score,
+                                        data: return_data.data1,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
@@ -224,10 +241,19 @@
                                         }
                                     },
                                     {
-                                        name: '排名',
+                                        name: getKpi()+'标杆值',
                                         type: 'line',
-                                        yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.data2,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true}
+                                            }
+                                        }
+                                    },
+                                    {
+                                        name: getKpi()+'平均值',
+                                        type: 'line',
+                                        data: return_data.data3,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
