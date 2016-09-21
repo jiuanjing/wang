@@ -23,6 +23,7 @@
         function confirmIt() {
             showDiv001();
             getDataGrid();
+            getCompany();
         }
 
         function changeDiv() {
@@ -127,6 +128,8 @@
             }
         }
         function showDiv001() {
+            var year1 = $('#date').datebox('getValue');
+            var year = year1.length == 0 ? 2015: year1;
             $.ajax({
                 url: "DebtRiskDiv1.jsp",
                 dataType: "json", //传参的数据类型
@@ -173,7 +176,7 @@
                                                 orient: 'vertical',
                                                 x: 'right',
                                                 y: 'bottom',
-                                                data: ['标杆值', '2016年', '2015年', '2014年']
+                                                data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                             }
                                             ,
                                             toolbox: {
@@ -224,15 +227,15 @@
                                                         },
                                                         {
                                                             value: (return_data.data2).concat(return_data.data2),
-                                                            name: '2016年'
+                                                            name: year + '年'
                                                         },
                                                         {
                                                             value: (return_data.data3).concat(return_data.data3),
-                                                            name: '2015年'
+                                                            name: year-1 + '年'
                                                         },
                                                         {
                                                             value: (return_data.data4).concat(return_data.data4),
-                                                            name: '2014年'
+                                                            name: year-2 + '年'
                                                         }
                                                     ]
                                                 }

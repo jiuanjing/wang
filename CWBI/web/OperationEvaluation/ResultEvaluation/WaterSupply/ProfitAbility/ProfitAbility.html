@@ -23,24 +23,7 @@
     function confirmIt() {
         showDiv001();
         getDataGrid();
-        var city ;
-        $.ajax({
-            url: 'ProfitAbilityDiv2.jsp',
-            async : false,
-            data: {
-                date: $('#date').datebox('getValue')
-            },
-            dataType: 'json',
-            success: function (d) {
-                city = d.rows[0].m2;
-            }
-        });
-        var city1 = $("#company").val();
-        if (city1.length == 0) {
-            return city;
-        } else {
-            return city1;
-        }
+        getCompany();
     }
 
     function changeDiv() {
@@ -172,16 +155,16 @@
         window.location.href = "Rank.html";
     }
     function getCompany() {
-        var city ;
+        var city;
         $.ajax({
             url: 'ProfitAbilityDiv2.jsp',
-            async : false,
+            async: false,
             data: {
                 date: $('#date').datebox('getValue')
             },
             dataType: 'json',
             success: function (d) {
-               city = d.rows[0].m2;
+                city = d.rows[0].m2;
             }
         });
         var city1 = $("#company").val();
@@ -193,7 +176,7 @@
     }
     function showDiv001() {
         var year1 = $('#date').datebox('getValue');
-        var year = year1.length == 0 ? 2016 : year1;
+        var year = year1.length == 0 ? 2015: year1;
         $.ajax({
             url: "ProfitAbilityDiv1.jsp",
             dataType: "json", //传参的数据类型
@@ -249,18 +232,15 @@
                                                 ,
                                                 dataView: {
                                                     show: true, readOnly: false
-                                                }
-                                                ,
+                                                },
                                                 restore: {
                                                     show: true
-                                                }
-                                                ,
+                                                },
                                                 saveAsImage: {
                                                     show: true
                                                 }
                                             }
-                                        }
-                                        ,
+                                        },
                                         polar: [
                                             {
                                                 indicator: [
@@ -268,8 +248,8 @@
                                                     {text: '综合毛利率(%)', max: 100},
                                                     {text: '工程毛利率(%)', max: 100},
                                                     {text: '水处理毛利率(%)', max: 100},
-                                                    {text: '综合水价(元)', max: 100},
-                                                    {text: '综合电价(元)', max: 100}
+                                                    {text: '综合水价(元)', max: 10},
+                                                    {text: '综合电价(元)', max: 10}
                                                 ],
                                                 name: {
                                                     textStyle: {

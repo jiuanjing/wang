@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人员素质排名分析</title>
+</head>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../../scripts/hanzi2pinyin.js"></script>
+<script>
+
+    $(function () {
+        setKpi();
+        getDataGrid();
+        showDiv001();
+    });
+
+    function getKpiName() {
+        var val = $('#kpi').combobox('getText');
+        if (val.length == 0) {
+            return "人员素质结构分布";
+        } else {
+            return val;
+        }
+    }
+    function confirmIt() {
+        getDataGrid();
+        showDiv001();
+    }
+    function showDiv001() {
+        $.ajax({
+            url: "RankDiv2.jsp",
+            dataType: "json", //传参的数据类型
+            type: "post", //传参方式，get 或post
+            data: {
+                date: $('#date').datebox('getValue'),
+                kpi: getKpiName()
+            },
+            error: function (msg) { //若Ajax处理失败后返回的信息
+                alert("Ajax获取数据失败");
+            },
+            success: function (return_data) { //若Ajax处理成功后返回的信息
+            	  console.log(return_data);
+                require.config({
+                    paths: {
+                        echarts: '../../../scripts'
+                    }
+                });
+                function getAverage() {
+                    var result = 0;
+                    for (var i = 0; i < return_data.data2.length; i++) {
+                        result += parseInt(return_data.data2[i]);
+                    }
+                    console.log(result);
+                    return (result / return_data.data2.length).toFixed(2);//这得到的是总的回报率，除以公司总数就是平局值，然后求平均值，保留两位
+                }
+                function getUnit(){
+                	var kpiName = getKpiName();
+                	unit = kpiName.charAt(kpiName.length-1);
+                	console.log(unit);
+        			if(unit == "布"){
+        				return "人"
+        			} 
+                }
+
+                var poleValue = return_data.data3[0];//78
+                var kpi_id = return_data.kpi_id;
+                
+                
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/bar',
+                            'echarts/chart/line'
+                        ],
+                        function (ec, theme) {
+                            var myChart = ec.init(document.getElementById('main1'), 'macarons');
+
+                            var option = {
+                                title: {
+                                    text: $('#date').combobox('getText') + "年" + $('#kpi').combobox('getText') + '排名分析',
+                                    x: 'center',
+                                    textStyle: {
+                                        fontSize: 15,
+                                        fontWeight: 'bolder',
+                                        color: '#666666'
+                                    }
+                                },
+                                dataZoom: {
+                                    show: true,
+                                    orient: 'vertical'
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter : "{b} <br/> {a} : {c}"+getUnit()+""
+                                },
+                                toolbox: {
+                                    show: false,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                xAxis: [
+                                    {
+                                        type: 'value'
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'category',
+                                        boundaryGap: true,//类目起始和结束两端空白策略，见下图，默认为true留空，false则顶头 
+                                        axisLabel: {
+                                            rotate: 45,
+                                            textStyle:{
+                                            	fontSize:11
+                                            }
+                                        },
+                                        data: return_data.data1
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: getKpiName(),
+                                        type: 'bar',
+                                        data: return_data.data2,
+                                        markLine: {
+                                            data: [
+                                                [
+                                                    {name: '人员素质结构分布', xAxis: getAverage(), yAxis: 100},
+                                                    {value: getAverage(), xAxis: getAverage(), yAxis: -10}
+                                                ]
+                                            ]
+                                        },                                        
+                                    }
+                                ]
+                            };
+
+                            myChart.setOption(option);
+                            window.onresize = myChart.resize;
+                        }
+                );
+            }
+        });
+    }
+    function getDataGrid() {
+        $('#tg1').datagrid({
+            url: 'RankDiv1.jsp',
+            method: 'post',
+            singleSelect: true,
+            nowrap: true,
+            fitColumns: true,
+            sortOrder: 'desc',
+            remoteSort: false,
+            rowNumbers: false,
+            striped: true,
+            loadMsg: '正在加载数据，请稍等......',
+            queryParams: {
+                date: $('#date').datebox('getValue'),
+                kpi: getKpiName()
+            },
+            columns: [[
+                {
+                    field: 'm1',
+                    title: '排名',
+                    width: 50,
+                    align: 'center',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+
+                },
+                {
+                    field: 'm2',
+                    title: '公司简称',
+                    width: 130,
+                    align: 'left',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm3',
+                    title: getKpiName(),
+                    width: 110,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                },
+                {
+                    field: 'm4',
+                    title: '分值',
+                    width: 80,
+                    align: 'right',
+                    sortable: true,
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    }
+                }
+            ]]
+        });
+    }
+
+    function setKpi() {
+        $('#kpi').combobox({
+            url: 'PeoplewareKpi.json',
+            editable : true,
+            valueField: 'id',
+            textField: 'text',
+            filter: function (q,row) {
+            	/* 定义当 'mode' 设置为 'local' 时如何过滤本地数据。该函数有两个参数：
+            	q：用户输入的文本。
+            	row：列表中的行数据。
+            	返回 true 则允许显示该行。
+            	*/
+                var opts = $(this).combobox('options');
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+            }
+        });
+    }
+
+
+</script>
+<body>
+<div id="query_condition" class="condition_div">
+    <table class="condition_table">
+        <tr>
+            <td width="7%">年度：</td>
+            <td width="8%">
+                <input id="date" class="easyui-combobox" name="year"
+                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
+                       style="width:80px">
+            </td>
+            <td width="4%">指标：</td>
+            <td width="12%">
+                <input id="kpi" class="easyui-combobox" name="kpi" panelHeight="100" style="width:120px">
+            </td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
+                              onclick="confirmIt();">确定</a></td>
+            <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
+                              onclick="window.history.back();">返&nbsp;&nbsp;&nbsp;&nbsp;回</a></td>
+            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+        </tr>
+    </table>
+</div>
+<hr class="Main_hr" align="center" width="100%"/>
+<div id="main2" style="height:520px;width: 33%;float: left;">
+    <table id="tg1" style="height: 520px;"></table>
+</div>
+<div id="main1" style="height:520px;width: 63%;float: right;"></div>
+</body>
+</html>

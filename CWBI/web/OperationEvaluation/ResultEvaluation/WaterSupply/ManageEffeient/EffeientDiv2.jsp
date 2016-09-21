@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String date = new String(request.getParameter("date").getBytes("ISO-8859-1"), "gbk");
-    date = date.equals("") ? "2016" : date;
+    date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
     DBOperation dbOperation = new DBOperation(true);
     if (dbOperation.dbOpen()) {
@@ -19,13 +19,13 @@
         String sql = "select t1.brief_name," +
                 "       sum(score) as score," +
                 "       sum(decode(t.kpi_id, 1601, t.actual_value, null)) as kpi1601," +
-                "       sum(decode(t.kpi_id, 64, t.actual_value, null)) as kpi64," +
+                "       sum(decode(t.kpi_id, 68, t.actual_value, null)) as kpi68," +
                 "       sum(decode(t.kpi_id, 1603, t.actual_value, null)) as kpi1603," +
                 "       sum(decode(t.kpi_id, 1604, t.actual_value, null)) as kpi1604," +
                 "       sum(decode(t.kpi_id, 1605, t.actual_value, null)) as kpi1605" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_water = 1" +
-                "   and t.kpi_id in (1601,64,1603,1604,1605)" +
+                "   and t.kpi_id in (1601,68,1603,1604,1605)" +
                 " group by t.company_id,t1.brief_name" +
                 " order by score desc";
 

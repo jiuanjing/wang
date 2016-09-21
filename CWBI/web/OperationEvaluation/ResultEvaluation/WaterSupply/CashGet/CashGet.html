@@ -23,6 +23,7 @@
     function confirmIt() {
         showDiv001();
         getDataGrid();
+        getCompany();
     }
 
     function changeDiv() {
@@ -119,10 +120,10 @@
         window.location.href = "CashGetRank.html";
     }
     function getCompany() {
-        var city ;
+        var city;
         $.ajax({
             url: 'CashGetDiv2.jsp',
-            async : false,
+            async: false,
             data: {
                 date: $('#date').datebox('getValue')
             },
@@ -139,6 +140,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015: year1;
         $.ajax({
             url: "CashGetDiv1.jsp",
             dataType: "json", //传参的数据类型
@@ -191,7 +194,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016年', '2015年', '2014年']
+                                    data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                 }
                                 ,
                                 toolbox: {
@@ -218,7 +221,7 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '经营性现金流量净额(元)', max: 100},
+                                            {text: '经营性现金流量净额(万元)', max: 100},
                                             {text: '当年水费回收率(%)', max: 100},
                                             {text: '应收账款余额增减率(%)', max: 100}
                                         ],
@@ -241,15 +244,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016年'
+                                                name: year + '年'
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015年'
+                                                name: year - 1 + '年'
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014年'
+                                                name: year - 2 + '年'
                                             }
                                         ]
                                     }

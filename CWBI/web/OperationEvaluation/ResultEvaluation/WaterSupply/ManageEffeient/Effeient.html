@@ -23,6 +23,7 @@
     function confirmIt() {
         showDiv001();
         getDataGrid();
+        getCompany();
     }
 
     function changeDiv() {
@@ -217,7 +218,7 @@
                                             orient: 'vertical',
                                             x: 'right',
                                             y: 'bottom',
-                                            data: ['标杆值', '2016年', '2015年', '2014年']
+                                            data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                         }
                                         ,
                                         toolbox: {
@@ -244,9 +245,9 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '人均售水量(万吨)', max: 100},
-                                                    {text: '人均产值(万元)', max: 100},
-                                                    {text: '人均净利润(万元)', max: 100},
+                                                    {text: '人均售水量(万吨)', max: 50},
+                                                    {text: '人均产值(万元)', max: 50},
+                                                    {text: '人均净利润(万元)', max: 50},
                                                     {text: '居民人均用水量(万吨)', max: 100},
                                                     {text: '供水服务人口数(万人)', max: 100}
                                                 ],

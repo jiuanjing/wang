@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String date = new String(request.getParameter("date").getBytes("ISO-8859-1"), "gbk");
-    date = date.equals("") ? "2016" : date;
+    date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
     DBOperation dbOperation = new DBOperation(true);
     if (dbOperation.dbOpen()) {

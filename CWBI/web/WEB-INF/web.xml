@@ -4,7 +4,6 @@
          id="WebApp_ID" version="2.5">
     <display-name>CWBI</display-name>
     <servlet>
-        <description></description>
         <display-name>LoginServlet</display-name>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.bws.login.LoginServlet</servlet-class>
@@ -22,7 +21,6 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
-        <description></description>
         <display-name>SSOLoginServlet</display-name>
         <servlet-name>SSOLoginServlet</servlet-name>
         <servlet-class>com.bws.login.SSOLoginServlet</servlet-class>
