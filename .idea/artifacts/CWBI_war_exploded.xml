@@ -8,6 +8,20 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="lib" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/ojdbc6.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/gson-2.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/dom4j-1.6.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/ezmorph-1.0.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/pinyin4j-2.5.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-lang-2.5.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-codec-1.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/json-lib-2.4-jdk15.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-logging-1.1.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-httpclient-3.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-beanutils-1.7.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/commons-collections-3.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/eetrust-security-crypto-2.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/CWBI/web/WEB-INF/lib/eetrust-security-plugin-2.6.jar" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="CWBI/web/Web" />
