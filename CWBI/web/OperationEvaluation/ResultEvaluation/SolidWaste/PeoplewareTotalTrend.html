@@ -44,7 +44,7 @@
     function confirmIt() {
         var val = $('#company').combobox('getText');
         $.ajax({
-            url: 'ProfitTotalTrendDiv.jsp',
+            url: 'PeoplewareTotalTrendDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
@@ -127,7 +127,7 @@
                                         name: '排名',
                                         type: 'line',
                                         yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.comp_rank,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}
@@ -231,7 +231,7 @@
                                         name: '排名',
                                         type: 'line',
                                         yAxisIndex: 1,
-                                        data: return_data.rank,
+                                        data: return_data.comp_rank,
                                         itemStyle: {
                                             normal: {
                                                 label: {show: true}

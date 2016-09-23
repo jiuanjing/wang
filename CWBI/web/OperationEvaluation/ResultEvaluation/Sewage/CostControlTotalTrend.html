@@ -44,7 +44,7 @@
     function confirmIt() {
         var val = $('#company').combobox('getText');
         $.ajax({
-            url: 'CostControlTotalTrend.jsp',
+            url: 'CostControlTotalTrendDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
@@ -147,7 +147,7 @@
     }
     function showDiv() {
         $.ajax({
-            url: 'CostControlTotalTrend.jsp',
+            url: 'CostControlTotalTrendDiv.jsp',
             dataType: "json",
             type: "post",
             data: {

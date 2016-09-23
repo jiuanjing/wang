@@ -236,6 +236,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "CostControlDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -275,7 +277,7 @@
                                     }
                                 },
                                 tooltip: {
-                                    trigger: 'item'
+                                    trigger: 'axis'
                                 },
                                 legend: {
                                     show: true,
@@ -296,15 +298,15 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '管理费用成本比', max: 100},
-                                            {text: '人均可控管理费用', max: 100},
-                                            {text: '吨水经营成本', max: 100},
-                                            {text: '吨水人工成本', max: 100},
-                                            {text: '单位药剂费', max: 100},
-                                            {text: '单位电耗', max: 100},
-                                            {text: '吨水电费', max: 100},
-                                            {text: '吨水维修费', max: 100},
-                                            {text: '吨水管理费', max: 100}
+                                            {text: '单位电耗', max: 1},
+                                            {text: '单位药剂费', max: 1},
+                                            {text: '吨水管理费', max: 1},
+                                            {text: '吨水维修费', max: 1},
+                                            {text: '管理费用成本比', max: 1},
+                                            {text: '人均可控管理费用', max: 10},
+                                            {text: '吨水经营成本', max: 1},
+                                            {text: '吨水人工成本', max: 1},
+                                            {text: '吨水电费', max: 1}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -323,15 +325,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016'
+                                                name: year + '年'
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015'
+                                                name: year-1 + '年'
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014'
+                                                name: year-2 + '年'
                                             }
                                         ]
                                     }

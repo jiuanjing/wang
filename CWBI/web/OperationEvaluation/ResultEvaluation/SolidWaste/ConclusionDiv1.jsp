@@ -18,13 +18,13 @@
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "select t1.brief_name," +
 		                "       sum(comp_score) as comp_score," +
-		                "       sum(decode(t.kpi_id, 4100, t.actual_value, null)) as 盈利能力," +
-		                "       sum(decode(t.kpi_id, 4200, t.actual_value, null)) as 债务风险," +
-		                "       sum(decode(t.kpi_id, 4300, t.actual_value, null)) as 现金获取," +
-		                "       sum(decode(t.kpi_id, 4400, t.actual_value, null)) as 成本控制," +
-		                "       sum(decode(t.kpi_id, 4500, t.actual_value, null)) as 业务增长," +
-		                "       sum(decode(t.kpi_id, 4600, t.actual_value, null)) as 经营效率," +
-		                "       sum(decode(t.kpi_id, 4700, t.actual_value, null)) as 人员素质" +
+		                "       sum(decode(t.kpi_id, 4100, t.comp_score, null)) as 盈利能力," +
+		                "       sum(decode(t.kpi_id, 4200, t.comp_score, null)) as 债务风险," +
+		                "       sum(decode(t.kpi_id, 4300, t.comp_score, null)) as 现金获取," +
+		                "       sum(decode(t.kpi_id, 4400, t.comp_score, null)) as 成本控制," +
+		                "       sum(decode(t.kpi_id, 4500, t.comp_score, null)) as 业务增长," +
+		                "       sum(decode(t.kpi_id, 4600, t.comp_score, null)) as 经营效率," +
+		                "       sum(decode(t.kpi_id, 4700, t.comp_score, null)) as 人员素质" +
 		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
 		                "   and t.kpi_id in (4100,4200,4300,4400,4500,4600,4700)" +

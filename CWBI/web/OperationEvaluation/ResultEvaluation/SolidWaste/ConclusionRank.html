@@ -37,7 +37,7 @@
     }
     function showDiv001() {
         $.ajax({
-            url: "RankDiv2.jsp",
+            url: "TotalRankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -59,14 +59,13 @@
                     for (var i = 0; i < return_data.data2.length; i++) {
                         result += parseInt(return_data.data2[i]);
                     }
-                    console.log(result);
                     return (result / return_data.data2.length).toFixed(2);//这得到的是总的回报率，除以公司总数就是平局值，然后求平均值，保留两位
                 }                
 
                 var poleValue = return_data.data3[0];//78
                 var kpi_id = return_data.kpi_id;
-                
-                
+
+
                 // 使用
                 require(
                         [
@@ -154,7 +153,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'RankDiv1.jsp',
+            url: 'TotalRankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,
@@ -185,16 +184,6 @@
                     title: '公司简称',
                     width: 130,
                     align: 'left',
-                    sortable: true,
-                    sorter: function (a, b) {
-                        return (a * 10 > b * 10 ? 1 : -1);
-                    }
-                },
-                {
-                    field: 'm3',
-                    title: getKpiName(),
-                    width: 110,
-                    align: 'right',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);

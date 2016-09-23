@@ -141,6 +141,8 @@
         window.location.href = "ServiceRank.html";
     }
     function getCompany() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: 'ServiceDiv1.jsp',
             async : false,
@@ -160,6 +162,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "ServiceDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -220,9 +224,9 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '营业收入增长率', max: 100},
-                                            {text: '人工成本利润率', max: 100},
-                                            {text: '利润总额增长率', max: 100}
+                                            {text: '营业收入增长率', max: 300},
+                                            {text: '人工成本利润率', max: 600},
+                                            {text: '利润总额增长率', max: 600}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -241,15 +245,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016'
+                                                name: year  + '年'
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015'
+                                                name: year - 1 + '年'
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014'
+                                                name: year - 2 + '年'
                                             }
                                         ]
                                     }

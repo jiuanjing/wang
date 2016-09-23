@@ -112,7 +112,7 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],
@@ -171,6 +171,7 @@
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
+                console.log(return_data);
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -221,7 +222,7 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],

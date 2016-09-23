@@ -20,7 +20,7 @@
 		String sql = "select t.date_id ,sum(t.comp_score),sum(t.comp_rank)" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t1.brief_name='" + company + "'  and t1.flag_sewage = 1 and t.company_id = t1.company_id" +
-                "   and t.kpi_id in (2401,2402,2403,2404,2026,2020,2407,2408,2409)" +
+                "   and t.kpi_id in (2401,2402,2403,2404,126,120,2407,149,148)" +
                 " group by t.date_id order by t.date_id";
 		ResultSet rs = db.executeQuery(sql);
 		if (rs != null){

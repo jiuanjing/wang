@@ -23,14 +23,14 @@
 		                "       sum(decode(t.kpi_id, 2402, t.actual_value, null)) as 人均可控管理费用," +
 		                "       sum(decode(t.kpi_id, 2403, t.actual_value, null)) as 吨水经营成本," +
 		                "       sum(decode(t.kpi_id, 2404, t.actual_value, null)) as 吨水人工成本," +
-		                "       sum(decode(t.kpi_id, 2026, t.actual_value, null)) as 单位药剂费," +
-		                "       sum(decode(t.kpi_id, 2026, t.actual_value, null)) as 单位电耗," +
+		                "       sum(decode(t.kpi_id, 126, t.actual_value, null)) as 单位药剂费," +
+		                "       sum(decode(t.kpi_id, 120, t.actual_value, null)) as 单位电耗," +
 		                "       sum(decode(t.kpi_id, 2407, t.actual_value, null)) as 吨水电费," +
-		                "       sum(decode(t.kpi_id, 2408, t.actual_value, null)) as 吨水维修费," +
-		                "       sum(decode(t.kpi_id, 2409, t.actual_value, null)) as 吨水管理费" +
+		                "       sum(decode(t.kpi_id, 149, t.actual_value, null)) as 吨水维修费," +
+		                "       sum(decode(t.kpi_id, 148, t.actual_value, null)) as 吨水管理费" +
 		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
-		                "   and t.kpi_id in (2401,2402,2403,2404,2026,2020,2407,2408,2409)" +
+		                "   and t.kpi_id in (2401,2402,2403,2404,126,120,2407,149,148)" +
 		                " group by t.company_id,t1.brief_name" +
 		                " order by comp_score desc";
 		
