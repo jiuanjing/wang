@@ -17,16 +17,16 @@
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "select t1.brief_name," +
-                "       sum(score) as score," +
-                "       sum(decode(t.kpi_id, 2101, t.actual_value, null)) as 投资回报率," +
-                "       sum(decode(t.kpi_id, 2102, t.actual_value, null)) as 水处理毛利率," +
-                "       sum(decode(t.kpi_id, 2050, t.actual_value, null)) as 综合水价," +
-                "       sum(decode(t.kpi_id, 2018, t.actual_value, null)) as 综合电价" +
+                "       sum(comp_score) as comp_score," +
+                "       sum(decode(t.kpi_id, 4101, t.actual_value, null)) as 投资回报率," +
+                "       sum(decode(t.kpi_id, 4102, t.actual_value, null)) as 固废处理毛利率," +
+                "       sum(decode(t.kpi_id, 4103, t.actual_value, null)) as 综合垃圾处理费," +
+                "       sum(decode(t.kpi_id, 4104, t.actual_value, null)) as 综合电价" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
-                "   and t.kpi_id in (2101,2102,2050,2018)" +
+                "   and t.kpi_id in (4101,4102,4103,4104)" +
                 " group by t.company_id,t1.brief_name" +
-                " order by score desc";
+                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){

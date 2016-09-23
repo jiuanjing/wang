@@ -35,7 +35,7 @@
             String ddd = "sum" + month;
             sqlstr = "select b.company_id,b.brief_name, round(c." + ddd + ",2) from echarts.dim_dept_op a, echarts.dim_op_company b, echarts.dm_op_mr_kpi_actual c";
             String where = " where a.dept_id=b.dept_id and b.company_id=c.company_id"
-                    + " and c.kpi_code_num=2003"//1003水费回收率指标
+                    + " and c.kpi_code_num=103"//1003水费回收率指标
                     + " and b.Flag_Sewage = 1 and b.status = 1 and date_id =" + date;
             String orderBy = " order by c." + ddd + " " + order;
             sqlstr = sqlstr + where + orderBy;

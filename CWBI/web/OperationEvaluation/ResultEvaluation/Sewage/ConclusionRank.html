@@ -93,7 +93,7 @@
                                 },
                                 tooltip: {
                                     trigger: 'axis',
-                                    formatter : "{b} <br/> {a} : {c}
+                                    formatter : "{b} <br/> {a} : {c}"
                                 },
                                 toolbox: {
                                     show: false,
@@ -185,16 +185,6 @@
                     title: '公司简称',
                     width: 130,
                     align: 'left',
-                    sortable: true,
-                    sorter: function (a, b) {
-                        return (a * 10 > b * 10 ? 1 : -1);
-                    }
-                },
-                {
-                    field: 'm3',
-                    title: getKpiName(),
-                    width: 110,
-                    align: 'right',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);

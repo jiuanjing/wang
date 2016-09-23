@@ -70,10 +70,17 @@
         				return "%"
         			} else if(unit == "用"){
         				return "万元/人"
-        			} else if(unit == "本" || unit == "费"){
+        			} else if(unit == "本"){
         				return "元/吨"
-        			} else if(unit == "耗"){
-        				return "kwh/吨"
+        			} 
+        			if(kpiName.indexOf("电")!=-1){
+        				return "kwh/吨";
+        			}
+        			if(kpiName.indexOf("药")!=-1){
+        				return "元/吨";
+        			}
+        			if(kpiName.indexOf("水")!=-1){
+        				return "元/吨水";
         			}
                 }
 

@@ -18,7 +18,7 @@
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = 
 				"select t1.brief_name," +
-		                "       sum(score) as score," +
+		                "       sum(comp_score) as comp_score," +
 		                "       sum(decode(t.kpi_id, 4401, t.actual_value, null)) as 管理费用成本比," +
 		                "       sum(decode(t.kpi_id, 4402, t.actual_value, null)) as 人均可控管理费用," +
 		                "       sum(decode(t.kpi_id, 4403, t.actual_value, null)) as 吨垃圾经营成本," +
@@ -32,7 +32,7 @@
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
 		                "   and t.kpi_id in (4401,4402,4403,4404,4405,4406,4407,4408,4409)" +
 		                " group by t.company_id,t1.brief_name" +
-		                " order by score desc";
+		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){

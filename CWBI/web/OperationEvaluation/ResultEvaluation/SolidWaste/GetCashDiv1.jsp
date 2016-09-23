@@ -17,7 +17,7 @@
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "select t1.brief_name," +
-                "       sum(score) as score," +
+                "       sum(comp_score) as comp_score," +
                 "       sum(decode(t.kpi_id, 4301, t.actual_value, null)) as 经营性现金流量金额," +
                 "       sum(decode(t.kpi_id, 4302, t.actual_value, null)) as 处理费回收率," +
                 "       sum(decode(t.kpi_id, 4303, t.actual_value, null)) as 应收账款余额增长率" +
@@ -25,7 +25,7 @@
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
                 "   and t.kpi_id in (4301,4302,4303)" +
                 " group by t.company_id,t1.brief_name" +
-                " order by score desc";
+                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){
@@ -38,6 +38,8 @@
 					dataMap.put("m2", rs.getString(1));
 					dataMap.put("m3", rs.getString(2));
 					dataMap.put("m4", rs.getString(3));
+					dataMap.put("m5", rs.getString(4));
+					dataMap.put("m6", rs.getString(5));
 					
 					list.add(dataMap);
 				}

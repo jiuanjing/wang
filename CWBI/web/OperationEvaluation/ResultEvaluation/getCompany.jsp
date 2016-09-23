@@ -16,11 +16,11 @@
     if (db.dbOpen()) {
         String sql = "";
         if (type1 == 1){
-            sql = "select t.brief_name from echarts.dim_op_company t where t.flag_water = 1 ";
+            sql = "select distinct t.brief_name from echarts.dim_op_company t,dm_op_yr_evaluate t1 where t.company_id = t1.company_id and t.flag_water = 1  ";
         }else if (type1 == 2){
-            sql = "select t.brief_name from echarts.dim_op_company t where t.flag_sewage = 1 ";
+            sql = "select distinct t.brief_name from echarts.dim_op_company t,dm_op_yr_evaluate t1 where t.company_id = t1.company_id and t.flag_sewage = 1";
         }else if(type1 == 4){
-            sql = "select t.brief_name from echarts.dim_op_company t where t.flag_solid_waste = 1 ";
+            sql = "select distinct t.brief_name from echarts.dim_op_company t,dm_op_yr_evaluate t1 where t.company_id = t1.company_id and t.flag_solid_waste = 1 ";
         }
         ResultSet rs = db.executeQuery(sql);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

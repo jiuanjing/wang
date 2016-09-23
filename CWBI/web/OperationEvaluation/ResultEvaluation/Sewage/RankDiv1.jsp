@@ -17,14 +17,14 @@
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
-		 String sql = " select t1.brief_name, t.actual_value, t.score " +
+		 String sql = " select t1.brief_name, t.actual_value, t.comp_score " +
 	                "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
 	                " where t.date_id = " + date +
 	                "   and t2.kpi_name = '" + kpiName + "' " +
 	                "   and t.company_id = t1.company_id " +
-	                "   and t.kpi_id = t2.kpi_id " +
+	                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 2" +
 	                "	and  t1.flag_sewage =1" +
-	                " order by t.actual_value desc";
+	                " order by t.comp_score desc";
 		 ResultSet rs = db.executeQuery(sql);
 		 if(null != rs){
 			 try {

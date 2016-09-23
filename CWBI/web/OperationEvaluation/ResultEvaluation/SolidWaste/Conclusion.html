@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset=UTF-8>
-    <title>固废总结概况分析</title>
+    <title>固废板块总结概括分析</title>
 </head>
 
 <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
@@ -42,6 +42,7 @@
         	return company1;
         }
     }
+
     function changeDiv() {
         showDiv001();
     }
@@ -49,7 +50,7 @@
     function getDataGrid() {
         $('#tg1').datagrid({
             url: 'ConclusionDiv1.jsp',
-            title: '总结该刊分项整体分析表',
+            title: '总体评价分项整体分析表',
             method: 'post',
             singleSelect: true,
             nowrap: true,
@@ -70,7 +71,7 @@
                     field: 'm1',
                     title: '排名',
                     align: 'center',
-                    width:20,
+                    width: 10,
                 },
                 {
                     field: 'm2',
@@ -86,7 +87,7 @@
                     field: 'm3',
                     title: '盈利能力',
                     sortable: true,
-                    width:20,
+                    width: 30,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
@@ -99,7 +100,7 @@
                     field: 'm4',
                     title: '债务风险',
                     sortable: true,
-                    width:20,
+                    width: 20,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
@@ -177,8 +178,9 @@
         });
     }
     function getRank() {
-        window.location.href = "DebtRiskRank.html";
+        window.location.href = "ConclusionRank.html";
     }
+   
     function getCompany() {
         $.ajax({
             url: 'ConclusionDiv1.jsp',
@@ -199,6 +201,11 @@
         }
     }
     function showDiv001() {
+    	var date = $('#date').datebox('getValue');
+    	year = date.length == 0 ? '2015' : date;
+		var lastYear = year - 1;
+		var perYear = lastYear - 1;
+		
         $.ajax({
             url: "ConclusionDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -229,7 +236,7 @@
 
                             var option = {
                                 title: {
-                                    text: getCompany() + "分项整体分析",
+                                    text: getCompany() + "总体评价分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -245,7 +252,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year, lastYear, perYear]
                                 },
                                 toolbox: {
                                     show: false,
@@ -257,18 +264,18 @@
                                     }
                                 },
                                 polar: [
-                                    {
-                                        indicator: [
-                                            {text: '盈利能力', max: 100},
-                                            {text: '债务风险', max: 100},
-                                            {text: '现金获取', max: 100},
-                                            {text: '成本控制', max: 100},
-                                            {text: '业务增长', max: 100},
-                                            {text: '经营效率', max: 100},
-                                            {text: '人员素质', max: 100}
-                                        ]
-                                    }
-                                ],
+                                        {
+                                            indicator: [
+                                                {text: '盈利能力', max: 100},
+                                                {text: '债务风险', max: 100},
+                                                {text: '现金获取', max: 100},
+                                                {text: '成本控制', max: 100},
+                                                {text: '业务增长', max: 100},
+                                                {text: '经营效率', max: 100},
+                                                {text: '人员素质', max: 100}
+                                            ]
+                                        }
+                                    ],
                                 calculable: true,
                                 series: [
                                     {
@@ -281,15 +288,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016'
+                                                name: year
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015'
+                                                name: lastYear
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014'
+                                                name: perYear
                                             }
                                         ]
                                     }
@@ -317,14 +324,14 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company"></td>
+            <td><input type="hidden" id="company" ></td>
         </tr>
     </table>
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 
-<div id="main1" style="height:510px;width: 45%;float: left;"></div>
-<div id="main2" style="height:510px;width: 55%;float: right;">
+<div id="main1" style="height:510px;width: 50%;float: left;"></div>
+<div id="main2" style="height:510px;width: 50%;float: right;">
     <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>

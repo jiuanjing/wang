@@ -91,14 +91,14 @@
                 },
                 {
                     field: 'm5',
-                    title: '当年水费回收率(%)',
+                    title: '水费回收率(%)',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='CashGetSingleIndex.html?company=" + rowData.m2 + "&kpi = 当年水费回收率'>" + value + "</a>";
+                        return "<a href='CashGetSingleIndex.html?company=" + rowData.m2 + "&kpi = 水费回收率'>" + value + "</a>";
                     }
                 },
                 {
@@ -141,7 +141,7 @@
     }
     function showDiv001() {
         var year1 = $('#date').datebox('getValue');
-        var year = year1.length == 0 ? 2015: year1;
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "CashGetDiv1.jsp",
             dataType: "json", //传参的数据类型
@@ -221,9 +221,9 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '经营性现金流量净额(万元)', max: 100},
-                                            {text: '当年水费回收率(%)', max: 100},
-                                            {text: '应收账款余额增减率(%)', max: 100}
+                                            {text: '水费回收率(%)', max: 300},
+                                            {text: '经营性现金流量净额(万元)', max: 20000},
+                                            {text: '应收账款增减率(%)', max: 300}
                                         ],
                                         name: {
                                             textStyle: {

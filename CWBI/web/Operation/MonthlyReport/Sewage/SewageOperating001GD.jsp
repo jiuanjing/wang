@@ -41,7 +41,7 @@
                     + " nvl(b.m6,0),nvl(b.m7,0),nvl(b.m8,0),nvl(b.m9,0),nvl(b.m10,0),"
                     + " nvl(b.m11,0),nvl(b.m12,0),nvl(b.m13,0),nvl(b.m14,0)"
                     + " from echarts.dim_op_kpi a left join echarts.dm_op_mr_kpi_actual b on a.kpi_code_num = b.kpi_code_num"
-                    + " where b.date_id =" + date + " and b.company_id =" + CompanyID + " and a.status = 1 and a.kpi_code_num =2003";
+                    + " where b.date_id =" + date + " and b.company_id =" + CompanyID + " and a.status = 1 and a.kpi_code_num =103";
 				/* 预算值 */
             String sqlstr4 = "select a.kpi_id,a.kpi_name \"预算水费回收率\",a.kpi_unit,"
                     + " nvl(b.m1,0),nvl(b.m2,0),nvl(b.m3,0),nvl(b.m4,0),nvl(b.m5,0),"

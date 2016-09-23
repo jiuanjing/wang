@@ -24,9 +24,9 @@
             }
             column = column.substring(0, column.length() - 1).trim();
 
-            String sqlstr1 = "select " + column + " from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=2051 and t.date_id = " + (year - 1);//同期主营人均产值
-            String sqlstr2 = "select " + column + " from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=2051 and t.date_id = " + year;//主营人均产值实际值
-            String sqlstr3 = "select " + column + " from echarts.dm_op_mr_kpi_budget t where t.company_id = " + CompanyID + " and t.kpi_code_num=2051 and t.date_id = " + year;//主营人均产值计划
+            String sqlstr1 = "select " + column + " from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=158 and t.date_id = " + (year - 1);//同期主营人均产值
+            String sqlstr2 = "select " + column + " from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=158 and t.date_id = " + year;//主营人均产值实际值
+            String sqlstr3 = "select " + column + " from echarts.dm_op_mr_kpi_budget t where t.company_id = " + CompanyID + " and t.kpi_code_num=158 and t.date_id = " + year;//主营人均产值计划
 
             List<String> sqlList = new ArrayList<String>();
             sqlList.add(sqlstr1);

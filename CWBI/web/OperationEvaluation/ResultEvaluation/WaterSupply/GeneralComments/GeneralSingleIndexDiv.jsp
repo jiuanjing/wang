@@ -20,23 +20,23 @@
     List<String> sqlList = new ArrayList<String>();
     if (dbOperation.dbOpen()) {
         //查询实际值
-        String sql1 = "select t.actual_value,t.company_id,t.date_id" +
+        String sql1 = "select t.comp_score,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
                 " where t1.kpi_id = t.kpi_id" +
                 "   and t.company_id = t2.company_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
+                "  and t1.kpi_type = 1 and t1.kpi_name = '" + kpi + "'" +
                 "   and t2.brief_name ='" + company + "'" +
                 "order by t.date_id";
-        String sql2 = "select t.actual_value,t.company_id,t.date_id" +
+        String sql2 = "select t.comp_score,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
+                "  and t1.kpi_type = 1 and t1.kpi_name = '" + kpi + "'" +
                 "   and t.company_id = -1 " +
                 "order by t.date_id";
-        String sql3 = "select t.actual_value,t.company_id,t.date_id" +
+        String sql3 = "select t.comp_score,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
                 " where t1.kpi_id = t.kpi_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
+                "  and t1.kpi_type = 1 and t1.kpi_name = '" + kpi + "'" +
                 "   and t.company_id = 0 " +
                 "order by t.date_id";
         sqlList.add(sql1);

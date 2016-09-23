@@ -13,7 +13,7 @@
 <%
     DBOperation dbOperation = new DBOperation(true);
     String date = request.getParameter("date");
-    date = date.length() == 0 ? "2016" : date;
+    date = date.length() == 0 ? "2015" : date;
     String kpiName = new String(request.getParameter("kpi").getBytes("ISO-8859-1"), "utf-8");
     if (dbOperation.dbOpen()) {
 
@@ -23,29 +23,29 @@
         List<String> list3 = new ArrayList<String>();
         List<String> list4 = new ArrayList<String>();
 
-        String sql = " select t1.brief_name, t.actual_value, t.score ,t.kpi_id" +
+        String sql = " select t1.brief_name, t.actual_value, t.comp_score ,t.kpi_id" +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = t1.company_id " +
                 "   and t.kpi_id = t2.kpi_id " +
-                "	and  t1.flag_sewage =1" +
-                " order by t.actual_value ";
+                "	and  t1.flag_sewage =1 and t2.kpi_type = 2" +
+                " order by t.comp_score ";
         //公司id为-1的实际值代表该kpi的标杆值
         String sql1 = " select t.actual_value " +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
-                "   and t.company_id = -1 " +
+                "   and t.company_id = -1 and t2.kpi_type = 2" +
                 "   and t.kpi_id = t2.kpi_id " +
-                " order by t.actual_value ";
+                " order by t.comp_score ";
 		
         ResultSet rs = dbOperation.executeQuery(sql);
         if (null != rs) {
             try {
                 while (rs.next()) {
                     list1.add(rs.getString(1));
-                    list2.add(rs.getString(2));
+                    list2.add(rs.getString(3));
                     list4.add(rs.getString(4));
                 }
             } catch (SQLException e) {

@@ -21,8 +21,8 @@
             int month = Integer.valueOf(date.substring(5, 7));
             String column = "";
 
-            String sqlstr1 = "select nvl(round(sum(sum" + month + "),2),0) from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=2051 and t.date_id = " + year;//主营人均产值实际值
-            String sqlstr2 = "select nvl(round(sum(sum" + month + "),2),0) from echarts.dm_op_mr_kpi_budget t where t.company_id = " + CompanyID + " and t.kpi_code_num=2051 and t.date_id = " + year;//主营人均产值计划
+            String sqlstr1 = "select nvl(round(sum(sum" + month + "),2),0) from echarts.dm_op_mr_kpi_actual t where t.company_id = " + CompanyID + " and t.kpi_code_num=158 and t.date_id = " + year;//主营人均产值实际值
+            String sqlstr2 = "select nvl(round(sum(sum" + month + "),2),0) from echarts.dm_op_mr_kpi_budget t where t.company_id = " + CompanyID + " and t.kpi_code_num=158 and t.date_id = " + year;//主营人均产值计划
 
             List<String> sqlList = new ArrayList<String>();
             sqlList.add(sqlstr1);

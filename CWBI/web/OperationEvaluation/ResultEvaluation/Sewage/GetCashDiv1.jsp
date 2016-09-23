@@ -17,15 +17,15 @@
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "select t1.brief_name," +
-                "       sum(score) as score," +
+                "       sum(comp_score) as comp_score," +
                 "       sum(decode(t.kpi_id, 2301, t.actual_value, null)) as 经营性现金流量金额," +
-                "       sum(decode(t.kpi_id, 2003, t.actual_value, null)) as 水费回收率," +
+                "       sum(decode(t.kpi_id, 103, t.actual_value, null)) as 水费回收率," +
                 "       sum(decode(t.kpi_id, 2303, t.actual_value, null)) as 应收账款余额增长率" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
-                "   and t.kpi_id in (2301,2003,2303)" +
+                "   and t.kpi_id in (2301,103,2303)" +
                 " group by t.company_id,t1.brief_name" +
-                " order by score desc";
+                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){
@@ -38,7 +38,9 @@
 					dataMap.put("m2", rs.getString(1));
 					dataMap.put("m3", rs.getString(2));
 					dataMap.put("m4", rs.getString(3));
-					
+					dataMap.put("m5", rs.getString(4));
+					dataMap.put("m6", rs.getString(5));
+
 					list.add(dataMap);
 				}
 			} catch (SQLException e) {

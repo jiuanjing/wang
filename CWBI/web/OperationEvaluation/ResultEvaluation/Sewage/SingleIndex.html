@@ -2,10 +2,6 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="Cache" content="no-cache">
     <title>单项指标趋势分析</title>
 </head>
 <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
@@ -27,18 +23,25 @@
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        var company = params.split("&")[0].split("=")[1].trim();
-        return company;
+        return params.split("&")[0].split("=")[1].trim();
+    }
+    function getUnit() {
+        var name = getKpi();
+
+        if (name.indexOf('率')!=-1){
+            return "%";
+        }else if(name.indexOf('价')!=-1){
+            return "元";
+        }
     }
     function getKpi() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        var kpi = params.split("&")[1].split("=")[1].trim();
-        return kpi;
+        return params.split("&")[1].split("=")[1].trim();
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: 'getCompany.jsp?company=' + getCompany(),
+            url: 'getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {
@@ -48,7 +51,7 @@
         });
     }
     function confirmIt() {
-        var val = $('#company').combobox('getText');
+        var val = $('#company').combobox('getValue');
         $.ajax({
             url: 'SingleIndexDiv.jsp',
             dataType: "json",
@@ -86,8 +89,9 @@
                                     }
                                 },
                                 tooltip: {
-
-                                    trigger: 'item'
+//                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
+                                    trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
@@ -112,7 +116,7 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],
@@ -171,6 +175,7 @@
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
+                console.log(return_data);
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -183,6 +188,7 @@
                             'echarts/chart/line',
                             'echarts/chart/bar'
                         ],
+                        //todo 当取不到值或者取到的为null是，线条显示不出来??
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
@@ -196,7 +202,8 @@
                                     }
                                 },
                                 tooltip: {
-                                    trigger: 'item'
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
+                                    trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
@@ -221,7 +228,7 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],

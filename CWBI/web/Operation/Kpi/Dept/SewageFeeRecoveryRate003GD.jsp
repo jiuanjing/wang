@@ -26,9 +26,9 @@
             //累计值
             String sumcolumn = "nvl(round(m13,2),0)";
 
-            String sqlstr1 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2003 and t.date_id = " + (year - 1);//同期水费回收率
-            String sqlstr2 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2003 and t.date_id = " + year;//实际水费回收率
-            String sqlstr3 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2003 and t.date_id = " + year;//计划水费回收率
+            String sqlstr1 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=103 and t.date_id = " + (year - 1);//同期水费回收率
+            String sqlstr2 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=103 and t.date_id = " + year;//实际水费回收率
+            String sqlstr3 = "select " + column + "," + sumcolumn + " from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=103 and t.date_id = " + year;//计划水费回收率
 
             List<String> sqlList = new ArrayList<String>();
             sqlList.add(sqlstr1);

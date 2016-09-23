@@ -17,19 +17,19 @@
         Map<String, Object> gsonmap = new HashMap<String, Object>();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         String sql = "select t1.brief_name," +
-                "       sum(score) as score," +
-                "       sum(decode(t.kpi_id, 1100, t.actual_value, null)) as kpi1100," +
-                "       sum(decode(t.kpi_id, 1200, t.actual_value, null)) as kpi1200," +
-                "       sum(decode(t.kpi_id, 1300, t.actual_value, null)) as kpi1300," +
-                "       sum(decode(t.kpi_id, 1400, t.actual_value, null)) as kpi1400," +
-                "       sum(decode(t.kpi_id, 1500, t.actual_value, null)) as kpi1500," +
-                "       sum(decode(t.kpi_id, 1600, t.actual_value, null)) as kpi1600," +
-                "       sum(decode(t.kpi_id, 1700, t.actual_value, null)) as kpi1700" +
+                "       sum(comp_score) as comp_score," +
+                "       sum(decode(t.kpi_id, 1100, t.comp_score, null)) as kpi1100," +
+                "       sum(decode(t.kpi_id, 1200, t.comp_score, null)) as kpi1200," +
+                "       sum(decode(t.kpi_id, 1300, t.comp_score, null)) as kpi1300," +
+                "       sum(decode(t.kpi_id, 1400, t.comp_score, null)) as kpi1400," +
+                "       sum(decode(t.kpi_id, 1500, t.comp_score, null)) as kpi1500," +
+                "       sum(decode(t.kpi_id, 1600, t.comp_score, null)) as kpi1600," +
+                "       sum(decode(t.kpi_id, 1700, t.comp_score, null)) as kpi1700" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_water = 1" +
                 "   and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700)" +
                 " group by t.company_id,t1.brief_name" +
-                " order by score desc";
+                " order by comp_score desc";
 
         ResultSet rs = dbOperation.executeQuery(sql);
         if (null != rs) {

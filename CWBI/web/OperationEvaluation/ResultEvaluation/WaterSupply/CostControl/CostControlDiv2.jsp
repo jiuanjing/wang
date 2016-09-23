@@ -16,25 +16,25 @@
 
         Map<String, Object> gsonmap = new HashMap<String, Object>();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        //34,1402,1403,1404,1405,44,1038,1408,62,1410,31
+        //34,1402,1403,1404,1405,44,38,1408,62,1410,31
         String sql = "select t1.brief_name," +
-                "       sum(score) as score," +
+                "       sum(comp_score) as comp_score," +
                 "       sum(decode(t.kpi_id, 34, t.actual_value, null)) as kpi34," +
                 "       sum(decode(t.kpi_id, 1402, t.actual_value, null)) as kpi1402," +
                 "       sum(decode(t.kpi_id, 1403, t.actual_value, null)) as kpi1403," +
                 "       sum(decode(t.kpi_id, 1404, t.actual_value, null)) as kpi1404," +
                 "       sum(decode(t.kpi_id, 1405, t.actual_value, null)) as kpi1405," +
                 "       sum(decode(t.kpi_id, 44, t.actual_value, null)) as kpi44," +
-                "       sum(decode(t.kpi_id, 1038, t.actual_value, null)) as kpi1038," +
+                "       sum(decode(t.kpi_id, 38, t.actual_value, null)) as kpi1038," +
                 "       sum(decode(t.kpi_id, 1408, t.actual_value, null)) as kpi1408," +
                 "       sum(decode(t.kpi_id, 62, t.actual_value, null)) as kpi62," +
                 "       sum(decode(t.kpi_id, 1410, t.actual_value, null)) as kpi1410," +
                 "       sum(decode(t.kpi_id, 31, t.actual_value, null)) as kpi31" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = " + dateID + " and t1.company_id = t.company_id and t1.flag_water = 1" +
-                "   and t.kpi_id in (34, 1402, 1403, 1404, 1405, 44,1038,1408,62,1410,31)" +
+                "   and t.kpi_id in (34, 1402, 1403, 1404, 1405, 44,38,1408,62,1410,31)" +
                 " group by t.company_id,t1.brief_name" +
-                " order by score desc";
+                " order by comp_score desc";
 
         ResultSet rs = dbOperation.executeQuery(sql);
         if (null != rs) {

@@ -24,9 +24,9 @@
             }
             column = column.substring(0, column.length() - 1).trim();
 
-            String sqlstr1 = "select " + column + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2051 and t.date_id = " + (year - 1);//同期主营人均产值
-            String sqlstr2 = "select " + column + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2051 and t.date_id = " + year;//实际主营人均产值
-            String sqlstr3 = "select " + column + " from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=2051 and t.date_id = " + year;//预算主营人均产值
+            String sqlstr1 = "select " + column + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=158 and t.date_id = " + (year - 1);//同期主营人均产值
+            String sqlstr2 = "select " + column + " from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=158 and t.date_id = " + year;//实际主营人均产值
+            String sqlstr3 = "select " + column + " from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id=" + DeptID + " and t.kpi_code_num=158 and t.date_id = " + year;//预算主营人均产值
 
             List<String> sqlList = new ArrayList<String>();
             sqlList.add(sqlstr1);

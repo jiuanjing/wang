@@ -164,6 +164,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015: year1;
         $.ajax({
             url: "EffeientDiv1.jsp",
             dataType: "json", //传参的数据类型
@@ -245,11 +247,11 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '人均售水量(万吨)', max: 50},
                                                     {text: '人均产值(万元)', max: 50},
+                                                    {text: '人均售水量(吨)', max: 50},
                                                     {text: '人均净利润(万元)', max: 50},
                                                     {text: '居民人均用水量(万吨)', max: 100},
-                                                    {text: '供水服务人口数(万人)', max: 100}
+                                                    {text: '供水服务人口数(万人)', max: 300}
                                                 ],
                                                 name : {
                                                     textStyle:{
@@ -270,15 +272,15 @@
                                                     },
                                                     {
                                                         value: return_data.data2,
-                                                        name: '2016年'
+                                                        name: year + '年'
                                                     },
                                                     {
                                                         value: return_data.data3,
-                                                        name: '2015年'
+                                                        name: year - 1 + '年'
                                                     },
                                                     {
                                                         value: return_data.data4,
-                                                        name: '2014年'
+                                                        name: year - 2 + '年'
                                                     }
                                                 ]
                                             }

@@ -106,7 +106,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 投资回报率'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 投资回报率（ROI）'>" + value + "</a>";
                     }
                 },
                 {
@@ -175,6 +175,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015: year1;
         $.ajax({
             url: "ProfitAbilityDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -221,7 +223,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                 },
                                 toolbox: {
                                     show: false,
@@ -235,7 +237,7 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '投资回报率', max: 100},
+                                            {text: '投资回报率', max: 350},
                                             {text: '水处理毛利率', max: 100},
                                             {text: '综合水价', max: 100},
                                             {text: '综合电价', max: 100}
@@ -257,15 +259,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016'
+                                                name:  year + '年'
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015'
+                                                name:  year -1+ '年'
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014'
+                                                name:  year -2+ '年'
                                             }
                                         ]
                                     }

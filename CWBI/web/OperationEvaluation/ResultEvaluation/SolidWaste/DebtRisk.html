@@ -148,6 +148,11 @@
         }
     }
     function showDiv001() {
+    	var date = $('#date').datebox('getValue');
+        var year = date.length == 0 ? '2015' : date;
+		var lastYear = year - 1;
+		var perYear = lastYear - 1;
+		
         $.ajax({
             url: "DebtRiskDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -178,7 +183,7 @@
 
                             var option = {
                                 title: {
-                                    text: getCompany() + "分项整体分析",
+                                    text: getCompany() + "债务风险分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -194,7 +199,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year, lastYear, perYear]
                                 },
                                 toolbox: {
                                     show: false,
@@ -209,9 +214,9 @@
                                     {
                                         indicator: [
                                             {text: '资产负债率', max: 100},
-                                            {text:'已获利息倍数', max: 100},
+                                            {text:'已获利息倍数', max: 20},
                                             {text: '资深负债率', max: 100},
-                                            {text:'已获利息倍数', max: 100}
+                                            {text:'已获利息倍数', max: 20}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -231,15 +236,15 @@
                                             },
                                             {
                                                 value: return_data.data2.concat(return_data.data2),
-                                                name: '2016'
+                                                name: year
                                             },
                                             {
                                                 value: return_data.data3.concat(return_data.data3),
-                                                name: '2015'
+                                                name: lastYear
                                             },
                                             {
                                                 value: return_data.data4.concat(return_data.data4),
-                                                name: '2014'
+                                                name: perYear
                                             }
                                         ]
                                     }
@@ -273,8 +278,8 @@
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
 
-<div id="main1" style="height:510px;width: 50%;float: left;"></div>
-<div id="main2" style="height:510px;width: 50%;float: right;">
+<div id="main1" style="height:510px;width: 45%;float: left;"></div>
+<div id="main2" style="height:510px;width: 55%;float: right;">
     <table id="tg1" style="height: 510px;"></table>
 </div>
 </body>

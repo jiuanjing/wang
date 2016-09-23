@@ -35,8 +35,8 @@
         var val = name.charAt(name.length - 1)
         if (val == '率'){
             return "%";
-        }else if(val == '价'){
-            return "元";
+        }else{
+            return "万元";
         }
     }
     function getKpi() {
@@ -95,7 +95,7 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}名',
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
                                     trigger: 'axis'
                                 },
                                 legend: {
@@ -205,7 +205,7 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}名',
+                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
                                     trigger: 'axis'
                                 },
                                 legend: {

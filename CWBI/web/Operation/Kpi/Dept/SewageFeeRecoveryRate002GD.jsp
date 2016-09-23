@@ -18,8 +18,8 @@
             String DeptID = request.getParameter("DeptID");
             String year = date.substring(0, 4);
             int month = Integer.parseInt(date.substring(5));
-            String sqlstr1 = "select nvl(round(sum" + month + ",2),0) from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id = " + DeptID + " and t.kpi_code_num=2003 and t.date_id =" + year;
-            String sqlstr2 = "select nvl(round(sum" + month + ",2),0) from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id = " + DeptID + " and t.kpi_code_num=2003 and t.date_id =" + year;
+            String sqlstr1 = "select nvl(round(sum" + month + ",2),0) from echarts.dm_op_mr_kpi_actual_sum t where t.sum_id = " + DeptID + " and t.kpi_code_num=103 and t.date_id =" + year;
+            String sqlstr2 = "select nvl(round(sum" + month + ",2),0) from echarts.dm_op_mr_kpi_budget_sum t where t.sum_id = " + DeptID + " and t.kpi_code_num=103 and t.date_id =" + year;
 
             List<String> sqlList = new ArrayList<String>();
             sqlList.add(sqlstr1);

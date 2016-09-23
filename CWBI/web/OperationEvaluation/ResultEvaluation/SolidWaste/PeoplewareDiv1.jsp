@@ -18,13 +18,13 @@
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = 
 				"select t1.brief_name," +
-		                "       sum(score) as score," +
-		                "       sum(decode(t.kpi_id, 2701, t.actual_value, null)) as 人员素质结构分布" +
+		                "       sum(comp_score) as comp_score," +
+		                "       sum(decode(t.kpi_id, 4701, t.actual_value, null)) as 人员素质结构分布" +
 		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
-		                "   and t.kpi_id in (2701)" +
+		                "   and t.kpi_id in (4701)" +
 		                " group by t.company_id,t1.brief_name" +
-		                " order by score desc";
+		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){

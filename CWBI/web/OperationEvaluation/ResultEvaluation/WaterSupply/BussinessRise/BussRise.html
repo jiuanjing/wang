@@ -91,26 +91,26 @@
                 },
                 {
                     field: 'm5',
-                    title: '利润总和增长率(%)',
+                    title: '利润总额增长率(%)',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='BussRiseSingleIndex.html?company=" + rowData.m2 + "&kpi = 利润总和增长率'>" + value + "</a>";
+                        return "<a href='BussRiseSingleIndex.html?company=" + rowData.m2 + "&kpi = 利润总额增长率'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm6',
-                    title: '人工成本增长率(%)',
+                    title: '人工成本利润率(%)',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='BussRiseSingleIndex.html?company=" + rowData.m2 + "&kpi = 人工成本增长率'>" + value + "</a>";
+                        return "<a href='BussRiseSingleIndex.html?company=" + rowData.m2 + "&kpi = 人工成本利润率'>" + value + "</a>";
                     }
                 },
                 {
@@ -233,10 +233,10 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '营业收入增长率(%)', max: 100},
-                                                    {text: '利润总额增长率(%)', max: 100},
-                                                    {text: '人工成本增长率(%)', max: 100},
-                                                    {text: '售水量增长率(%)', max: 100}
+                                                    {text: '营业收入增长率(%)', max: 50},
+                                                    {text: '利润总额增长率(%)', max: 5000},
+                                                    {text: '人工成本增长率(%)', max: 1000},
+                                                    {text: '售水量增长率(%)', max: 50}
                                                 ],
                                                 name: {
                                                     textStyle: {

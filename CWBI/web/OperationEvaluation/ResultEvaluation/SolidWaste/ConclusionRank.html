@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>综合排名分析</title>
+    <title>固废板块综合排名分析</title>
 </head>
 <script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
@@ -61,8 +61,8 @@
                     }
                     console.log(result);
                     return (result / return_data.data2.length).toFixed(2);//这得到的是总的回报率，除以公司总数就是平局值，然后求平均值，保留两位
-                }
-               
+                }                
+
                 var poleValue = return_data.data3[0];//78
                 var kpi_id = return_data.kpi_id;
                 
@@ -93,7 +93,7 @@
                                 },
                                 tooltip: {
                                     trigger: 'axis',
-                                    formatter : "{b} <br/> {a} : {c}
+                                    formatter : "{b} <br/> {a} : {c}"
                                 },
                                 toolbox: {
                                     show: false,

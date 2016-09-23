@@ -26,7 +26,7 @@
     function getKpiName() {
         var val = $('#kpi').combobox('getText');
         if (val.length == 0) {
-            return "主营人均产值";
+            return "人均产值";
         } else {
             return val;
         }
@@ -142,7 +142,7 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '主营人均产值', xAxis: getAverage(), yAxis: -10},
+                                                    {name: '人均产值', xAxis: getAverage(), yAxis: -10},
                                                     {value: getAverage(), xAxis: getAverage(), yAxis: 110}
                                                 ],
                                                 [

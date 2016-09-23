@@ -139,7 +139,7 @@
                 },
                 {
                     field: 'm9',
-                    title: '吨水电耗(元)',
+                    title: '单位药剂费(元)',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
@@ -151,7 +151,7 @@
                 },
                 {
                     field: 'm10',
-                    title: '吨水药剂费(元)',
+                    title: '单位电耗(元)',
                     sortable: true,
                     sorter: function (a, b) {
                         return (a * 10 > b * 10 ? 1 : -1);
@@ -319,17 +319,17 @@
                                         polar: [
                                             {
                                                 indicator: [
-                                                    {text: '产销差率(%)', max: 100},
-                                                    {text: '管理费用成本比(%)', max: 10},
-                                                    {text: '人工可控管理费用(万元)', max: 30},
-                                                    {text: '吨水经营成本(万元)', max: 30},
-                                                    {text: '吨水人工成本(万元)', max: 30},
-                                                    {text: '吨水药剂费(万元)', max: 30},
-                                                    {text: '吨水电耗(万元)', max: 30},
-                                                    {text: '吨水电费(万元)', max: 30},
-                                                    {text: '吨水维修费(万元)', max: 30},
-                                                    {text: '产销差', max: 30},
-                                                    {text: '自用水率(%)', max: 100}
+                                                    {text: '自用水率(%)', max: 50},
+                                                    {text: '产销差率(%)', max: 40},
+                                                    {text: '单位电耗(万元)', max: 1},
+                                                    {text: '单位药剂费(万元)', max: 0.5},
+                                                    {text: '吨水维修费(万元)', max: 1},
+                                                    {text: '管理费用成本比(%)', max: 1},
+                                                    {text: '人均可控管理费用(万元)', max: 4},
+                                                    {text: '吨水经营成本(万元)', max: 3},
+                                                    {text: '吨水人工成本(万元)', max: 3},
+                                                    {text: '吨水电费(万元)', max: 1},
+                                                    {text: '产销差(万吨)', max: 50}
                                                 ],
                                                 name: {
                                                     textStyle: {

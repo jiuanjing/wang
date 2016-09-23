@@ -28,7 +28,7 @@
             String sqlstr3 = "select nvl(c.m1,0),nvl(c.m2,0),nvl(c.m3,0),nvl(c.m4,0),nvl(c.m5,0),nvl(c.m6,0),nvl(c.m7,0),nvl(c.m8,0),nvl(c.m9,0),nvl(c.m10,0),nvl(c.m11,0),nvl(c.m12,0) from echarts.dm_op_mr_kpi_actual c"
                     + " where c.kpi_code_num=2015 and c.company_id = " + CompanyID;
             String sqlstr4 = "select round(c.sum1,2),round(c.sum2,2),round(c.sum3,2),round(c.sum4,2),round(c.sum5,2),round(c.sum6,2),round(c.sum7,2),round(c.sum8,2),round(c.sum9,2),round(c.sum10,2),round(c.sum11,2),round(c.sum12,2) from echarts.dm_op_mr_kpi_actual c"
-                    + " where c.kpi_code_num=2003 and c.company_id = " + CompanyID;
+                    + " where c.kpi_code_num=103 and c.company_id = " + CompanyID;
 
             String where = "";
 

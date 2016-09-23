@@ -17,7 +17,7 @@
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "select t1.brief_name," +
-		                "       sum(score) as score," +
+		                "       sum(comp_score) as comp_score," +
 		                "       sum(decode(t.kpi_id, 4100, t.actual_value, null)) as 盈利能力," +
 		                "       sum(decode(t.kpi_id, 4200, t.actual_value, null)) as 债务风险," +
 		                "       sum(decode(t.kpi_id, 4300, t.actual_value, null)) as 现金获取," +
@@ -29,7 +29,7 @@
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
 		                "   and t.kpi_id in (4100,4200,4300,4400,4500,4600,4700)" +
 		                " group by t.company_id,t1.brief_name" +
-		                " order by score desc";
+		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);
 		if(rs != null){
@@ -40,13 +40,13 @@
 					dataMap.put("m1", i + "");
 					i ++;
 					dataMap.put("m2", rs.getString(1));
-					dataMap.put("m3", rs.getString(2));
-					dataMap.put("m4", rs.getString(3));
-					dataMap.put("m5", rs.getString(4));
-					dataMap.put("m6", rs.getString(5));
-					dataMap.put("m7", rs.getString(6));
-					dataMap.put("m8", rs.getString(7));
-					dataMap.put("m9", rs.getString(8));
+					dataMap.put("m3", rs.getString(3));
+					dataMap.put("m4", rs.getString(4));
+					dataMap.put("m5", rs.getString(5));
+					dataMap.put("m6", rs.getString(6));
+					dataMap.put("m7", rs.getString(7));
+					dataMap.put("m8", rs.getString(8));
+					dataMap.put("m9", rs.getString(9));
 					
 					list.add(dataMap);
 				}

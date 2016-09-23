@@ -11,16 +11,17 @@
 	DBOperation db = new DBOperation(true);
 	String company = new String(request.getParameter("company").getBytes("ISO-8859-1"),"utf-8");
 	Map<String, Object> gsonmap = new HashMap<String, Object>();
-
+	System.out.println(company);
+	
 	List<String> dataList1 = new ArrayList<String>();
 	List<String> dataList2 = new ArrayList<String>();
 	List<String> dataList3 = new ArrayList<String>();
 	
 	if(db.dbOpen()){
-		String sql = "select t.date_id ,sum(t.score),sum(t.rank)" +
+		String sql = "select t.date_id ,sum(t.comp_score),sum(t.rank)" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t1.brief_name='" + company + "'  and t1.flag_solid_waste = 1 and t.company_id = t1.company_id" +
-                "   and t.kpi_id in (2101,2102,2050,2018)" +
+                "   and t.kpi_id in (4101,4102,4103,4104)" +
                 " group by t.date_id order by t.date_id";
 		ResultSet rs = db.executeQuery(sql);
 		if (rs != null){
@@ -36,7 +37,7 @@
 		}
 		db.dbClose();
 		gsonmap.put("date", dataList1);
-		gsonmap.put("score", dataList2);
+		gsonmap.put("comp_score", dataList2);
 		gsonmap.put("rank", dataList3);
 		
 		Gson gson = new Gson();

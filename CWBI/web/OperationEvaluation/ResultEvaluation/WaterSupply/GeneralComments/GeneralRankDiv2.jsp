@@ -13,7 +13,7 @@
 <%
     DBOperation dbOperation = new DBOperation(true);
     String date = request.getParameter("date");
-    date = date.length() == 0 ? "2016" : date;
+    date = date.length() == 0 ? "2015" : date;
     String kpiName = new String(request.getParameter("kpi").getBytes("ISO-8859-1"), "utf-8");
     if (dbOperation.dbOpen()) {
 
@@ -22,21 +22,21 @@
         List<String> list2 = new ArrayList<String>();
         List<String> list3 = new ArrayList<String>();
 
-        String sql = " select t1.brief_name, t.actual_value, t.score " +
+        String sql = " select t1.brief_name, t.comp_score, t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = t1.company_id " +
                 "   and t.kpi_id = t2.kpi_id " +
-                " order by t.actual_value ";
+                " order by t.comp_score ";
         //公司id为-1的实际值代表该kpi的标杆值
-        String sql1 = " select t.actual_value " +
+        String sql1 = " select t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = -1 " +
                 "   and t.kpi_id = t2.kpi_id " +
-                " order by t.actual_value ";
+                " order by t.comp_score ";
 
         ResultSet rs = dbOperation.executeQuery(sql);
         if (null != rs) {

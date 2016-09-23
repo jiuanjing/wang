@@ -175,6 +175,11 @@
         }
     }
     function showDiv001() {
+    	var date = $('#date').datebox('getValue');
+    	year = date.length == 0 ? '2015' : date;
+		var lastYear = year - 1;
+		var perYear = lastYear - 1;
+		
         $.ajax({
             url: "ProfitAbilityDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -205,7 +210,7 @@
 
                             var option = {
                                 title: {
-                                    text: getCompany() + "分项整体分析",
+                                    text: getCompany() + "盈利能力分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -221,7 +226,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year, lastYear, perYear]
                                 },
                                 toolbox: {
                                     show: false,
@@ -237,8 +242,8 @@
                                         indicator: [
                                             {text: '投资回报率', max: 100},
                                             {text: '水处理毛利率', max: 100},
-                                            {text: '综合水价', max: 100},
-                                            {text: '综合电价', max: 100}
+                                            {text: '综合水价', max: 10},
+                                            {text: '综合电价', max: 10}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -257,15 +262,15 @@
                                             },
                                             {
                                                 value: return_data.data2,
-                                                name: '2016'
+                                                name: year
                                             },
                                             {
                                                 value: return_data.data3,
-                                                name: '2015'
+                                                name: lastYear
                                             },
                                             {
                                                 value: return_data.data4,
-                                                name: '2014'
+                                                name: perYear
                                             }
                                         ]
                                     }

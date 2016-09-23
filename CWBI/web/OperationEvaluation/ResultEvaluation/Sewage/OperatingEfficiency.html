@@ -97,7 +97,7 @@
                 },
                 {
                     field: 'm4',
-                    title: '主营人均产值',
+                    title: '人均产值',
                     sortable: true,
                     width:20,
                     sorter: function (a, b) {
@@ -105,7 +105,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 主营人均产值'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 人均产值'>" + value + "</a>";
                     }
                 },
                 {
@@ -147,6 +147,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "OperatingEfficiencyDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -193,7 +195,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                 },
                                 toolbox: {
                                     show: false,
@@ -207,10 +209,10 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '主营人均产值', max: 100},
-                                            {text: '人均净利润', max: 100},
-                                            {text: '主营人均产值', max: 100},
-                                            {text: '人均净利润', max: 100}
+                                            {text: '人均产值', max: 200},
+                                            {text: '人均净利润', max: 200},
+                                            {text: '人均产值', max: 200},
+                                            {text: '人均净利润', max: 200}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -229,15 +231,15 @@
                                             },
                                             {
                                                 value: return_data.data2.concat(return_data.data2),
-                                                name: '2016'
+                                                name: year + '年'
                                             },
                                             {
                                                 value: return_data.data3.concat(return_data.data3),
-                                                name: '2015'
+                                                name: year-1 + '年'
                                             },
                                             {
                                                 value: return_data.data4.concat(return_data.data4),
-                                                name: '2014'
+                                                name: year-2+ '年'
                                             }
                                         ]
                                     }

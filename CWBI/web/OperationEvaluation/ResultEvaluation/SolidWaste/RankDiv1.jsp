@@ -12,12 +12,13 @@
 	String date = new String(request.getParameter("date").getBytes("ISO-8859-1"),"gbk");
 	date = date.equals("") ? "2015" : date;
 	String kpiName = new String(request.getParameter("kpi").getBytes("ISO-8859-1"),"utf-8");
+	System.out.println(kpiName);
 	
 	if(db.dbOpen()){
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
-		 String sql = " select t1.brief_name, t.actual_value, t.score " +
+		 String sql = " select t1.brief_name, t.actual_value, t.comp_score " +
 	                "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
 	                " where t.date_id = " + date +
 	                "   and t2.kpi_name = '" + kpiName + "' " +
@@ -25,6 +26,7 @@
 	                "   and t.kpi_id = t2.kpi_id " +
 	                "	and  t1.flag_solid_waste =1" +
 	                " order by t.actual_value desc";
+		 System.out.println(sql);
 		 ResultSet rs = db.executeQuery(sql);
 		 if(null != rs){
 			 try {

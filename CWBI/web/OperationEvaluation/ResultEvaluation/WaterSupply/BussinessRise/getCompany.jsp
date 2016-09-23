@@ -11,7 +11,7 @@
     DBOperation db = new DBOperation(true);
     String city = new String(request.getParameter("company").getBytes("ISO-8859-1"), "gbk");
     if (db.dbOpen()) {
-        String sql = "select t.brief_name from echarts.dim_op_company t where t.flag_water = 1 ";
+        String sql = "select distinct t.brief_name from echarts.dim_op_company t,dm_op_yr_evaluate t1 where t.company_id = t1.company_id and t.flag_water = 1  ";
         ResultSet rs = db.executeQuery(sql);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         if (null != rs) {

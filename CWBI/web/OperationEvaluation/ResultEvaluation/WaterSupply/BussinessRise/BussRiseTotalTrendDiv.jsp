@@ -18,7 +18,7 @@
     List<String> dataList1 = new ArrayList<String>();
     List<String> dataList2 = new ArrayList<String>();
     if (dbOperation.dbOpen()) {
-        String sql = "select t.date_id ,sum(t.score),sum(t.rank)" +
+        String sql = "select t.date_id ,sum(t.comp_score),sum(t.comp_rank)" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t1.brief_name='" + company + "' and t.company_id = t1.company_id" +
                 "   and t.kpi_id in (1501, 1502, 1503, 1504)" +
@@ -36,8 +36,8 @@
             }
         }
         dbOperation.dbClose();
-        gsonMap.put("score",dataList1);
-        gsonMap.put("rank",dataList2);
+        gsonMap.put("comp_score",dataList1);
+        gsonMap.put("comp_rank",dataList2);
 
         Gson gson = new Gson();
         String s = gson.toJson(gsonMap);

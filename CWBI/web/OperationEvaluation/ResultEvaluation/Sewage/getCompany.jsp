@@ -10,7 +10,7 @@
 <% 
 	DBOperation db = new DBOperation(true);
 	String company = new String(request.getParameter("company").getBytes("ISO-8859-1"),"gbk");
-	String sql = "select t.company_id, t.brief_name from echarts.dim_op_company t where t.flag_sewage=1";
+	String sql = "select distinct t.brief_name from echarts.dim_op_company t,dm_op_yr_evaluate t1 where t.company_id = t1.company_id and t.flag_sewage = 1";
 	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 	
 	ResultSet rs = db.executeQuery(sql);
@@ -18,13 +18,13 @@
 		try{
 			while(rs.next()){
 				Map<String, Object> map = new HashMap<String, Object>();
-				if(company.equals(rs.getString(2))){
+				if(company.equals(rs.getString(1))){
 					map.put("id", rs.getString(1));
-					map.put("text", rs.getString(2));
+					map.put("text", rs.getString(1));
 					map.put("selected", true);
 				} else {
 					map.put("id", rs.getString(1));
-					map.put("text", rs.getString(2));
+					map.put("text", rs.getString(1));
 				}
 				list.add(map);
 			}

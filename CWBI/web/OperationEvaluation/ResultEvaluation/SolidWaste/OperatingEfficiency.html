@@ -147,6 +147,11 @@
         }
     }
     function showDiv001() {
+    	var date = $('#date').datebox('getValue');
+    	year = date.length == 0 ? '2015' : date;
+		var lastYear = year - 1;
+		var perYear = lastYear - 1;
+		
         $.ajax({
             url: "OperatingEfficiencyDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -177,7 +182,7 @@
 
                             var option = {
                                 title: {
-                                    text: getCompany() + "分项整体分析",
+                                    text: getCompany() + "经营效率分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -193,7 +198,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year, lastYear, perYear]
                                 },
                                 toolbox: {
                                     show: false,
@@ -229,15 +234,15 @@
                                             },
                                             {
                                                 value: return_data.data2.concat(return_data.data2),
-                                                name: '2016'
+                                                name: year
                                             },
                                             {
                                                 value: return_data.data3.concat(return_data.data3),
-                                                name: '2015'
+                                                name: lastYear
                                             },
                                             {
                                                 value: return_data.data4.concat(return_data.data4),
-                                                name: '2014'
+                                                name: perYear
                                             }
                                         ]
                                     }

@@ -134,6 +134,8 @@
         }
     }
     function showDiv001() {
+        var year1 = $('#date').datebox('getValue');
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "PeoplewareDiv2.jsp",
             dataType: "json", //传参的数据类型
@@ -180,7 +182,7 @@
                                     orient: 'vertical',
                                     x: 'right',
                                     y: 'bottom',
-                                    data: ['标杆值', '2016', '2015', '2014']
+                                    data: ['标杆值', year + '年', year - 1 + '年', year - 2 + '年']
                                 },
                                 toolbox: {
                                     show: false,
@@ -194,9 +196,9 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '人员素质结构分布', max: 100},
-                                            {text: '人员素质结构分布', max: 100},
-                                            {text: '人员素质结构分布', max: 100}
+                                            {text: '人员素质结构分布', max: 5},
+                                            {text: '人员素质结构分布', max: 5},
+                                            {text: '人员素质结构分布', max: 5}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}
@@ -215,15 +217,15 @@
                                             },
                                             {
                                                 value: return_data.data2.concat(return_data.data2,return_data.data2,return_data.data2),
-                                                name: '2016'
+                                                name:  year + '年'
                                             },
                                             {
                                                 value: return_data.data3.concat(return_data.data3,return_data.data3,return_data.data3),
-                                                name: '2015'
+                                                name:  year-1 + '年'
                                             },
                                             {
                                                 value: return_data.data4.concat(return_data.data4,return_data.data4,return_data.data4),
-                                                name: '2014'
+                                                name:  year-2 + '年'
                                             }
                                         ]
                                     }
