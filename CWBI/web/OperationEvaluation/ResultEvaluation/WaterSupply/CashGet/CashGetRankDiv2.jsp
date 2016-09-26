@@ -27,7 +27,7 @@
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = t1.company_id " +
-                "   and t.kpi_id = t2.kpi_id " +
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.actual_value ";
         //公司id为-1的实际值代表该kpi的标杆值
         String sql1 = " select t.actual_value " +
@@ -35,7 +35,7 @@
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = -1 " +
-                "   and t.kpi_id = t2.kpi_id " +
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.actual_value ";
 
         ResultSet rs = dbOperation.executeQuery(sql);

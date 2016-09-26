@@ -21,7 +21,6 @@
         List<String> list1 = new ArrayList<String>();
         List<String> list2 = new ArrayList<String>();
         List<String> list3 = new ArrayList<String>();
-        List<String> list4 = new ArrayList<String>();
 
         String sql = " select t1.brief_name, t.actual_value, t.comp_score ,t.kpi_id" +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
@@ -65,13 +64,11 @@
         gsonmap.put("data1",list1);
         gsonmap.put("data2",list2);
         gsonmap.put("data3",list3);//标杆值
-		gsonmap.put("kpi_id", list4);
-        
+
         dbOperation.dbClose();
 
         Gson gson = new Gson();
         String s = gson.toJson(gsonmap);
-        System.out.println(gsonmap);
         out.write(s);
 
     } else {

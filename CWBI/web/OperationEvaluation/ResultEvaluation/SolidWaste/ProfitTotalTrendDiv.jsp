@@ -11,8 +11,7 @@
 	DBOperation db = new DBOperation(true);
 	String company = new String(request.getParameter("company").getBytes("ISO-8859-1"),"utf-8");
 	Map<String, Object> gsonmap = new HashMap<String, Object>();
-	System.out.println(company);
-	
+
 	List<String> dataList1 = new ArrayList<String>();
 	List<String> dataList2 = new ArrayList<String>();
 	List<String> dataList3 = new ArrayList<String>();

@@ -18,7 +18,7 @@
 	
 	if(db.dbOpen()){
 		//查询实际值
-		String sql1 = "select t.actual_value,t.company_id,t.date_id" +
+		String sql1 = "select t.comp_score,t.company_id,t.date_id" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
                 " where t1.kpi_id = t.kpi_id" +
                 "   and t.company_id = t2.company_id" +
@@ -27,19 +27,19 @@
                 "	and t2.flag_sewage=1" +
                 "order by t.date_id";
 		//行业标杆值
-		 String sql2 = "select t.actual_value,t.company_id,t.date_id" +
-	                "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
+		 String sql2 = "select t.comp_score,t.company_id,t.date_id" +
+	                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
 	                " where t1.kpi_id = t.kpi_id" +
 	                "   and t1.kpi_name = '" + kpi + "'" +
-	                "   and t.company_id = -1 and t1.kpi_type = 2" +
-	                " order by t.date_id";
+	                "   and t.company_id = -1 and t2.flag_sewage=1" +
+	                "order by t.date_id";
 		//行业平均值
-		 String sql3 = "select t.actual_value,t.company_id,t.date_id" +
-	                "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
+		 String sql3 = "select t.comp_score,t.company_id,t.date_id" +
+	                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
 	                " where t1.kpi_id = t.kpi_id" +
 	                "   and t1.kpi_name = '" + kpi + "'" +
-	                "   and t.company_id = 0 and t1.kpi_type = 2" +
-	                " order by t.date_id";
+	                "   and t.company_id = 0 and t2.flag_sewage=1" +
+	                "order by t.date_id";
 		
 		sqlList.add(sql1);
 		sqlList.add(sql2);
@@ -64,8 +64,6 @@
 		Gson gson = new Gson();
 		String s = gson.toJson(gsonmap);
 		out.write(s);
-        System.out.println(sql3);
-		System.out.println(s);
 	} else {
 		  out.write("<script>alert('对不起！系统无法与数据库建立链接，请稍后再试或与系统管理员联系！');</script>");
 	}

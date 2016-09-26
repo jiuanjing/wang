@@ -124,7 +124,7 @@
                 },
                 {
                     field: 'm6',
-                    title: '综合水价',
+                    title: '污水处理单价',
                     sortable: true,
                     width:20,
                     sorter: function (a, b) {
@@ -132,7 +132,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合水价'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 污水处理单价'>" + value + "</a>";
                     }
                 },
                 {
@@ -237,10 +237,10 @@
                                 polar: [
                                     {
                                         indicator: [
-                                            {text: '投资回报率', max: 350},
-                                            {text: '水处理毛利率', max: 100},
-                                            {text: '综合水价', max: 100},
-                                            {text: '综合电价', max: 100}
+                                            {text: '综合电价', max: 5},
+                                            {text: '污水处理单价', max: 5},
+                                            {text: '投资回报率', max: 100},
+                                            {text: '水处理毛利率', max: 100}
                                         ],
                                         name:{
                                             textStyle:{fontSize:10}

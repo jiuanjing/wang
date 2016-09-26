@@ -25,25 +25,18 @@
         var params = url.split("?")[1];
         return params.split("&")[0].split("=")[1].trim();
     }
-    function getUnit() {
+    function getUnit(){
         var kpiName = getKpi();
-        if (kpiName.indexOf("率") != -1 || kpiName.indexOf("成本比") != -1) {
+        if(kpiName.indexOf("率")!=-1){
             return "%";
         }
-        if (kpiName.indexOf("人均") != -1) {
-            return "万元/人";
+        if(kpiName.indexOf("电")!=-1){
+            return "元/kwh";
         }
-        if (kpiName.indexOf("分布") != -1) {
+        if(kpiName.indexOf("费")!=-1){
+            return "元/吨";
+        }else {
             return "";
-        }
-        if (kpiName.indexOf("倍数") != -1) {
-            return "倍";
-        }
-        if (kpiName.indexOf("净额") != -1) {
-            return "万元";
-        }
-        if (kpiName.indexOf("药剂费") != -1 || kpiName.indexOf("吨水") != -1 || kpiName.indexOf("单") != -1 || kpiName.indexOf("电价") != -1) {
-            return "万元/吨";
         }
     }
     function getKpi() {
@@ -58,15 +51,14 @@
             textField: 'text',
             filter: function (q, row) {
                 var opts = $(this).combobox('options');
-                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1
-                        || row[opts.textField].indexOf(q) != -1;
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
             }
         });
     }
     function confirmIt() {
         var val = $('#company').combobox('getValue');
         $.ajax({
-            url: 'SingleIndexDiv.jsp',
+            url: 'TotalSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
@@ -177,7 +169,7 @@
     }
     function showDiv() {
         $.ajax({
-            url: 'SingleIndexDiv.jsp',
+            url: 'TotalSingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {

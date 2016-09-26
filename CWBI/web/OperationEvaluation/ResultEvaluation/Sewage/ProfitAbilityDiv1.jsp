@@ -20,11 +20,11 @@
                 "       sum(comp_score) as comp_score," +
                 "       sum(decode(t.kpi_id, 2101, t.actual_value, null)) as 投资回报率," +
                 "       sum(decode(t.kpi_id, 2102, t.actual_value, null)) as 水处理毛利率," +
-                "       sum(decode(t.kpi_id, 2050, t.actual_value, null)) as 综合水价," +
-                "       sum(decode(t.kpi_id, 2018, t.actual_value, null)) as 综合电价" +
+                "       sum(decode(t.kpi_id, 150, t.actual_value, null)) as 综合水价," +
+                "       sum(decode(t.kpi_id, 118, t.actual_value, null)) as 综合电价" +
                 "  from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
-                "   and t.kpi_id in (2101,2102,2050,2018)" +
+                "   and t.kpi_id in (2101,2102,150,118)" +
                 " group by t.company_id,t1.brief_name" +
                 " order by comp_score desc";
 		

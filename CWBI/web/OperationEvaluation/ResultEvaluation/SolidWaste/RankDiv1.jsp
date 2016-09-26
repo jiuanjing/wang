@@ -12,8 +12,7 @@
 	String date = new String(request.getParameter("date").getBytes("ISO-8859-1"),"gbk");
 	date = date.equals("") ? "2015" : date;
 	String kpiName = new String(request.getParameter("kpi").getBytes("ISO-8859-1"),"utf-8");
-	System.out.println(kpiName);
-	
+
 	if(db.dbOpen()){
 		Map<String, Object> gsonmap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

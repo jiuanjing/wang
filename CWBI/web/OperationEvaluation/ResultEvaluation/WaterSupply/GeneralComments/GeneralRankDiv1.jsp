@@ -25,7 +25,7 @@
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = t1.company_id " +
-                "   and t.kpi_id = t2.kpi_id " +
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.comp_score desc";
 
         ResultSet rs = dbOperation.executeQuery(sql);
@@ -33,6 +33,9 @@
             try {
                 int i = 1;
                 while (rs.next()) {
+                    if (rs.getString(1).contains("平均")) {
+                        continue;
+                    }
                     Map<String, Object> dataMap = new HashMap<String, Object>();
                     dataMap.put("m1", i + "");
                     i++;

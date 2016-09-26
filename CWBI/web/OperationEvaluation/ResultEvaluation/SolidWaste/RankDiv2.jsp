@@ -71,7 +71,6 @@
 
         Gson gson = new Gson();
         String s = gson.toJson(gsonmap);
-        System.out.println(gsonmap);
         out.write(s);
 
     } else {

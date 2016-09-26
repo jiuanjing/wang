@@ -31,15 +31,15 @@
             return val;
         }
     }
-//    function getUnit() {
-//        var name = getKpiName();
-//        var val = name.charAt(name.length - 1)
-//        if (val == '率'){
-//            return "%";
-//        }else if(val == '价'){
-//            return "元";
-//        }
-//    }
+    //    function getUnit() {
+    //        var name = getKpiName();
+    //        var val = name.charAt(name.length - 1)
+    //        if (val == '率'){
+    //            return "%";
+    //        }else if(val == '价'){
+    //            return "元";
+    //        }
+    //    }
     function confirmIt() {
         getDataGrid();
         showDiv001();
@@ -80,7 +80,6 @@
                         ],
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
-
                             var option = {
                                 title: {
                                     text: $('#date').combobox('getText') + "年" + $('#kpi').combobox('getText') + '排名分析',
@@ -100,7 +99,7 @@
 //                                    y2: 100
 //                                },
                                 tooltip: {
-                                    formatter: '{a}<br>{b}:{c}'+'(分)',
+                                    formatter: '{a}<br>{b}:{c}' + '(分)',
                                     trigger: 'item'
                                 },
 //                                legend: {
@@ -143,11 +142,16 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
+                                                    {
+                                                        name: '公司平均值',
+                                                        value: getAverage(),
+                                                        xAxis: getAverage(),
+                                                        yAxis: -10
+                                                    },
                                                     {xAxis: getAverage(), yAxis: 110}
                                                 ],
                                                 [
-                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},
+                                                    {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis: -10},
                                                     {xAxis: poleValue, yAxis: 100}
                                                 ]
                                             ]
@@ -203,7 +207,7 @@
                 },
                 {
                     field: 'm4',
-                    title: getKpiName()+'(分)',
+                    title: getKpiName() + '(分)',
                     width: 110,
                     align: 'right',
                     sortable: true,

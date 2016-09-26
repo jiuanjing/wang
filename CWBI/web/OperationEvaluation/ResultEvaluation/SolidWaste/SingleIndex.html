@@ -36,6 +36,30 @@
         var kpi = params.split("&")[1].split("=")[1].trim();
         return kpi;
     }
+    function getUnit(){
+        var kpiName = getKpi();
+        if(kpiName.indexOf("率")!=-1){
+            return "%";
+        }
+        if(kpiName.indexOf("人均")!=-1){
+            return "万元/人";
+        }
+        if(kpiName.indexOf("分布")!=-1){
+            return "";
+        }
+        if(kpiName.indexOf("倍数")!=-1){
+            return "倍";
+        }
+        if(kpiName.indexOf("净额")!=-1){
+            return "万元";
+        }
+        if(kpiName.indexOf("成本比")!=-1){
+            return "%";
+        }
+        if(kpiName.indexOf("药剂费")!=-1 ||kpiName.indexOf("吨水")!=-1||kpiName.indexOf("单位")!=-1 ){
+            return "万元/吨";
+        }
+    }
     function fillCombobox() {
         $('#company').combobox({
             url: 'getCompany.jsp?company=' + getCompany(),
