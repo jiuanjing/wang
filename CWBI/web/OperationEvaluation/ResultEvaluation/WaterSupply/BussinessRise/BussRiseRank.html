@@ -62,15 +62,9 @@
                         echarts: '../../../../scripts'
                     }
                 });
-                function getAverage() {
-                    var result = 0;
-                    for (var i = 0; i < return_data.data2.length; i++) {
-                        result += parseInt(return_data.data2[i]);
-                    }
-                    return (result / return_data.data2.length).toFixed(2);
-                }
 
-                var poleValue = return_data.data3[0];
+
+                var poleValue = return_data.data3[0]; var averageValue=return_data.data4[0]; var averageValue=return_data.data4[0];
                 // 使用
                 require(
                         [
@@ -95,10 +89,9 @@
                                     show: true,
                                     orient: 'vertical'
                                 },
-//                                grid: {
-//                                    x: 130,
-//                                    y2: 100
-//                                },
+                                grid: {
+                                    x: 130
+                                },
                                 tooltip: {
                                     formatter: '{a}<br>{b}:{c}'+getUnit(),
                                     trigger: 'item'
@@ -143,8 +136,8 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '公司平均值', value: getAverage(), xAxis: getAverage(), yAxis: -10},
-                                                    {xAxis: getAverage(), yAxis: 110}
+                                                    {name: '公司平均值', value: averageValue, xAxis: averageValue, yAxis: -10},
+                                                    {xAxis: averageValue, yAxis: 110}
                                                 ],
                                                 [
                                                     {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis:-10},

@@ -4,61 +4,84 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>单项指标趋势分析</title>
 </head>
-<script type="text/javascript" src="../../scripts/jquery-1.6.min.js"></script>
-<script type="text/javascript" src="../../scripts/jquery-ui.min.js"></script>
-<script src="../../scripts/DatePicker_zh_cn.js"></script>
-<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css"/>
-<script type="text/javascript" src="../../scripts/jquery.easyui.min.js"></script>
-<script src="../../scripts/echarts.js"></script>
-<link rel="stylesheet" type="text/css" href="../../css/condition-table.css"/>
-<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
-<link rel="stylesheet" type="text/css" href="../../scripts/easyui-1.3.6/themes/icon.css">
-<script type="text/javascript" src="../../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../../scripts/hanzi2pinyin.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../../../scripts/jquery-ui.min.js"></script>
+<script src="../../../scripts/DatePicker_zh_cn.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/jquery-ui.css"/>
+<script type="text/javascript" src="../../../scripts/jquery.easyui.min.js"></script>
+<script src="../../../scripts/echarts.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../css/condition-table.css"/>
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
+<script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../../scripts/hanzi2pinyin.js"></script>
+<script type="text/javascript" src="../../../scripts/op_water_kpiSort.js"></script>
 <script type="text/javascript">
     $(function () {
+        setKpiSort();
+        setKpi();
         fillCombobox();
         showDiv();
+
     });
+    window.onload=function () {
+        $('#kpi').combobox('setValue',getKpi());
+    };
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
         return params.split("&")[0].split("=")[1].trim();
     }
     function getUnit() {
-        var name = getKpi();
-        var val = name.charAt(name.length - 1);
-        if (val == '率'){
+        var kpiName = $('#kpi').combobox('getText');
+        if (kpiName.indexOf("率") != -1 || kpiName.indexOf("成本比") != -1) {
             return "%";
-        }else if(val == '价'){
-            return "元";
+        }
+        if (kpiName.indexOf("人均") != -1) {
+            return "万元/人";
+        }
+        if (kpiName.indexOf("分布") != -1) {
+            return "";
+        }
+        if (kpiName.indexOf("倍数") != -1) {
+            return "倍";
+        }
+        if (kpiName.indexOf("净额") != -1) {
+            return "万元";
+        }
+        if (kpiName.indexOf("药剂费") != -1 || kpiName.indexOf("吨水") != -1 ||
+                kpiName.indexOf("单") != -1 || kpiName.indexOf("电价") != -1) {
+            return "万元/吨";
         }
     }
     function getKpi() {
         var url = window.location.href;
         var params = url.split("?")[1];
-        return params.split("&")[1].split("=")[1].trim();
+        var Kpi = params.split("&")[1].split("=")[1].trim();
+        return Kpi;
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: 'getCompany.jsp?company=' + getCompany()+'&type=1',
+            url: 'getCompany.jsp?company=' + getCompany() + '&type=1',
             valueField: 'id',
             textField: 'text',
-            filter: function (q,row) {
+            filter: function (q, row) {
                 var opts = $(this).combobox('options');
-                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1
+                        || row[opts.textField].indexOf(q) != -1;
             }
         });
     }
     function confirmIt() {
         var val = $('#company').combobox('getValue');
+        var kpi = $('#kpi').combobox('getText');
         $.ajax({
             url: 'SingleIndexDiv.jsp',
             dataType: "json",
             type: "post",
             data: {
                 company: val,
-                kpi : getKpi()
+                kpi: kpi
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -66,7 +89,7 @@
             success: function (return_data) {
                 require.config({
                     paths: {
-                        echarts: '../../scripts'
+                        echarts: '../../../scripts'
                     }
                 });
                 // 使用
@@ -80,7 +103,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: val + getKpi()+"趋势分析",
+                                    text: val + kpi + "趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -89,12 +112,12 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
+                                    formatter: '{b}年<br/>{a}:{c}' + getUnit() + '<br/>{a1}:{c1}' + getUnit() + '<br/>{a2}:{c2}' + getUnit(),
                                     trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
-                                    data: [getKpi()+'实际值',getKpi()+'标杆值',getKpi()+'平均值']
+                                    data: [kpi + '实际值', kpi + '标杆值', kpi + '平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -115,13 +138,13 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: getKpi()+'实际值',
+                                        name: kpi + '实际值',
                                         type: 'line',
                                         data: return_data.data1,
                                         itemStyle: {
@@ -131,7 +154,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi()+'标杆值',
+                                        name: kpi + '标杆值',
                                         type: 'line',
                                         data: return_data.data2,
                                         itemStyle: {
@@ -141,7 +164,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi()+'平均值',
+                                        name: kpi + '平均值',
                                         type: 'line',
                                         data: return_data.data3,
                                         itemStyle: {
@@ -168,7 +191,7 @@
             type: "post",
             data: {
                 company: getCompany(),
-                kpi : getKpi()
+                kpi: getKpi()
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -176,7 +199,7 @@
             success: function (return_data) {
                 require.config({
                     paths: {
-                        echarts: '../../scripts'
+                        echarts: '../../../scripts'
                     }
                 });
                 // 使用
@@ -190,7 +213,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
                                 title: {
-                                    text: getCompany() + getKpi()+"趋势分析",
+                                    text: getCompany() + getKpi() + "趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -199,12 +222,12 @@
                                     }
                                 },
                                 tooltip: {
-                                    formatter:'{b}年<br/>{a}:{c}'+getUnit()+'<br/>{a1}:{c1}'+getUnit()+'<br/>{a2}:{c2}'+getUnit(),
+                                    formatter: '{b}年<br/>{a}:{c}' + getUnit() + '<br/>{a1}:{c1}' + getUnit() + '<br/>{a2}:{c2}' + getUnit(),
                                     trigger: 'axis'
                                 },
                                 legend: {
                                     y: 30,
-                                    data: [getKpi()+'实际值',getKpi()+'标杆值',getKpi()+'平均值']
+                                    data: [getKpi() + '实际值', getKpi() + '标杆值', getKpi() + '平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -225,13 +248,13 @@
                                 ],
                                 yAxis: [
                                     {
-                                        name: '分值',
+                                        name: '值',
                                         type: 'value'
                                     }
                                 ],
                                 series: [
                                     {
-                                        name: getKpi()+'实际值',
+                                        name: getKpi() + '实际值',
                                         type: 'line',
                                         data: return_data.data1,
                                         itemStyle: {
@@ -241,7 +264,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi()+'标杆值',
+                                        name: getKpi() + '标杆值',
                                         type: 'line',
                                         data: return_data.data2,
                                         itemStyle: {
@@ -251,7 +274,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi()+'平均值',
+                                        name: getKpi() + '平均值',
                                         type: 'line',
                                         data: return_data.data3,
                                         itemStyle: {
@@ -260,10 +283,8 @@
                                             }
                                         }
                                     }
-
                                 ]
                             };
-
                             myChart.setOption(option);
                             window.onresize = myChart.resize;
                         }
@@ -271,8 +292,75 @@
             }
         });
     }
-
-
+    function setKpiSort() {
+        var kpi = getKpi();
+        $('#kpiSort').combobox({
+            valueField: 'id', //值字段
+            textField: 'text', //显示的字段
+            url: 'getKpiSort.jsp',
+            value: _getKpiSort(kpi),
+            panelHeight: 'auto',
+            filter: function (q, row) {
+                var opts = $(this).combobox('options');
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+            },
+            onChange: function (kpiId) {
+                $('#kpi').combobox({
+                    valueField: 'id', //值字段
+                    textField: 'text', //显示的字段
+                    url: getKpiUrl(kpiId),
+                    panelHeight: 'auto',
+                    filter: function (q, row) {
+                        var opts = $(this).combobox('options');
+                        return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+                    }
+                });
+            }
+        });
+    }
+    function setKpi() {
+        var kpi = getKpi();
+        $('#kpi').combobox({
+            valueField: 'id',
+            textField: 'text',
+            value:kpi,
+            url: _getKpiUrl(kpi),
+            panelHeight: 'auto',
+            filter: function (q, row) {
+                var opts = $(this).combobox('options');
+                return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
+            }
+        });
+    }
+    function getKpiUrl(kpiId) {
+        switch (kpiId) {
+            case "1100":
+                return 'Profit.json';
+                break;
+            case "1200":
+                return 'Debt.json';
+                break;
+            case "1300":
+                return 'Cash.json';
+                break;
+            case "1400":
+                return 'Cost.json';
+                break;
+            case "1500":
+                return 'Effeient.json';
+                break;
+            case "1600":
+                return 'Business.json';
+                break;
+            case "1700":
+                return 'Person.json';
+                break;
+        }
+    }
+    function test1() {
+        alert(getKpi());
+        $('#kpi').combobox('setValue',getKpi());
+    }
 </script>
 <body style="overflow: hidden;">
 <div id="query_condition" class="condition_div">
@@ -282,19 +370,23 @@
             <td width="5%">
                 <input id="company" panelHeight="110" class="easyui-combobox">
             </td>
+            <td width="7%">指标分类：</td>
+            <td width="12%">
+                <input id="kpiSort" class="easyui-combobox" name="kpiSort" panelHeight="100" style="width:120px">
+            </td>
+            <td width="4%">指标：</td>
+            <td width="12%">
+                <input id="kpi" class="easyui-combobox" name="kpi" panelHeight="100" style="width:120px">
+            </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
-                              onclick="window.history.back();">返&nbsp;回</a></td>
+                              onclick="test1();">返&nbsp;回</a></td>
             <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
         </tr>
     </table>
-
 </div>
 <hr class="Main_hr" align="center" width="98%"/>
 <div id="main" style="margin-top: 10px;height:520px;"></div>
 </body>
-<script>
-
-</script>
 </html>

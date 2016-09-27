@@ -45,7 +45,6 @@
                 while (rs.next()) {
                     list1.add(rs.getString(1));
                     list2.add(rs.getString(3));
-                    list4.add(rs.getString(4));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="herit:war">
-    <output-path>$PROJECT_DIR$/herit/target</output-path>
-    <root id="archive" name="herit.war">
-      <element id="artifact" artifact-name="herit:war exploded" />
-    </root>
-  </artifact>
-</component>

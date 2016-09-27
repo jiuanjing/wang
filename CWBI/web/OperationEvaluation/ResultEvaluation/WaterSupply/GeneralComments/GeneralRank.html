@@ -26,7 +26,7 @@
     function getKpiName() {
         var val = $('#kpi').combobox('getText');
         if (val.length == 0) {
-            return "盈利能力";
+            return "总体评价";
         } else {
             return val;
         }
@@ -46,7 +46,7 @@
     }
     function showDiv001() {
         $.ajax({
-            url: "GeneralRankDiv2.jsp",
+            url: "../RankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -62,15 +62,8 @@
                         echarts: '../../../../scripts'
                     }
                 });
-                function getAverage() {
-                    var result = 0;
-                    for (var i = 0; i < return_data.data2.length; i++) {
-                        result += parseInt(return_data.data2[i]);
-                    }
-                    return (result / return_data.data2.length).toFixed(2);
-                }
 
-                var poleValue = return_data.data3[0];
+                var poleValue = return_data.data3[0]; var averageValue=return_data.data4[0];
                 // 使用
                 require(
                         [
@@ -94,20 +87,13 @@
                                     show: true,
                                     orient: 'vertical'
                                 },
-//                                grid: {
-//                                    x: 130,
-//                                    y2: 100
-//                                },
+                                grid: {
+                                    x: 130
+                                },
                                 tooltip: {
                                     formatter: '{a}<br>{b}:{c}' + '(分)',
                                     trigger: 'item'
                                 },
-//                                legend: {
-//                                    show: false,
-//                                    orient: 'vertical',
-//                                    y: 30,
-//                                    data: getKpiName()
-//                                },
                                 toolbox: {
                                     show: false,
                                     feature: {
@@ -144,11 +130,11 @@
                                                 [
                                                     {
                                                         name: '公司平均值',
-                                                        value: getAverage(),
-                                                        xAxis: getAverage(),
+                                                        value: averageValue,
+                                                        xAxis: averageValue,
                                                         yAxis: -10
                                                     },
-                                                    {xAxis: getAverage(), yAxis: 110}
+                                                    {xAxis: averageValue, yAxis: 110}
                                                 ],
                                                 [
                                                     {name: '行业标杆值', value: poleValue, xAxis: poleValue, yAxis: -10},
@@ -169,7 +155,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'GeneralRankDiv1.jsp',
+            url: '../RankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,
@@ -215,16 +201,6 @@
                         return (a * 10 > b * 10 ? 1 : -1);
                     }
                 }
-//                {
-//                    field: 'm4',
-//                    title: '分值(分)',
-//                    width: 80,
-//                    align: 'right',
-//                    sortable: true,
-//                    sorter: function (a, b) {
-//                        return (a * 10 > b * 10 ? 1 : -1);
-//                    }
-//                }
             ]]
         });
     }

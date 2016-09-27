@@ -54,14 +54,7 @@
                         echarts: '../../../scripts'
                     }
                 });
-                function getAverage() {
-                    var result = 0;
-                    for (var i = 0; i < return_data.data2.length; i++) {
-                        result += parseInt(return_data.data2[i]);
-                    }
-                    console.log(result);
-                    return (result / return_data.data2.length).toFixed(2);//这得到的是总的回报率，除以公司总数就是平局值，然后求平均值，保留两位
-                }
+
                 function getUnit(){
                 	var kpiName = getKpiName();
                 	unit = kpiName.charAt(kpiName.length-1);
@@ -71,7 +64,7 @@
         			} 
                 }
 
-                var poleValue = return_data.data3[0];//78
+                var poleValue = return_data.data3[0]; var averageValue=return_data.data4[0];
                 var kpi_id = return_data.kpi_id;
                 
                 
@@ -114,6 +107,9 @@
                                     }
                                 },
                                 calculable: true,
+                                grid: {
+                                    x: 130
+                                },
                                 xAxis: [
                                     {
                                         type: 'value'
@@ -140,8 +136,8 @@
                                         markLine: {
                                             data: [
                                                 [
-                                                    {name: '人员素质结构分布', xAxis: getAverage(), yAxis: 100},
-                                                    {value: getAverage(), xAxis: getAverage(), yAxis: -10}
+                                                    {name: '人员素质结构分布', xAxis: averageValue, yAxis: 100},
+                                                    {value: averageValue, xAxis: averageValue, yAxis: -10}
                                                 ]
                                             ]
                                         },                                        

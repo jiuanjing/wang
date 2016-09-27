@@ -19,8 +19,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="servlet-api-2.4" level="application" />
-    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
-    <orderEntry type="library" name="Tomcat 7.0.57" level="application_server_libraries" />
+    <orderEntry type="library" name="jstl" level="project" />
+    <orderEntry type="library" name="lib1" level="project" />
   </component>
 </module>

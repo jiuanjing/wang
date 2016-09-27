@@ -21,6 +21,7 @@
         List<String> list1 = new ArrayList<String>();
         List<String> list2 = new ArrayList<String>();
         List<String> list3 = new ArrayList<String>();
+        List<String> list4 = new ArrayList<String>();
 
         String sql = " select t1.brief_name, t.actual_value, t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
@@ -35,6 +36,15 @@
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = -1 " +
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
+                " order by t.actual_value ";
+
+        //公司id为0的实际值代表该kpi的平均值
+        String sql2= " select t.actual_value " +
+                "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
+                " where t.date_id = " + date +
+                "   and t2.kpi_name = '" + kpiName + "' " +
+                "   and t.company_id = 0 " +
                 "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.actual_value ";
 
@@ -59,9 +69,20 @@
                 e.printStackTrace();
             }
         }
+        ResultSet rs2 = dbOperation.executeQuery(sql2);
+        if (null != rs2) {
+            try {
+                while (rs2.next()) {
+                    list4.add(rs2.getString(1));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         gsonmap.put("data1",list1);
         gsonmap.put("data2",list2);
         gsonmap.put("data3",list3);//标杆值
+        gsonmap.put("data4",list4);//平均值
 
         dbOperation.dbClose();
 
