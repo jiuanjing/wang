@@ -40,7 +40,7 @@
                 " order by t.actual_value ";
 
         //公司id为0的实际值代表该kpi的平均值
-        String sql2= " select t.actual_value " +
+        String sql2= " select t.actual_value ,t.comp_score" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
@@ -82,7 +82,7 @@
         gsonmap.put("data1",list1);
         gsonmap.put("data2",list2);
         gsonmap.put("data3",list3);//标杆值
-        gsonmap.put("data4",list4);//平均值
+        gsonmap.put("data4",list4);//一般页面平均值
 
         dbOperation.dbClose();
 

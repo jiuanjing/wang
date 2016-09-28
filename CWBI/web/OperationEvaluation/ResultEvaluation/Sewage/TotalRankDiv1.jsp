@@ -23,7 +23,7 @@
 	                "   and t2.kpi_name = '" + kpiName + "' " +
 	                "   and t.company_id = t1.company_id " +
 	                "   and t.kpi_id = t2.kpi_id " +
-	                "	and  t1.flag_solid_waste =1" +
+	                "	and  t1.flag_sewage =1" +
 	                " order by t.comp_score desc";
 		 System.out.println(sql);
 		 ResultSet rs = db.executeQuery(sql);

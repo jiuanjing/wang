@@ -21,6 +21,7 @@
         List<String> list1 = new ArrayList<String>();
         List<String> list2 = new ArrayList<String>();
         List<String> list3 = new ArrayList<String>();
+        List<String> list4 = new ArrayList<String>();
 
         String sql = " select t1.brief_name, t.actual_value, t.comp_score ,t.kpi_id" +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
@@ -31,14 +32,22 @@
                 "	and  t1.flag_solid_waste =1" +
                 " order by t.comp_score ";
         //公司id为-1的实际值代表该kpi的标杆值
-        String sql1 = " select t.actual_value " +
+        String sql1 = " select t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
                 "   and t2.kpi_name = '" + kpiName + "' " +
                 "   and t.company_id = -1 " +
-                "   and t.kpi_id = t2.kpi_id " +
-                " order by t.actual_value ";
-		
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 4" +
+                " order by t.comp_score ";
+        //公司id为0的实际值代表该kpi的标杆值
+        String sql2 = " select t.comp_score " +
+                "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
+                " where t.date_id = " + date +
+                "   and t2.kpi_name = '" + kpiName + "' " +
+                "   and t.company_id = 0 " +
+                "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 4" +
+                " order by t.comp_score ";
+
         ResultSet rs = dbOperation.executeQuery(sql);
         if (null != rs) {
             try {
@@ -60,9 +69,20 @@
                 e.printStackTrace();
             }
         }
+        ResultSet rs2 = dbOperation.executeQuery(sql2);
+        if (null != rs2) {
+            try {
+                while (rs2.next()) {
+                    list4.add(rs2.getString(1));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         gsonmap.put("data1",list1);
         gsonmap.put("data2",list2);
         gsonmap.put("data3",list3);//标杆值
+        gsonmap.put("data4",list4);//标杆值
 
         dbOperation.dbClose();
 

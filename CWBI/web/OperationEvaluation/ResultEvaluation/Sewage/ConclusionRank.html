@@ -37,7 +37,7 @@
     }
     function showDiv001() {
         $.ajax({
-            url: "RankDiv2.jsp",
+            url: "TotalRankDiv2.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
@@ -148,7 +148,7 @@
     }
     function getDataGrid() {
         $('#tg1').datagrid({
-            url: 'RankDiv1.jsp',
+            url: 'TotalRankDiv1.jsp',
             method: 'post',
             singleSelect: true,
             nowrap: true,
