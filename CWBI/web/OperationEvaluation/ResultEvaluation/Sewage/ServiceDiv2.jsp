@@ -19,7 +19,6 @@
 		List<String> sqlList = new ArrayList<String>();
 		
 		//获取标杆值
-        //todo 确定公司名字为0的事实是否为标杆值
         String sql1 = "select t.actual_value from dm_op_yr_evaluate t  where t.date_id = " + dateID
                 + " and t.kpi_id in (2501,2502,2503) and t.company_id = -1 order by t.kpi_id";
         //获取第一年实际值
