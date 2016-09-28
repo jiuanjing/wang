@@ -22,11 +22,7 @@
         setKpi();
         fillCombobox();
         showDiv();
-
     });
-    window.onload=function () {
-        $('#kpi').combobox('setValue',getKpi());
-    };
     function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
@@ -310,6 +306,14 @@
                     textField: 'text', //显示的字段
                     url: getKpiUrl(kpiId),
                     panelHeight: 'auto',
+                    onLoadSuccess: function () { //加载完成后,设置选中第一项
+                        var val = $(this).combobox("getData");
+                        for (var item in val[0]) {
+                            if (item == "ID") {
+                                $(this).combobox("select", val[0][item]);
+                            }
+                        }
+                    },
                     filter: function (q, row) {
                         var opts = $(this).combobox('options');
                         return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
@@ -323,9 +327,12 @@
         $('#kpi').combobox({
             valueField: 'id',
             textField: 'text',
-            value:kpi,
+            text: kpi,
             url: _getKpiUrl(kpi),
             panelHeight: 'auto',
+            onLoadSuccess: function () {
+                $('#kpi').combobox('setText', kpi);
+            },
             filter: function (q, row) {
                 var opts = $(this).combobox('options');
                 return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
@@ -357,10 +364,6 @@
                 break;
         }
     }
-    function test1() {
-        alert(getKpi());
-        $('#kpi').combobox('setValue',getKpi());
-    }
 </script>
 <body style="overflow: hidden;">
 <div id="query_condition" class="condition_div">
@@ -381,7 +384,7 @@
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
-                              onclick="test1();">返&nbsp;回</a></td>
+                              onclick="window.history.back();">返&nbsp;回</a></td>
             <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
         </tr>
     </table>

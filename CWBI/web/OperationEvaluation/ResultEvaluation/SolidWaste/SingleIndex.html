@@ -19,10 +19,9 @@
 <script type="text/javascript">
     $(function () {
         setKpiSort();
+        setKpi();
         fillCombobox();
         showDiv();
-        $('#kpi').combobox("setValue", getKpi());
-        setKpi();
     });
     function getCompany() {
         var url = window.location.href;
@@ -307,6 +306,14 @@
                     textField: 'text', //显示的字段
                     url: getKpiUrl(kpiId),
                     panelHeight: 'auto',
+                    onLoadSuccess: function () { //加载完成后,设置选中第一项
+                        var val = $(this).combobox("getData");
+                        for (var item in val[0]) {
+                            if (item == "ID") {
+                                $(this).combobox("select", val[0][item]);
+                            }
+                        }
+                    },
                     filter: function (q, row) {
                         var opts = $(this).combobox('options');
                         return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
@@ -320,8 +327,12 @@
         $('#kpi').combobox({
             valueField: 'id',
             textField: 'text',
+            text: kpi,
             url: _getKpiUrl(kpi),
             panelHeight: 'auto',
+            onLoadSuccess: function () {
+                $('#kpi').combobox('setText', kpi);
+            },
             filter: function (q, row) {
                 var opts = $(this).combobox('options');
                 return __pinyin.getPinyin(row[opts.textField]).indexOf(q.toLowerCase()) != -1 || row[opts.textField].indexOf(q) != -1;
