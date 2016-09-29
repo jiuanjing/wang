@@ -23,7 +23,7 @@
         fillCombobox();
         showDiv();
     });
-    function getCompany() {
+    function getCompany(type) {
         var url = window.location.href;
         var params = url.split("?")[1];
         return params.split("&")[0].split("=")[1].trim();
@@ -45,10 +45,11 @@
         if (kpiName.indexOf("净额") != -1) {
             return "万元";
         }
-        if (kpiName.indexOf("药剂费") != -1 || kpiName.indexOf("吨水") != -1 ||
+        if (kpiName.indexOf("药剂费") != -1 || kpiName.indexOf("水价") != -1 ||
                 kpiName.indexOf("单") != -1 || kpiName.indexOf("电价") != -1) {
             return "万元/吨";
         }
+
     }
     function getKpi() {
         var url = window.location.href;
@@ -70,7 +71,7 @@
     }
     function confirmIt() {
         var val = $('#company').combobox('getValue');
-        var kpi = $('#kpi').combobox('getText');
+        var kpi = $('#kpi').combobox('getValue');
         $.ajax({
             url: 'SingleIndexDiv.jsp',
             dataType: "json",
@@ -98,8 +99,9 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
+                                color: ['#7b68ee', '#00fa9a', '#ffd700', '#6b8e23'],
                                 title: {
-                                    text: val + kpi + "趋势分析",
+                                    text: $('#company').combobox('getText') + $('#kpi').combobox('getText') + "趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -113,7 +115,7 @@
                                 },
                                 legend: {
                                     y: 30,
-                                    data: [kpi + '实际值', kpi + '标杆值', kpi + '平均值']
+                                    data: [$('#kpi').combobox('getText') + '实际值', $('#kpi').combobox('getText') + '标杆值', $('#kpi').combobox('getText') + '平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -140,7 +142,7 @@
                                 ],
                                 series: [
                                     {
-                                        name: kpi + '实际值',
+                                        name: $('#kpi').combobox('getText') + '实际值',
                                         type: 'line',
                                         data: return_data.data1,
                                         itemStyle: {
@@ -150,7 +152,7 @@
                                         }
                                     },
                                     {
-                                        name: kpi + '标杆值',
+                                        name: $('#kpi').combobox('getText') + '标杆值',
                                         type: 'line',
                                         data: return_data.data2,
                                         itemStyle: {
@@ -160,7 +162,7 @@
                                         }
                                     },
                                     {
-                                        name: kpi + '平均值',
+                                        name: $('#kpi').combobox('getText') + '平均值',
                                         type: 'line',
                                         data: return_data.data3,
                                         itemStyle: {
@@ -208,8 +210,9 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = {
+                                color: ['#7b68ee', '#00fa9a', '#ffd700', '#6b8e23'],
                                 title: {
-                                    text: getCompany() + getKpi() + "趋势分析",
+                                    text: $('#company').combobox('getText') + $('#kpi').combobox('getText') + "趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -223,7 +226,7 @@
                                 },
                                 legend: {
                                     y: 30,
-                                    data: [getKpi() + '实际值', getKpi() + '标杆值', getKpi() + '平均值']
+                                    data: [$('#kpi').combobox('getText') + '实际值', $('#kpi').combobox('getText') + '标杆值', $('#kpi').combobox('getText') + '平均值']
                                 },
                                 toolbox: {
                                     show: true,
@@ -250,7 +253,7 @@
                                 ],
                                 series: [
                                     {
-                                        name: getKpi() + '实际值',
+                                        name: $('#kpi').combobox('getText') + '实际值',
                                         type: 'line',
                                         data: return_data.data1,
                                         itemStyle: {
@@ -260,7 +263,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi() + '标杆值',
+                                        name: $('#kpi').combobox('getText') + '标杆值',
                                         type: 'line',
                                         data: return_data.data2,
                                         itemStyle: {
@@ -270,7 +273,7 @@
                                         }
                                     },
                                     {
-                                        name: getKpi() + '平均值',
+                                        name: $('#kpi').combobox('getText') + '平均值',
                                         type: 'line',
                                         data: return_data.data3,
                                         itemStyle: {
@@ -331,7 +334,7 @@
             url: _getKpiUrl(kpi),
             panelHeight: 'auto',
             onLoadSuccess: function () {
-                $('#kpi').combobox('setText', kpi);
+                $('#kpi').combobox('setValue', kpi);
             },
             filter: function (q, row) {
                 var opts = $(this).combobox('options');
@@ -385,7 +388,7 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-back'" href="javascript:void(0)"
                               onclick="window.history.back();">返&nbsp;回</a></td>
-            <td>&nbsp;<input type="hidden" id="value1" name="value1" value=""></td>
+            <td>&nbsp;<input type="hidden" id="comName" value=""></td>
         </tr>
     </table>
 </div>

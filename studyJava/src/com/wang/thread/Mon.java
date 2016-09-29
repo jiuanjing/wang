@@ -6,6 +6,7 @@ public class Mon {
         com();
     }
 
+
     protected static void getMoney() {
         int mouth = 12;
         double sumBefit = 0;

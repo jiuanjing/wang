@@ -8,7 +8,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String date = new String(request.getParameter("date").getBytes("ISO-8859-1"), "gbk");
+    String date = request.getParameter("date");
     date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
     DBOperation dbOperation = new DBOperation(true);
@@ -23,10 +23,10 @@
                 "       sum(decode(t.kpi_id, 1603, t.actual_value, null)) as kpi1603," +
                 "       sum(decode(t.kpi_id, 1604, t.actual_value, null)) as kpi1604," +
                 "       sum(decode(t.kpi_id, 1605, t.actual_value, null)) as kpi1605" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_water = 1" +
                 "   and t.kpi_id in (1601,68,1603,1604,1605)" +
-                " group by t.company_id,t1.brief_name" +
+                " group by t.company_id,t1.brief_name,t1.company_id" +
                 " order by comp_score desc";
 
         ResultSet rs = dbOperation.executeQuery(sql);

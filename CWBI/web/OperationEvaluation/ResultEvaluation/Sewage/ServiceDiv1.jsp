@@ -21,10 +21,10 @@
                 "       sum(decode(t.kpi_id, 2501, t.actual_value, null)) as 营业收入增长率," +
                 "       sum(decode(t.kpi_id, 2502, t.actual_value, null)) as 人工成本利润率," +
                 "       sum(decode(t.kpi_id, 2503, t.actual_value, null)) as 利润总额增长率" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
                 "   and t.kpi_id in (2501,2502,2503)" +
-                " group by t.company_id,t1.brief_name" +
+                " group by t.company_id,t1.brief_name,t1.company_id" +
                 " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

@@ -47,7 +47,8 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                $("#company").val(rowData.m2);
+                $("#company").val(rowData.m10);
+                $("#comName").val(rowData.m2);
             },
             columns: [[
                 {
@@ -74,7 +75,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='BussRiseTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='BussRiseTotalTrend.html?company=" + rowData.m10 + "'>" + value + "</a>";
                     }
                 },
                 {
@@ -86,7 +87,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 营业收入增长率'>" + value + "</a>";//../SingleIndex.html
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 1501'>" + value + "</a>";//../SingleIndex.html
                     }
                 },
                 {
@@ -98,7 +99,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 利润总额增长率'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 1502'>" + value + "</a>";
                     }
                 },
                 {
@@ -110,7 +111,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 人工成本利润率'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 1503'>" + value + "</a>";
                     }
                 },
                 {
@@ -122,7 +123,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 售水量增长率'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 1504'>" + value + "</a>";
                     }
                 }
             ]]
@@ -131,8 +132,9 @@
     function getRank() {
         window.location.href = "BussRiseRank.html";
     }
-    function getCompany() {
+    function getCompany(type) {
         var city;
+        var comName;
         $.ajax({
             url: 'BussRiseDiv2.jsp',
             async: false,
@@ -141,26 +143,37 @@
             },
             dataType: 'json',
             success: function (d) {
-                city = d.rows[0].m2;
+                city = d.rows[0].m10;
+                comName = d.rows[0].m2;
             }
         });
-        var city1 = $("#company").val();
-        if (city1.length == 0) {
-            return city;
-        } else {
-            return city1;
+        if (type == 1) {
+            var city1 = $("#company").val();
+            if (city1.length == 0) {
+                return city;
+            } else {
+                return city1;
+            }
+        }
+        if (type == 0){
+            var city1 = $("#comName").val();
+            if (city1.length == 0) {
+                return comName;
+            } else {
+                return city1;
+            }
         }
     }
     function showDiv001() {
         var year1 = $('#date').datebox('getValue');
-        var year = year1.length == 0 ? 2015: year1;
+        var year = year1.length == 0 ? 2015 : year1;
         $.ajax({
             url: "BussRiseDiv1.jsp",
             dataType: "json", //传参的数据类型
             type: "post", //传参方式，get 或post
             data: {
                 date: $('#date').datebox('getValue'),
-                company: getCompany()
+                company: getCompany(1)
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -181,8 +194,9 @@
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
                             var option = {
+                                        color: ['#7b68ee', '#00fa9a', '#ffd700', '#6b8e23'],
                                         title: {
-                                            text: getCompany() + "业务增长整体分析",
+                                            text: getCompany(0) + "业务增长整体分析",
                                             x: 'center',
                                             textStyle: {
                                                 fontSize: 15,
@@ -192,14 +206,6 @@
                                         },
                                         tooltip: {
                                             trigger: 'axis',
-                                            //formatter:'{b}<br>{c}<br>{d}<br>{b1}<br>{c1}<br>{d1}'
-//                                            formatter: function (params) {
-//                                                var returnStr = params[0].name + '<br />';
-//                                                for (var i = 0; i < params.length; i++) {
-//                                                    returnStr += params[i].seriesName + ':' + Util.commafy(params[i].data) + '<br />';
-//                                                }
-//                                                return returnStr;
-//                                            }
                                         },
                                         legend: {
                                             show: true,
@@ -294,7 +300,7 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value=""></td>
+            <td><input type="hidden" id="company" value=""><input type="hidden" id="comName" value=""></td>
         </tr>
     </table>
 </div>

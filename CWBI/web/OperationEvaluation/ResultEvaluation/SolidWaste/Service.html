@@ -63,7 +63,7 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                $("#company").val(rowData.m2);
+                 $("#company").val(rowData.m10); $("#comName").val(rowData.m2);
             },
             columns: [[
                 {
@@ -92,7 +92,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ServiceTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='ServiceTotalTrend.html?company=" + rowData.m10 + "'>" + value + "</a>";
                     }
                 },
                 {
@@ -105,7 +105,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 营业收入增长率'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 营业收入增长率'>" + value + "</a>";
                     }
                 },
                 {
@@ -118,7 +118,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 人工成本利润率'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 人工成本利润率'>" + value + "</a>";
                     }
                 },
                 {
@@ -131,7 +131,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 利润总额增长率'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 利润总额增长率'>" + value + "</a>";
                     }
                 }
             ]]
@@ -140,7 +140,7 @@
     function getRank() {
         window.location.href = "ServiceRank.html";
     }
-    function getCompany() {
+    function getCompany(type) {
         $.ajax({
             url: 'ServiceDiv1.jsp',
             async : false,
@@ -193,9 +193,9 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
-                            var option = {
+                            var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany() + "业务增长分项整体分析",
+                                    text: getCompany(0) + "业务增长分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,

@@ -20,10 +20,10 @@
                 "       sum(comp_score) as comp_score," +
                 "       sum(decode(t.kpi_id, 4601, t.actual_value, null)) as 人均产值," +
                 "       sum(decode(t.kpi_id, 4602, t.actual_value, null)) as 人均净利润" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
                 "   and t.kpi_id in (4601,4602)" +
-                " group by t.company_id,t1.brief_name" +
+                " group by t.company_id,t1.brief_name,t1.company_id" +
                 " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

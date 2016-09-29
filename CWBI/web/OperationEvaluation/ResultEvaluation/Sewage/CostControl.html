@@ -63,7 +63,7 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                $("#company").val(rowData.m2);
+                 $("#company").val(rowData.m10); $("#comName").val(rowData.m2);
             },
             columns: [[
                 {
@@ -90,7 +90,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='CostControlTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='CostControlTotalTrend.html?company=" + rowData.m10 + "'>" + value + "</a>";
                     }
                 },
                 {
@@ -103,7 +103,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 管理费用成本比'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 管理费用成本比'>" + value + "</a>";
                     }
                 },
                 {
@@ -116,7 +116,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 人均可控管理费用'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 人均可控管理费用'>" + value + "</a>";
                     }
                 },
                 {
@@ -129,7 +129,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水经营成本'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 吨水经营成本'>" + value + "</a>";
                     }
                 },
                 {
@@ -142,7 +142,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水人工成本'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 吨水人工成本'>" + value + "</a>";
                     }
                 },
                 {
@@ -155,7 +155,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 单位药剂费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 单位药剂费'>" + value + "</a>";
                     }
                 },
                 {
@@ -168,7 +168,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 单位电耗'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 单位电耗'>" + value + "</a>";
                     }
                 },
                 {
@@ -181,7 +181,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水电费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 吨水电费'>" + value + "</a>";
                     }
                 },
                 {
@@ -194,7 +194,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水维修费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 吨水维修费'>" + value + "</a>";
                     }
                 },
                 {
@@ -207,7 +207,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水管理费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 吨水管理费'>" + value + "</a>";
                     }
                 }
             ]]
@@ -216,7 +216,7 @@
     function getRank() {
         window.location.href = "CostControlRank.html";
     }
-    function getCompany() {
+    function getCompany(type) {
         $.ajax({
             url: 'CostControlDiv1.jsp',
             async : false,
@@ -266,9 +266,9 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
-                            var option = {
+                            var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany() + "分项整体分析",
+                                    text: getCompany(0) + "分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,

@@ -84,7 +84,7 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
-                            var option = {
+                            var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
                                     text: $('#date').combobox('getText') + "年" + $('#kpi').combobox('getText') + '排名分析',
                                     x: 'center',

@@ -47,7 +47,7 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                $("#company").val(rowData.m2);
+                 $("#company").val(rowData.m10); $("#comName").val(rowData.m2);
             },
             columns: [[
                 {
@@ -74,7 +74,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='CashGetTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
+                        return "<a href='CashGetTotalTrend.html?company=" + rowData.m10 + "'>" + value + "</a>";
                     }
                 },
                 {
@@ -86,7 +86,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 经营性现金流量净额'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 经营性现金流量净额'>" + value + "</a>";
                     }
                 },
                 {
@@ -98,7 +98,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 水费回收率'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 水费回收率'>" + value + "</a>";
                     }
                 },
                 {
@@ -110,7 +110,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m2 + "&kpi = 应收账款余额增减率'>" + value + "</a>";
+                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 应收账款余额增减率'>" + value + "</a>";
                     }
                 }
             ]]
@@ -119,8 +119,8 @@
     function getRank() {
         window.location.href = "CashGetRank.html";
     }
-    function getCompany() {
-        var city;
+    function getCompany(type) {
+        var city;var comName;
         $.ajax({
             url: 'CashGetDiv2.jsp',
             async: false,
@@ -129,7 +129,7 @@
             },
             dataType: 'json',
             success: function (d) {
-                city = d.rows[0].m2;
+                city = d.rows[0].m10;comName = d.rows[0].m2;
             }
         });
         var city1 = $("#company").val();
@@ -168,9 +168,9 @@
                         function (ec, theme) {
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
 
-                            var option = {
+                            var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany() + "现金获取整体分析",
+                                    text: getCompany(0) + "现金获取整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -280,7 +280,7 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value=""></td>
+            <td><input type="hidden" id="company" value=""><input type="hidden" id="comName" value=""></td>
         </tr>
     </table>
 </div>

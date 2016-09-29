@@ -22,10 +22,10 @@
                 "       sum(decode(t.kpi_id, 2102, t.actual_value, null)) as 水处理毛利率," +
                 "       sum(decode(t.kpi_id, 150, t.actual_value, null)) as 污水处理单价," +
                 "       sum(decode(t.kpi_id, 118, t.actual_value, null)) as 综合电价" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
                 "   and t.kpi_id in (2101,2102,150,118)" +
-                " group by t.company_id,t1.brief_name" +
+                " group by t.company_id,t1.brief_name,t1.company_id" +
                 " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

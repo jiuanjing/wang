@@ -8,10 +8,10 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String date = new String(request.getParameter("date").getBytes("ISO-8859-1"), "gbk");
+    String date = request.getParameter("date");
     date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
-    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
+    String company = request.getParameter("company");
 
 
     DBOperation dbOperation = new DBOperation(true);
@@ -26,13 +26,13 @@
                 + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = -1 order by t.kpi_id";
         //获取第一年实际值
         String sql2 = "select t.comp_score from dm_op_yr_evaluate t ,dim_op_company t2 where t.date_id = " + dateID
-                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.brief_name = '" + company + "' order by t.kpi_id";
+                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.company_id = '" + company + "' order by t.kpi_id";
         //获取第二年实际值
         String sql3 = "select t.comp_score from dm_op_yr_evaluate t ,dim_op_company t2 where t.date_id = " + (dateID - 1)
-                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.brief_name = '" + company + "' order by t.kpi_id";
+                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.company_id = '" + company + "' order by t.kpi_id";
         //获取第三年实际值
         String sql4 = "select t.comp_score from dm_op_yr_evaluate t ,dim_op_company t2 where t.date_id =" + (dateID - 2)
-                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.brief_name = '" + company + "' order by t.kpi_id";
+                + " and t.kpi_id in (1100,1200,1300,1400,1500,1600,1700) and t.company_id = t2.company_id and t2.company_id = '" + company + "' order by t.kpi_id";
 
         sqlList.add(sql1);
         sqlList.add(sql2);

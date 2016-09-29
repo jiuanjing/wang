@@ -21,10 +21,10 @@
                 "       sum(decode(t.kpi_id, 4301, t.actual_value, null)) as 经营性现金流量金额," +
                 "       sum(decode(t.kpi_id, 4302, t.actual_value, null)) as 处理费回收率," +
                 "       sum(decode(t.kpi_id, 4303, t.actual_value, null)) as 应收账款余额增长率" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
                 "   and t.kpi_id in (4301,4302,4303)" +
-                " group by t.company_id,t1.brief_name" +
+                " group by t.company_id,t1.brief_name,t1.company_id" +
                 " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

@@ -10,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     DBOperation db = new DBOperation(true);
-    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
+    String company = request.getParameter("company");
     String kpi = new String(request.getParameter("kpi").getBytes("ISO-8859-1"), "utf-8");
 
     Map<String, Object> gsonmap = new HashMap<String, Object>();

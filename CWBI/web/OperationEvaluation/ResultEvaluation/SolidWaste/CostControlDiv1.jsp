@@ -28,10 +28,10 @@
 		                "       sum(decode(t.kpi_id, 4407, t.actual_value, null)) as 吨垃圾电费," +
 		                "       sum(decode(t.kpi_id, 4408, t.actual_value, null)) as 吨垃圾维修费," +
 		                "       sum(decode(t.kpi_id, 4409, t.actual_value, null)) as 吨垃圾管理费" +
-		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+		                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
 		                "   and t.kpi_id in (4401,4402,4403,4404,4405,4406,4407,4408,4409)" +
-		                " group by t.company_id,t1.brief_name" +
+		                " group by t.company_id,t1.brief_name,t1.company_id" +
 		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

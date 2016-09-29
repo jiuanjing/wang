@@ -12,7 +12,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
+    String company = request.getParameter("company");
     DBOperation dbOperation = new DBOperation(true);
     Map<String, Object> gsonMap = new HashMap<String, Object>();
     List<String> dataList1 = new ArrayList<String>();

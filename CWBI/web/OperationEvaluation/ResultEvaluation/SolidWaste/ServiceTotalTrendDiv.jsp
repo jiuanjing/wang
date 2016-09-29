@@ -19,7 +19,7 @@
 	
 	if(db.dbOpen()){
 		String sql = "select t.date_id ,sum(t.comp_score),sum(t.comp_rank)" +
-                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+                "    from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t1.brief_name='" + company + "'  and t1.flag_solid_waste = 1 and t.company_id = t1.company_id" +
                 "   and t.kpi_id in (4501,4502,4503)" +
                 " group by t.date_id order by t.date_id";

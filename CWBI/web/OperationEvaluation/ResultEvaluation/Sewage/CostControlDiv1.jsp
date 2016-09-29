@@ -28,10 +28,10 @@
 		                "       sum(decode(t.kpi_id, 2407, t.actual_value, null)) as 吨水电费," +
 		                "       sum(decode(t.kpi_id, 149, t.actual_value, null)) as 吨水维修费," +
 		                "       sum(decode(t.kpi_id, 148, t.actual_value, null)) as 吨水管理费" +
-		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+		                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_sewage = 1" +
 		                "   and t.kpi_id in (2401,2402,2403,2404,126,120,2407,149,148)" +
-		                " group by t.company_id,t1.brief_name" +
+		                " group by t.company_id,t1.brief_name,t1.company_id" +
 		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

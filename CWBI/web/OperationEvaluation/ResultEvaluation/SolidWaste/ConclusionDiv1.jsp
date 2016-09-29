@@ -25,10 +25,10 @@
 		                "       sum(decode(t.kpi_id, 4500, t.comp_score, null)) as 业务增长," +
 		                "       sum(decode(t.kpi_id, 4600, t.comp_score, null)) as 经营效率," +
 		                "       sum(decode(t.kpi_id, 4700, t.comp_score, null)) as 人员素质" +
-		                "  from dm_op_yr_evaluate t,dim_op_company t1" +
+		                "   , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
 		                " where t.date_id = "+dateID+" and t1.company_id = t.company_id and t1.flag_solid_waste = 1" +
 		                "   and t.kpi_id in (4100,4200,4300,4400,4500,4600,4700)" +
-		                " group by t.company_id,t1.brief_name" +
+		                " group by t.company_id,t1.brief_name,t1.company_id" +
 		                " order by comp_score desc";
 		
 		ResultSet rs = db.executeQuery(sql);

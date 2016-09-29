@@ -8,10 +8,10 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String date = new String(request.getParameter("date").getBytes("ISO-8859-1"), "gbk");
+    String date = request.getParameter("date");
     date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
-    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
+    String company = request.getParameter("company");
 
 
     DBOperation dbOperation = new DBOperation(true);

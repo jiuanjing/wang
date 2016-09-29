@@ -1,12 +1,12 @@
 [
   {
     "id": 4800,
-    "text": "总体评价",
-    "selected": true
+    "text": "总体评价"
   },
   {
     "id": 4100,
-    "text": "盈利能力"
+    "text": "盈利能力",
+    "selected": true
   },
   {
     "id": 4200,
