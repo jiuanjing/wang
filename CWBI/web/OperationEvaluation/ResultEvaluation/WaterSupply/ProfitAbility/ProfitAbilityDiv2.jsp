@@ -24,7 +24,7 @@
                 "       sum(decode(t.kpi_id, 1104, t.actual_value, null)) as kpi1104," +
                 "       sum(decode(t.kpi_id, 63, t.actual_value, null)) as kpi63," +
                 "       sum(decode(t.kpi_id, 36, t.actual_value, null)) as kpi36" +
-                "  , t1.company_id from dm_op_yr_evaluate t,dim_op_company t1" +
+                "   from dm_op_yr_evaluate t,dim_op_company t1" +
                 " where t.date_id = " + dateID + " and t1.company_id = t.company_id and t1.flag_water = 1" +
                 "   and t.kpi_id in (1101, 1102, 1103, 1104, 63, 36)" +
                 " group by t.company_id,t1.brief_name,t1.company_id" +
@@ -46,7 +46,6 @@
                     dataMap.put("m7", rs.getString(6));
                     dataMap.put("m8", rs.getString(7));
                     dataMap.put("m9", rs.getString(8));
-                    dataMap.put("m10", rs.getString(9));
                     list.add(dataMap);
                 }
             } catch (SQLException e) {

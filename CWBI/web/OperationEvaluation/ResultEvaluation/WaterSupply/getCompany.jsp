@@ -9,7 +9,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     DBOperation db = new DBOperation(true);
-    String company = request.getParameter("company");
+    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"),"gbk");
+
     String type = request.getParameter("type");
     int type1 = Integer.parseInt(type);
 
@@ -28,7 +29,7 @@
             try {
                 while (rs.next()) {
                     Map<String, Object> map = new HashMap<String, Object>();
-                    if (company.equals(rs.getString(2))) {
+                    if (company.equals(rs.getString(1))) {
                         map.put("id",  rs.getString(2));
                         map.put("text", rs.getString(1));
                         map.put("selected", true);

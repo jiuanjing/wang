@@ -30,6 +30,8 @@
     }
     function getUnit() {
         var kpiName = $('#kpi').combobox('getText');
+//        console.log($('#kpi').combobox('getText'));
+//        console.log($('#kpi').combobox('getValue'));
         if (kpiName.indexOf("率") != -1 || kpiName.indexOf("成本比") != -1) {
             return "%";
         }
@@ -70,7 +72,7 @@
         });
     }
     function confirmIt() {
-        var val = $('#company').combobox('getValue');
+        var val = $('#company').combobox('getText');
         var kpi = $('#kpi').combobox('getValue');
         $.ajax({
             url: 'SingleIndexDiv.jsp',

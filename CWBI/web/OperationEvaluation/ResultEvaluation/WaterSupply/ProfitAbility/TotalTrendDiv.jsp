@@ -12,7 +12,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String company = request.getParameter("company");
+    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
     DBOperation dbOperation = new DBOperation(true);
     Map<String, Object> gsonMap = new HashMap<String, Object>();
     List<String> dataList1 = new ArrayList<String>();
@@ -20,7 +20,7 @@
     if (dbOperation.dbOpen()) {
         String sql = "select t.date_id ,sum(t.comp_score),sum(t.comp_rank)" +
                 "    from dm_op_yr_evaluate t,dim_op_company t1" +
-                " where t1.company_id='" + company + "' and t.company_id = t1.company_id" +
+                " where t1.brief_name='" + company + "' and t.company_id = t1.company_id" +
                 "   and t.kpi_id in (1101,1102,1103,1104,63,36)" +
                 " group by t.date_id";
         ResultSet resultSet = dbOperation.executeQuery(sql);
