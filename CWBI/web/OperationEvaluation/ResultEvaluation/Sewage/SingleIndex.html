@@ -24,13 +24,14 @@
         showDiv();
 
     });
-    function getCompany(type) {
+    function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
         return params.split("&")[0].split("=")[1].trim();
     }
     function getUnit() {
         var kpiName = $('#kpi').combobox('getText');
+
         if (kpiName.indexOf("率") != -1 || kpiName.indexOf("成本比") != -1) {
             return "%";
         }
