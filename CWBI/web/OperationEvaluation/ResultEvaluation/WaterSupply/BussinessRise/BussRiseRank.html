@@ -64,7 +64,7 @@
                 });
 
 
-                var poleValue = return_data.data3[0]; var averageValue=return_data.data4[0]; var averageValue=return_data.data4[0];
+                var poleValue = return_data.data3[0]; var averageValue=return_data.data4[0];
                 // 使用
                 require(
                         [
@@ -123,7 +123,7 @@
                                         type: 'category',
                                         boundaryGap: true,
                                         axisLabel: {
-                                            rotate: 45
+                                            rotate:0
                                         },
                                         data: return_data.data1
                                     }
@@ -220,7 +220,7 @@
 
     function setKpi() {
         $('#kpi').combobox({
-            url: 'kpi.json',
+            url: '../Business.json',
             editable: true,
             valueField: 'id',
             textField: 'text',

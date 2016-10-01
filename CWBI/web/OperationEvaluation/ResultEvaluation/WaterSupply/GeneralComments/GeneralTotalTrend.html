@@ -24,7 +24,7 @@
         fillCombobox();
         showDiv();
     });
-    function getCompany(type) {
+    function getCompany() {
         var url = window.location.href;
         var params = url.split("?")[1];
         var company = params.split("=")[1];
@@ -32,7 +32,7 @@
     }
     function fillCombobox() {
         $('#company').combobox({
-            url: '../../getCompany.jsp?company=' + getCompany()+'&type=1',
+            url: '../getCompany.jsp?company=' + getCompany()+'&type=1',
             valueField: 'id',
             textField: 'text',
             filter: function (q,row) {
@@ -42,7 +42,7 @@
         });
     }
     function confirmIt() {
-        var val = $('#company').combobox('getValue');
+        var val = $('#company').combobox('getText');
         $.ajax({
             url: 'TotalTrendDiv.jsp',
             dataType: "json",
@@ -174,7 +174,7 @@
                             var myChart = ec.init(document.getElementById('main'), 'macarons');
                             var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany(0) + "盈利能力整体趋势分析",
+                                    text: getCompany() + "盈利能力整体趋势分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,

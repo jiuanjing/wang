@@ -25,7 +25,7 @@
 
     function setKpi() {
         $('#kpi').combobox({
-            url: 'kpi.json',
+            url: '../Person.json',
             valueField: 'id',
             textField: 'text',
             filter: function (q, row) {
@@ -126,7 +126,7 @@
                                         type: 'category',
                                         boundaryGap: true,
                                         axisLabel: {
-                                            rotate: 45
+                                            rotate:0
                                         },
                                         data: return_data.data1
                                     }

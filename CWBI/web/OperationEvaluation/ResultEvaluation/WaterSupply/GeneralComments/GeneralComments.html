@@ -47,7 +47,7 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                 $("#company").val(rowData.m10); $("#comName").val(rowData.m2);
+                  $("#company").val(rowData.m2);
             },
             columns: [[
                 {
@@ -74,7 +74,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 盈利能力'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1100'>" + value + "</a>";
                     }
                 },
                 {
@@ -86,7 +86,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 债务风险'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1200'>" + value + "</a>";
                     }
                 },
                 {
@@ -98,7 +98,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 现金获取'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1300'>" + value + "</a>";
                     }
                 },
                 {
@@ -110,7 +110,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 成本控制'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1400'>" + value + "</a>";
                     }
                 },
                 {
@@ -122,7 +122,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 业务增长'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1500'>" + value + "</a>";
                     }
                 },
                 {
@@ -134,7 +134,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 经营效率'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1600'>" + value + "</a>";
                     }
                 },
                 {
@@ -146,7 +146,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='../SingleIndex.html?company=" + rowData.m10 + "&kpi = 人员素质'>" + value + "</a>";
+                        return "<a href='../TotalSingleIndex.html?company=" + rowData.m2 + "&kpi = 1700'>" + value + "</a>";
                     }
                 }
             ]]
@@ -155,8 +155,8 @@
     function getRank() {
         window.location.href = "GeneralRank.html";
     }
-    function getCompany(type) {
-        var city;var comName;
+    function getCompany() {
+        var city;
         $.ajax({
             url: 'GeneralCommentsDiv2.jsp',
             async: false,
@@ -165,7 +165,7 @@
             },
             dataType: 'json',
             success: function (d) {
-                city = d.rows[0].m10;comName = d.rows[0].m2;
+                city = d.rows[0].m2;
             }
         });
         var city1 = $("#company").val();
@@ -208,7 +208,7 @@
 
                             var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany(0) + "总体评价整体分析",
+                                    text: getCompany() + "总体评价整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,
@@ -322,7 +322,7 @@
                               onclick="confirmIt();">确定</a></td>
             <td width="5%"><a class="easyui-linkbutton" href="javascript:void(0)" style="width: 60px;"
                               onclick="getRank();">排名</a></td>
-            <td><input type="hidden" id="company" value=""><input type="hidden" id="comName" value=""></td>
+            <td><input type="hidden" id="company" value=""></td>
         </tr>
     </table>
 </div>

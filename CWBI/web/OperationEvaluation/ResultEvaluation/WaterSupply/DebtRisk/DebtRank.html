@@ -123,7 +123,7 @@
                                         type: 'category',
                                         boundaryGap: true,
                                         axisLabel: {
-                                            rotate: 45
+                                            rotate:0
                                         },
                                         data: return_data.data1
                                     }
@@ -220,7 +220,7 @@
 
     function setKpi() {
         $('#kpi').combobox({
-            url: 'kpi.json',
+            url: '../Debt.json',
             editable: true,
             valueField: 'id',
             textField: 'text',

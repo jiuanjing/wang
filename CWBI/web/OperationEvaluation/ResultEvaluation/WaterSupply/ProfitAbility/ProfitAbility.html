@@ -25,10 +25,6 @@
         getDataGrid();
     }
 
-    function changeDiv() {
-        showDiv001();
-    }
-
     function getDataGrid() {
         $('#tg1').datagrid({
             url: 'ProfitAbilityDiv2.jsp',
@@ -60,7 +56,7 @@
                     title: '公司简称',
                     align: 'left',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='javascript:changeDiv() '>" + value + "</a>";
+                        return "<a href='javascript:showDiv001()'>" + value + "</a>";
                     }
                 },
                 {

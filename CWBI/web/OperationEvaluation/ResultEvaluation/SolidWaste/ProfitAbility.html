@@ -64,7 +64,7 @@
                 date: $('#date').datebox('getValue')
             },
             onClickRow: function (rowIndex, rowData) {
-                 $("#company").val(rowData.m10); $("#comName").val(rowData.m2);
+                  $("#company").val(rowData.m2);
             },
             columns: [[
                 {
@@ -93,7 +93,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='ProfitTotalTrend.html?company=" + rowData.m10 + "'>" + value + "</a>";
+                        return "<a href='ProfitTotalTrend.html?company=" + rowData.m2 + "'>" + value + "</a>";
                     }
                 },
                 {
@@ -106,7 +106,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi =投资回报率（ROI）'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi =投资回报率（ROI）'>" + value + "</a>";
                     }
                 },
                 {
@@ -119,7 +119,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 固废处理毛利率'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 固废处理毛利率'>" + value + "</a>";
                     }
                 },
                 {
@@ -132,7 +132,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 综合垃圾处理费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合垃圾处理费'>" + value + "</a>";
                     }
                 },
                 {
@@ -145,7 +145,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m10 + "&kpi = 综合电价'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 综合电价'>" + value + "</a>";
                     }
                 }
             ]]
@@ -155,7 +155,7 @@
         window.location.href = "ProfitRank.html";
     }
    
-    function getCompany(type) {
+    function getCompany() {
         $.ajax({
             url: 'ProfitAbilityDiv1.jsp',
             async : false,
@@ -210,7 +210,7 @@
 
                             var option = { color:[ '#7b68ee', '#00fa9a', '#ffd700',  '#6b8e23' ],
                                 title: {
-                                    text: getCompany(0) + "盈利能力分项整体分析",
+                                    text: getCompany() + "盈利能力分项整体分析",
                                     x: 'center',
                                     textStyle: {
                                         fontSize: 15,

@@ -11,7 +11,7 @@
     String date = request.getParameter("date");
     date = date.equals("") ? "2015" : date;
     int dateID = Integer.parseInt(date);
-    String company = request.getParameter("company");
+    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
 
 
     DBOperation dbOperation = new DBOperation(true);

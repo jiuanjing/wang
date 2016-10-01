@@ -10,7 +10,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String company = request.getParameter("company");
+    String company = new String(request.getParameter("company").getBytes("ISO-8859-1"), "utf-8");
     DBOperation dbOperation = new DBOperation(true);
     Map<String, Object> gsonMap = new HashMap<String, Object>();
     List<String> dataList1 = new ArrayList<String>();
