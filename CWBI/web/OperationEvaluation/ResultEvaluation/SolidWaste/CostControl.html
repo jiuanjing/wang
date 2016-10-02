@@ -101,7 +101,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 管理费用成本比'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4401'>" + value + "</a>";
                     }
                 },
                 {
@@ -113,7 +113,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 人均可控管理费用'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4402'>" + value + "</a>";
                     }
                 },
                 {
@@ -126,7 +126,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾经营成本'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4403'>" + value + "</a>";
                     }
                 },
                 {
@@ -139,7 +139,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾人工成本'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4404'>" + value + "</a>";
                     }
                 },
                 {
@@ -152,7 +152,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾药剂费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4405'>" + value + "</a>";
                     }
                 },
                 {
@@ -165,7 +165,7 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾电耗'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4406'>" + value + "</a>";
                     }
                 },
                 {
@@ -178,12 +178,12 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨垃圾电费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4407'>" + value + "</a>";
                     }
                 },
                 {
                     field: 'm11',
-                    title: '吨水维修费',
+                    title: '吨垃圾维修费',
                     sortable: true,
                    
                     sorter: function (a, b) {
@@ -191,7 +191,20 @@
                     },
                     align: 'right',
                     formatter: function (value, rowData, rowIndex) {
-                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 吨水维修费'>" + value + "</a>";
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4408'>" + value + "</a>";
+                    }
+                },
+                {
+                    field: 'm11',
+                    title: '吨垃圾管理费',
+                    sortable: true,
+
+                    sorter: function (a, b) {
+                        return (a * 10 > b * 10 ? 1 : -1);
+                    },
+                    align: 'right',
+                    formatter: function (value, rowData, rowIndex) {
+                        return "<a href='SingleIndex.html?company=" + rowData.m2 + "&kpi = 4409'>" + value + "</a>";
                     }
                 }
             ]]

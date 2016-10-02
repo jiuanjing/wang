@@ -16,41 +16,37 @@
     Map<String, Object> gsonmap = new HashMap<String, Object>();
     List<String> sqlList = new ArrayList<String>();
 
-    if (db.dbOpen()) {
+    if(db.dbOpen()){
         //查询实际值
-        String sql1 = "select t.actual_value,t.company_id,t.date_id" +
-                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
-                " where t1.kpi_id = t.kpi_id" +
-                "   and t.company_id = t2.company_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
-                "   and t2.brief_name ='" + company + "'" +
-                "	and t2.flag_solid_waste=1 and t1.kpi_type = 4" +
-                "order by t.date_id";
+        String sql1 = "select t.actual_value, t1.brief_name , t.date_id" +
+                "  from dm_op_yr_evaluate t, dim_op_company t1 " +
+                " where t.kpi_id = " +kpi+
+                "   and t1.brief_name ='"+company +
+                "'   and t1.company_id = t.company_id" +
+                " order by t.date_id";
         //行业标杆值
         String sql2 = "select t.actual_value,t.company_id,t.date_id" +
-                "  from dm_op_yr_evaluate t, dim_op_kpi t1, dim_op_company t2" +
-                " where t1.kpi_id = t.kpi_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
-                "   and t.company_id = -1 and t2.flag_solid_waste=1 and t1.kpi_type = 4" +
+                "  from dm_op_yr_evaluate t " +
+                " where  t.kpi_id = '" + kpi + "'" +
+                "   and t.company_id = -1 " +
                 " order by t.date_id";
         //行业平均值
         String sql3 = "select t.actual_value,t.company_id,t.date_id" +
-                "  from dm_op_yr_evaluate t, dim_op_kpi t1" +
-                " where t1.kpi_id = t.kpi_id" +
-                "   and t1.kpi_name = '" + kpi + "'" +
-                "   and t.company_id = 0 and t1.kpi_type = 4" +
+                "  from dm_op_yr_evaluate t " +
+                " where  t.kpi_id = '" + kpi + "'" +
+                "   and t.company_id = 0 " +
                 " order by t.date_id";
 
         sqlList.add(sql1);
         sqlList.add(sql2);
         sqlList.add(sql3);
 
-        for (int i = 0; i < sqlList.size(); i++) {
+        for (int i = 0; i < sqlList.size();i++){
             ResultSet rs = db.executeQuery(sqlList.get(i));
-            if (rs != null) {
+            if(rs != null){
                 try {
                     List<String> list = new ArrayList<String>();
-                    while (rs.next()) {
+                    while(rs.next()){
                         list.add(rs.getString(1));
                     }
                     gsonmap.put("data" + (i + 1), list);
@@ -64,8 +60,6 @@
         Gson gson = new Gson();
         String s = gson.toJson(gsonmap);
         out.write(s);
-        System.out.println(sql3);
-        System.out.println(s);
     } else {
         out.write("<script>alert('对不起！系统无法与数据库建立链接，请稍后再试或与系统管理员联系！');</script>");
     }
