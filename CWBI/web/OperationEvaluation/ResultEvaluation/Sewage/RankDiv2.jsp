@@ -54,7 +54,7 @@
             try {
                 while (rs.next()) {
                     list1.add(rs.getString(1));
-                    list2.add(rs.getString(3));
+                    list2.add(rs.getString(2));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
