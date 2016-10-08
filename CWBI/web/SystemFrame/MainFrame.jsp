@@ -64,7 +64,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>欢迎访问经营决策系统</title>
+    <title>欢迎访问经营决策系统</title>
     <link rel="stylesheet" type="text/css" href="../scripts/easyui-1.3.6/themes/myself/easyui.css">
     <link rel="stylesheet" type="text/css" href="../scripts/easyui-1.3.6/themes/icon.css">
     <script type="text/javascript" src="../scripts/jquery.min.js"></script>
