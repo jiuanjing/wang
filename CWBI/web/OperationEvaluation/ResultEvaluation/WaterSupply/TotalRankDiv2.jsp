@@ -14,7 +14,8 @@
     DBOperation dbOperation = new DBOperation(true);
     String date = request.getParameter("date");
     date = date.length() == 0 ? "2015" : date;
-    String kpiName = new String(request.getParameter("kpi").getBytes("ISO-8859-1"), "utf-8");
+    String kpi = request.getParameter("kpi");
+    int kpiId = Integer.parseInt(kpi.length() == 0?"1100":kpi);
     if (dbOperation.dbOpen()) {
 
         Map<String, Object> gsonmap = new HashMap<String, Object>();
@@ -26,7 +27,7 @@
         String sql = " select t1.brief_name, t.actual_value, t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_company t1, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
-                "   and t2.kpi_name = '" + kpiName + "' " +
+                "   and t2.kpi_id = '" + kpiId + "' " +
                 "   and t.company_id = t1.company_id and t1.flag_water = 1" +
                 "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.comp_score ";
@@ -34,16 +35,16 @@
         String sql1 = " select t.comp_score " +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
-                "   and t2.kpi_name = '" + kpiName + "' " +
+                "   and t2.kpi_id = '" + kpiId + "' " +
                 "   and t.company_id = -1 " +
                 "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.comp_score ";
 
         //公司id为0的实际值代表该kpi的平均值
-        String sql2= " select t.comp_score" +
+        String sql2 = " select t.comp_score" +
                 "  from dm_op_yr_evaluate t, dim_op_kpi t2 " +
                 " where t.date_id = " + date +
-                "   and t2.kpi_name = '" + kpiName + "' " +
+                "   and t2.kpi_id = '" + kpiId + "' " +
                 "   and t.company_id = 0 " +
                 "   and t.kpi_id = t2.kpi_id and t2.kpi_type = 1 " +
                 " order by t.comp_score ";
@@ -79,10 +80,10 @@
                 e.printStackTrace();
             }
         }
-        gsonmap.put("data1",list1);
-        gsonmap.put("data2",list2);
-        gsonmap.put("data3",list3);//标杆值
-        gsonmap.put("data4",list4);//总体评价页面平均值
+        gsonmap.put("data1", list1);
+        gsonmap.put("data2", list2);
+        gsonmap.put("data3", list3);//标杆值
+        gsonmap.put("data4", list4);//总体能力页面平均值
 
         dbOperation.dbClose();
 
