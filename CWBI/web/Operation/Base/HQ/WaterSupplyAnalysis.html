@@ -18,14 +18,10 @@
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
 <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
-<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
 <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
-<!-- 设置时间 -->
-<script src="../../../scripts/MyDate.js"></script>
-<script src="../../../scripts/OP_Operation_Kpi.js"></script>
 <script type="text/javascript">
     $(function () {
+        getYear();
         var indicator = myIndicator("正在加载中...");
         showDiv001();
         showDiv002();
@@ -210,7 +206,7 @@
                             };
                             var ecConfig = require('echarts/config');
                             myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $('#select_options').val();
+                                var date = $("#cc").combobox("getValue");
                                 window.location = "../DeptDispatch/WaterSupplyAnalysis.html?date=" + date;
                             });
                             myChart.setOption(option);
@@ -223,6 +219,13 @@
         showDiv001();
         showDiv002();
     }
+    function getYear() {
+        $('#cc').combobox({
+            url:'../year.jsp',
+            valueField:'id',
+            textField:'text'
+        });
+    }
 
 </script>
 <body style="">
@@ -231,9 +234,7 @@
         <tr>
             <td width="7%">年度：</td>
             <td width="8%">
-                <input id="cc" class="easyui-combobox" name="year"
-                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
-                       style="width:80px">
+                <input id="cc" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>

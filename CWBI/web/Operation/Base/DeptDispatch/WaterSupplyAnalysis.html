@@ -18,43 +18,31 @@
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
 <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
-<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
 <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
-<!-- 设置时间 -->
-<script src="../../../scripts/MyDate.js"></script>
-<script src="../../../scripts/OP_Operation_Kpi.js"></script>
 <script type="text/javascript">
     $(function () {
         var indicator = myIndicator("正在加载中...");
-
-        getDataGrid();
+        getYear();
+        show();
         window.setTimeout(function () {
             indicator.hide();
         }, 500);
     });
 
-    function getDataGrid() {
+    function show() {
         $.ajax({
-            url: "a.json",
-            dataType: "text",
+            url: "DeptQuantityAndScale.jsp",
+            dataType: "json",
             type: "post",
-            /*
-             data : {
-             date1 : d1,
-             date2 : d2,
-             kpiCodeNum : '1022'//指标code
-             },
-             */
+            data: {
+                year: $('#cc').combobox("getValue"),
+                type: 1
+            },
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-                //var arrayData = eval("("+return_data+")");
-                //console.log(arrayData);
-                //table
-
-                //echarts
+//                console.log(return_data);
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -68,7 +56,7 @@
                         function (ec) {
                             var myChart = ec.init(document.getElementById('main'), "macarons");
 
-                            option = {
+                            var option = {
                                 title: {
                                     text: '供水规模及项目数量分析',
                                     x: 'center',
@@ -134,14 +122,7 @@
                                         symbolSize: function (value) {
                                             return value[2] / 5
                                         },
-                                        data: [
-                                            [4, 20, 80, '东南大区'],
-                                            [10, 10, 100, '北方大区'],
-                                            [5, 30, 150, '中原大区'],
-                                            [10, 18, 180, '北京大区'],
-                                            [2, 25, 50, '中南大区'],
-                                            [15, 20, 300, '西南大区']
-                                        ]
+                                        data: return_data
                                     }
                                 ]
                             };
@@ -152,7 +133,14 @@
         });
     }
     function confirmIt() {
-        getDataGrid();
+        show();
+    }
+    function getYear() {
+        $('#cc').combobox({
+            url: '../year.jsp',
+            valueField: 'id',
+            textField: 'text'
+        });
     }
 
 </script>
