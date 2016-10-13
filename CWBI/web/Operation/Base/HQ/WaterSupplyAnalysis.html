@@ -27,7 +27,6 @@
 <script type="text/javascript">
     $(function () {
         var indicator = myIndicator("正在加载中...");
-
         showDiv001();
         showDiv002();
         window.setTimeout(function () {
@@ -35,12 +34,11 @@
         }, 500);
     });
     function showDiv001() {
-
         $.ajax({
             url: "div1.json",
             dataType: "text",
             type: "post",
-            error: function (msg) {
+            error: function () {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
@@ -60,25 +58,21 @@
                             var option = {
                                 title: {
                                     text: '供水公司规模结构分析',
-
                                     x: 'center',
                                     textStyle: {
                                         color: '#1b1b1b',
                                         fontWeight: 'bold',
                                         fontSize: 14
                                     }
-
                                 },
                                 tooltip: {
                                     trigger: 'item',
-                                    formatter: "{a} <br/>{b} : {c}万吨 ({d}%)",
+                                    formatter: "{a} <br/>{b} : {c}万吨 ({d}%)"
                                 },
                                 toolbox: {
                                     show: false,
                                     orient: 'vertical',    // 布局方式，默认为水平布局，可选为：'horizontal' ¦ 'vertical'
                                     x: 'right',
-                                    showTitle: true,
-
                                     feature: {
                                         mark: {show: true},
                                         dataView: {show: true, readOnly: false},
@@ -157,7 +151,7 @@
                         function (ec) {
                             var myChart = ec.init(document.getElementById('main2'), "macarons");
 
-                            option = {
+                            var option = {
                                 title: {
                                     text: '供水公司数量分析',
                                     x: 'center',

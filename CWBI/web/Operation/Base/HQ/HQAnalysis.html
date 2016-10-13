@@ -58,7 +58,6 @@
                     echarts: '../../../scripts'
                 }
             });
-            //showTotal();
             showDiv001();
             showDiv002();
             showDiv003();
@@ -69,27 +68,7 @@
                 indicator.hide();
             }, 500);
         });
-        //northdiv获得数据
-        function showTotal() {
-            $.ajax({
-                url: "EnterpriseGetData.jsp",
-                dataType: "text",
-                type: "post",
-                data: {
-                    //date : $('#date').datebox('getValue')
-                },
-                error: function (msg) {
-                    console.log("Ajax获取数据失败");
-                },
-                success: function (return_data) {
-                    var arrayData = eval(return_data);
-                    arrayData = ['86,500', '3583', '54', '86,500', '34,360', '134,542'];
-                    for (var i = 0; i < arrayData.length; i++) {
-                        $(".total_span").eq(i).text(arrayData[i]);
-                    }
-                }
-            });
-        }
+
         function showDiv001() {
             $.ajax({
                 url: "div1.json",
@@ -111,7 +90,7 @@
                             ],
                             function (ec, theme) {
                                 var myChart = ec.init(document.getElementById('main1'), 'macarons');
-                                option = {
+                                var option = {
                                     title: {
                                         text: '总规模趋势分析',
                                         x: 'center',
@@ -182,25 +161,25 @@
                                         {
                                             name: '固废',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [120, 132, 101, 134, 90, 230, 210]
                                         },
                                         {
                                             name: '再生水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [220, 182, 191, 234, 290, 330, 310]
                                         },
                                         {
                                             name: '污水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [170, 232, 271, 154, 240, 300, 410]
                                         },
                                         {
                                             name: '供水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [150, 232, 201, 154, 190, 330, 410]
                                         },
                                         {
@@ -224,55 +203,6 @@
                     );
                 }
             });
-        }
-        //取数组最大值,并取整
-        function max_value(tmp) {
-            var max = tmp[0];
-            var min = tmp[1];
-            if (max == 0 && min == 0) {
-                return 100;
-            } else if (max == 0 && min < 0) {
-                max = 0 - min;
-            }
-            for (var i = 1; i < tmp.length; i++) {
-                if (max < tmp[i])max = tmp[i];
-            }
-            max = max.toFixed(0);//取整
-            var len = max.length;
-            if (len > 5) {
-                len = len - 2;
-                max = parseFloat(max.substr(0, 2)) + 1;
-                for (var i = 0; i < len; i++) {
-                    max += "0";
-                }
-            } else {
-                len = len - 1;
-                max = parseFloat(max.substr(0, 1)) + 1;
-                for (var i = 0; i < len; i++) {
-                    max += "0";
-                }
-            }
-            return max;
-        }
-        //取数组最小值,并取整
-        function min_value(tmp) {
-            var max = tmp[0];
-            var min = tmp[1];
-            if (max == 0 && min == 0) {
-                return 0;
-            } else if (max == 0 && min < 0) {
-                return (Math.floor(min / 1000)) * 1000;
-            } else if (min == 0 && max < 0) {
-                return (Math.floor(max / 1000)) * 1000;
-            } else if (max < 0 && min < 0) {
-                max = -max;
-                min = -min;
-                for (var i = 1; i < tmp.length; i++) {
-                    if (max < tmp[i])max = tmp[i];
-                }
-                return -(Math.ceil(min / 1000)) * 1000;
-            }
-            return 0;
         }
         function showDiv002() {
             $.ajax({
@@ -373,25 +303,25 @@
                                         {
                                             name: '固废',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [12, 13, 10, 13, 9, 23, 21]
                                         },
                                         {
                                             name: '再生水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [22, 18, 19, 23, 29, 33, 31]
                                         },
                                         {
                                             name: '污水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [15, 23, 20, 15, 19, 33, 41]
                                         },
                                         {
                                             name: '供水',
                                             type: 'bar',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [17, 23, 27, 15, 24, 30, 41]
                                         },
                                         {
@@ -504,25 +434,25 @@
                                         {
                                             name: '固废',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [12, 13, 10, 13, 9, 23, 21]
                                         },
                                         {
                                             name: '再生水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [22, 18, 19, 23, 29, 33, 31]
                                         },
                                         {
                                             name: '污水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [15, 23, 20, 15, 19, 33, 41]
                                         },
                                         {
                                             name: '供水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [17, 23, 27, 15, 24, 30, 41]
                                         },
                                     ]
@@ -731,25 +661,25 @@
                                         {
                                             name: '供水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [12, 13, 10, 13, 9, 23, 21]
                                         },
                                         {
                                             name: '污水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [22, 18, 19, 23, 29, 33, 31]
                                         },
                                         {
                                             name: '固废',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [15, 23, 20, 15, 19, 33, 41]
                                         },
                                         {
                                             name: '再生水',
                                             type: 'line',
-                                            stack: '广告',
+                                            stack: '规模数量',
                                             data: [17, 23, 27, 15, 24, 30, 41]
                                         },
                                     ]
