@@ -119,6 +119,6 @@
             <artifactId>spring-test</artifactId>
             <version>4.2.5.RELEASE</version>
         </dependency>
-        <!--5: spring依赖end-->
+        <!--5: spring依赖end -->
     </dependencies>
 </project>
