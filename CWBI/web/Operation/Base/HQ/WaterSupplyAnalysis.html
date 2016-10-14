@@ -34,7 +34,7 @@
             url: "DeptScaleAnalysis.jsp",
             data: {
                 type: 1,
-                year: $("#cc").combobox("getValue")
+                year: $("#year").combobox("getValue")
             },
             dataType: "json",
             type: "post",
@@ -116,7 +116,7 @@
             type: "post",
             data: {
                 type: 1,
-                year:$("#cc").combobox("getValue")
+                year:$("#year").combobox("getValue")
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
@@ -206,7 +206,7 @@
                             };
                             var ecConfig = require('echarts/config');
                             myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $("#cc").combobox("getValue");
+                                var date = $("#year").combobox("getValue");
                                 window.location = "../DeptDispatch/WaterSupplyAnalysis.html?date=" + date;
                             });
                             myChart.setOption(option);
@@ -220,7 +220,7 @@
         showDiv002();
     }
     function getYear() {
-        $('#cc').combobox({
+        $('#year').combobox({
             url:'../year.jsp',
             valueField:'id',
             textField:'text'
@@ -228,13 +228,13 @@
     }
 
 </script>
-<body style="">
+<body>
 <div id="query_condition" class="condition_div">
     <table class="condition_table">
         <tr>
             <td width="7%">年度：</td>
             <td width="8%">
-                <input id="cc" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
+                <input id="year" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
@@ -243,7 +243,6 @@
     </table>
 </div>
 <hr class="Main_hr" align="center" width="95%"/>
-
 <div id="main1" style="height:500px;width: 43%;float: left;"></div>
 <div id="main2" style="height:500px;width: 57%;float: right;"></div>
 </body>

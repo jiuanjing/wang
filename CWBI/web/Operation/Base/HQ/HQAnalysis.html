@@ -53,6 +53,7 @@
         $(function () {
             var indicator = myIndicator("正在加载中...");
             setSize();
+            getYear();
             require.config({
                 paths: {
                     echarts: '../../../scripts'
@@ -772,7 +773,6 @@
         function confirmIt() {
             var indicator = myIndicator("正在加载中...");
             $('#cc').layout('collapse', 'east');
-            showTotal();
             showDiv001();
             showDiv002();
             showDiv003();
@@ -783,6 +783,14 @@
                 indicator.hide();
             }, 1000);
         }
+        function getYear() {
+            $('#year').combobox({
+                url:'../year.jsp',
+                valueField:'id',
+                textField:'text'
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -811,15 +819,8 @@
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'center',border:false"
                  style="padding:10px;background:#fff;border:1px solid #ccc;">
-                <select>
-                    <option>2011</option>
-                    <option>2012</option>
-                    <option>2013</option>
-                    <option>2014</option>
-                    <option>2015</option>
-                    <option>2016</option>
-                    <option>2017</option>
-                </select>
+                年度：
+                <input id="year" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
                 <div style="text-align:right;padding:10px 0;">
                     <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                        onclick="confirmIt();">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
