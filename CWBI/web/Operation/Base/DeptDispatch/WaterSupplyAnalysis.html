@@ -35,14 +35,13 @@
             dataType: "json",
             type: "post",
             data: {
-                year: $('#cc').combobox("getValue"),
+                year: $('#year').combobox("getValue"),
                 type: 1
             },
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-//                console.log(return_data);
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -136,7 +135,7 @@
         show();
     }
     function getYear() {
-        $('#cc').combobox({
+        $('#year').combobox({
             url: '../year.jsp',
             valueField: 'id',
             textField: 'text'
@@ -150,9 +149,7 @@
         <tr>
             <td width="7%">年度：</td>
             <td width="8%">
-                <input id="cc" class="easyui-combobox" name="year"
-                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
-                       style="width:80px">
+                <input id="year" class="easyui-combobox" name="year" style="width:80px" panelHeight="100">
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>

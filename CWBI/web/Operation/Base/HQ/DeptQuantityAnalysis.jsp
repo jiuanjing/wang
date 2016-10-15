@@ -44,7 +44,6 @@
         try {
             preparedStatement.setString(1, year);
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println(sql);
             if (resultSet != null) {
                 Map<String,List<String>> map = new HashMap<String, List<String>>();
                 List<String> list1 = new ArrayList<String>();

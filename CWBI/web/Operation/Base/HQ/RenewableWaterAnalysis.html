@@ -18,16 +18,11 @@
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/myself_fg/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../../scripts/easyui-1.3.6/themes/icon.css">
 <script type="text/javascript" src="../../../scripts/easyui-lang-zh_CN.js"></script>
-<script src="../../../scripts/auto/jquery.autocomplete.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../scripts/auto/jquery.autocomplete.css"/>
 <script src="../../../scripts/myIndicator/myIndicator3.js"></script>
-<!-- 设置时间 -->
-<script src="../../../scripts/MyDate.js"></script>
-<script src="../../../scripts/OP_Operation_Kpi.js"></script>
 <script type="text/javascript">
     $(function () {
         var indicator = myIndicator("正在加载中...");
-
+        getYear();
         showDiv001();
         showDiv002();
         window.setTimeout(function () {
@@ -35,16 +30,18 @@
         }, 500);
     });
     function showDiv001() {
-
         $.ajax({
-            url: "div1.json",
-            dataType: "text",
+            url: "DeptScaleAnalysis.jsp",
+            dataType: "json",
+            data: {
+                type: 3,
+                year: $("#year").combobox("getValue")
+            },
             type: "post",
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-                var arrayData = eval(return_data);
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -59,9 +56,6 @@
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
                             var option = {
                                 title: {
-
-                                    text: '总部再生水公司规模分析',
-
                                     text: '再生水公司结构分析',
 
                                     x: 'center',
@@ -108,14 +102,7 @@
                                         type: 'pie',
                                         radius: '55%',//设置饼图大小
                                         center: ['50%', '50%'],
-                                        data: [
-                                            {value: 335, name: '东南大区'},
-                                            {value: 310, name: '北方大区'},
-                                            {value: 234, name: '中原大区'},
-                                            {value: 135, name: '北京大区'},
-                                            {value: 135, name: '中南大区'},
-                                            {value: 135, name: '西南大区'}
-                                        ]
+                                        data: return_data
                                     }
                                 ]
                             };
@@ -127,25 +114,17 @@
     }
     function showDiv002() {
         $.ajax({
-            url: "div1.json",
-            dataType: "text",
+            url: "DeptQuantityAnalysis.jsp",
+            dataType: "json",
             type: "post",
-            /*
-             data : {
-             date1 : d1,
-             date2 : d2,
-             kpiCodeNum : '1022'//指标code
-             },
-             */
+            data: {
+                type: 3,
+                year: $("#year").combobox("getValue")
+            },
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-                //var arrayData = eval("("+return_data+")");
-                //console.log(arrayData);
-                //table
-
-                //echarts
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -160,7 +139,7 @@
                         function (ec) {
                             var myChart = ec.init(document.getElementById('main2'), "macarons");
 
-                            option = {
+                            var option = {
                                 title: {
                                     text: '再生水数量分析',
                                     x: 'center',
@@ -209,7 +188,7 @@
                                             }
                                         },
 
-                                        data: ['东南大区', '北方大区', '中原大区', '北京大区', '中南大区', '西南大区']
+                                        data: return_data.deptName
                                     }
                                 ],
                                 yAxis: [
@@ -222,13 +201,13 @@
                                     {
                                         name: '再生水项目',
                                         type: 'bar',
-                                        data: [20, 30, 35, 26, 17, 39]
+                                        data: return_data.quantity
                                     }
                                 ]
                             };
                             var ecConfig = require('echarts/config');
                             myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $('#select_options').val();
+                                var date = $("#year").combobox("getValue");
                                 window.location = "../DeptDispatch/RenewableWaterAnalysis.html?date=" + date;
                             });
                             myChart.setOption(option);
@@ -241,6 +220,13 @@
         showDiv001();
         showDiv002();
     }
+    function getYear() {
+        $('#year').combobox({
+            url: '../year.jsp',
+            valueField: 'id',
+            textField: 'text'
+        });
+    }
 
 </script>
 <body style="">
@@ -249,9 +235,7 @@
         <tr>
             <td width="7%">年度：</td>
             <td width="8%">
-                <input id="cc" class="easyui-combobox" name="year"
-                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
-                       style="width:80px">
+                <input id="year" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>

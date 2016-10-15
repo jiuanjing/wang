@@ -27,7 +27,7 @@
 <script type="text/javascript">
     $(function () {
         var indicator = myIndicator("正在加载中...");
-
+        getYear();
         showDiv001();
         showDiv002();
         window.setTimeout(function () {
@@ -35,11 +35,14 @@
         }, 500);
     });
     function showDiv001() {
-
         $.ajax({
-            url: "div1.json",
-            dataType: "text",
+            url: "DeptScaleAnalysis.jsp",
+            dataType: "json",
             type: "post",
+            data: {
+                type: 2,
+                year: $("#year").combobox("getValue")
+            },
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
@@ -59,11 +62,7 @@
                             var myChart = ec.init(document.getElementById('main1'), 'macarons');
                             var option = {
                                 title: {
-
-                                    text: '总部污水公司规模分析',
-
                                     text: '污水公司结构分析',
-
                                     x: 'center',
                                     textStyle: {
                                         color: '#1b1b1b',
@@ -108,14 +107,7 @@
                                         type: 'pie',
                                         radius: '55%',//设置饼图大小
                                         center: ['50%', '50%'],
-                                        data: [
-                                            {value: 335, name: '东南大区'},
-                                            {value: 310, name: '北方大区'},
-                                            {value: 234, name: '中原大区'},
-                                            {value: 135, name: '北京大区'},
-                                            {value: 135, name: '中南大区'},
-                                            {value: 135, name: '西南大区'}
-                                        ]
+                                        data: return_data
                                     }
                                 ]
                             };
@@ -127,25 +119,17 @@
     }
     function showDiv002() {
         $.ajax({
-            url: "div1.json",
-            dataType: "text",
+            url: "DeptQuantityAnalysis.jsp",
+            dataType: "json",
             type: "post",
-            /*
-             data : {
-             date1 : d1,
-             date2 : d2,
-             kpiCodeNum : '1022'//指标code
-             },
-             */
+            data: {
+                type: 2,
+                year: $("#year").combobox("getValue")
+            },
             error: function (msg) {
                 alert("Ajax获取数据失败");
             },
             success: function (return_data) {
-                //var arrayData = eval("("+return_data+")");
-                //console.log(arrayData);
-                //table
-
-                //echarts
                 require.config({
                     paths: {
                         echarts: '../../../scripts'
@@ -160,7 +144,7 @@
                         function (ec) {
                             var myChart = ec.init(document.getElementById('main2'), "macarons");
 
-                            option = {
+                            var option = {
                                 title: {
                                     text: '污水数量分析',
                                     x: 'center',
@@ -209,7 +193,7 @@
                                             }
                                         },
 
-                                        data: ['东南大区', '北方大区', '中原大区', '北京大区', '中南大区', '西南大区']
+                                        data: return_data.deptName
                                     }
                                 ],
                                 yAxis: [
@@ -222,13 +206,13 @@
                                     {
                                         name: '污水项目',
                                         type: 'bar',
-                                        data: [20, 30, 35, 26, 17, 39]
+                                        data: return_data.quantity
                                     }
                                 ]
                             };
                             var ecConfig = require('echarts/config');
                             myChart.on(ecConfig.EVENT.CLICK, function () {
-                                var date = $('#select_options').val();
+                                var date = $("#year").combobox("getValue");
                                 window.location = "../DeptDispatch/SewageQuantityAnalysis.html?date=" + date;
                             });
                             myChart.setOption(option);
@@ -241,7 +225,13 @@
         showDiv002();
         showDiv002();
     }
-
+    function getYear() {
+        $('#year').combobox({
+            url: '../year.jsp',
+            valueField: 'id',
+            textField: 'text'
+        });
+    }
 </script>
 <body style="">
 <div id="query_condition" class="condition_div">
@@ -249,9 +239,7 @@
         <tr>
             <td width="7%">年度：</td>
             <td width="8%">
-                <input id="cc" class="easyui-combobox" name="year"
-                       data-options="valueField:'id',textField:'text',url:'year.json'" panelHeight="100"
-                       style="width:80px">
+                <input id="year" class="easyui-combobox" name="year" panelHeight="100" style="width:80px">
             </td>
             <td width="5%"><a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"
                               onclick="confirmIt();">确定</a></td>
